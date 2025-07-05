@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import aurelia from '@aurelia/vite-plugin';
 
 export default defineConfig({

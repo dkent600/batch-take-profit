@@ -1,10 +1,11 @@
 {
-  "name": "batch-take-profit-2",
+  "name": "batch-take-profit",
   "version": "0.0.1",
   "description": "Execute take profit sales",
   "repository": {
     "type": "git"
   },
+  "type": "module",
   "license": "MIT",
   "dependencies": {
     "@aurelia/router": "latest",
