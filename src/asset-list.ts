@@ -1,5 +1,4 @@
 import { customElement } from 'aurelia';
-
 interface IAsset {
   name: string;
   exchange: string;
@@ -13,7 +12,6 @@ export class AssetList {
   assets: Array<IAsset> = [];
 
   async binding() {
-    console.log("asdasd");
     // Fetch config.json from the public root
     const response = await fetch('/config.json');
     const config = await response.json();
