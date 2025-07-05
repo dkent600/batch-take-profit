@@ -1,0 +1,16 @@
+{
+  "name": "batch-take-profit",
+  "version": "0.0.1",
+  "description": "Execute take profit sales",
+  "repository": {
+    "type": "git",
+    "url": "batch-take-profit"
+  },
+  "license": "MIT",
+  "author": "Douglas Kent",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
