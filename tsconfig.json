@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "target": "ES2020",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src"
+  ],
+  "files": [
+    "src/resource.d.ts"
+  ],
+  "outDir": "./dist/", /* Specify an output folder for all emitted files. */
+  "strict": true, /* Enable all strict type-checking options. */
+}
