@@ -1,0 +1,34 @@
+{
+  "batchConfig": {
+    "exchanges": [
+      {
+        "name": "MexC",
+        "apiUrl": "https://api.mexc.com"
+      },
+      {
+        "name": "CoinEx",
+        "apiUrl": "https://api.coinex.com"
+      }
+    ],
+    "assets": [
+      {
+        "name": "BTC",
+        "percentage": 50,
+        "exchange": "MexC"
+      },
+      {
+        "name": "ETH",
+        "exchange": "MexC"
+      },
+      {
+        "name": "ADA",
+        "percentage": 30,
+        "exchange": "CoinEx"
+      },
+      {
+        "name": "SOL",
+        "exchange": "CoinEx"
+      }
+    ]
+  }
+}
