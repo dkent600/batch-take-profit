@@ -1,33 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asset List</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css" rel="stylesheet">
-</head>
-<body class="p-4">
-    <template>
-        <h3 class="text-lg font-bold mb-2">Asset List</h3>
-        <div class="overflow-x-auto">
-            <table class="table table-zebra w-full">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Exchange</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr repeat.for="asset of assets">
-                        <td>${asset.name}</td>
-                        <td>${asset.exchange}</td>
-                        <td>${asset.percentage}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </template>
-</body>
-</html>
+<template>
+  <h3 class="text-lg font-bold mb-2">Asset List</h3>
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Exchange</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr repeat.for="asset of assets">
+          <td>${asset.name}</td>
+          <td>${asset.exchange}</td>
+          <td>${asset.percentage}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>

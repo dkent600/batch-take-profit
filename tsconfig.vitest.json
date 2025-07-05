@@ -6,6 +6,15 @@
     "types": [
       "node",
       "jsdom"
+    ],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": [
+      "esnext",
+      "dom"
     ]
-  }
+  },
+  "include": [
+    "vitest.config.mts"
+  ]
 }
