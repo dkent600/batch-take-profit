@@ -1,3 +1,6 @@
+@reference "tailwindcss";
+@plugin "daisyui";
+
 .asset-list-table {
   @apply table w-full; /* Removed table-zebra */
 }
