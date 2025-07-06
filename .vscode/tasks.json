@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "vite: dev",
+			"command": "npx vite",
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": [
+				{
+					"pattern": {
+						"regexp": ".*"
+					},
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": "^\\s*Local:\\s+http://localhost:9000",
+						"endsPattern": "$^"
+					}
+				}
+			]
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "vite build"
+		}
+	]
+}
