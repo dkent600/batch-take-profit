@@ -35,6 +35,7 @@ Thumbs.db
 # Test coverage output (if you add testing later)
 coverage/
 .nyc_output/
+test_output/
 
 # Misc
 *.local
