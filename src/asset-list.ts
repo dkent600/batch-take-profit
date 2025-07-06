@@ -1,4 +1,5 @@
 import { customElement } from 'aurelia';
+import "./asset-list.css";
 interface IAsset {
   name: string;
   exchange: string;
