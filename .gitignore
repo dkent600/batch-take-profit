@@ -28,7 +28,6 @@ yarn-error.log*
 Thumbs.db
 
 # IDE/editor folders
-.vscode/
 .idea/
 *.sublime-workspace
 *.sublime-project
