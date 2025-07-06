@@ -11,6 +11,15 @@
     "@aurelia/router": "latest",
     "aurelia": "latest"
   },
+  "scripts": {
+    "lint:js": "eslint src test",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "lint": "npm run lint:js && npm run lint:css",
+    "pretest": "npm run lint",
+    "start": "vite",
+    "build": "vite build",
+    "test": "vitest"
+  },
   "devDependencies": {
     "@aurelia/testing": "latest",
     "@aurelia/vite-plugin": "latest",
@@ -30,15 +39,6 @@
     "vite": "^6.0.3",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^2.1.8"
-  },
-  "scripts": {
-    "lint:js": "eslint src test",
-    "lint:css": "stylelint \"src/**/*.css\"",
-    "lint": "npm run lint:js && npm run lint:css",
-    "pretest": "npm run lint",
-    "start": "vite",
-    "build": "vite build",
-    "test": "vitest"
   },
   "overrides": {
     "vite-plugin-node-polyfills": {
