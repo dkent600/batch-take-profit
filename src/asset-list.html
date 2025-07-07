@@ -1,22 +1,25 @@
 <template>
-<button class="btn btn-neutral">I am Daisy</button>
-  <h3 class="text-lg font-bold mb-2">Asset List</h3>
-  <div class="overflow-x-auto">
-  <table class="asset-list-table table-zebra">
+  <div data-theme="forest">
+  <h1>Asset List</h1>
+  <table class="asset-list-table table table-zebra">
       <thead>
         <tr>
           <th>Name</th>
           <th>Exchange</th>
           <th>Percentage</th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr repeat.for="asset of assets">
           <td>${asset.name}</td>
           <td>${asset.exchange}</td>
-          <td>${asset.percentage}</td>
-        </tr>
+          <td>${asset.percentage}%</td>
+              <td><button class="btn btn-primary btn-outline">Set order</button></td>
+            </tr>
       </tbody>
     </table>
+    </div>
   </div>
+</div>
 </template>

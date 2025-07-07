@@ -1,18 +1,18 @@
 @reference "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui"{
+  themes: --default forest --prefersdark forest;
+  root: ":root";
+  logs: true;
+}
 
 .asset-list-table {
-  @apply table w-full; /* Removed table-zebra */
 }
 
 .asset-list-header {
-  @apply bg-gray-100 text-gray-700;
 }
 
 .asset-list-row {
-  @apply hover:bg-gray-50;
 }
 
 .asset-list-empty {
-  @apply text-center text-gray-500;
 }
