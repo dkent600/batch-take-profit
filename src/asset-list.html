@@ -1,6 +1,7 @@
 <template>
-  <h1>Asset List</h1>
-  <table class="table table-zebra">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <h1>Asset List</h1>
+    <table class="daisy-table daisy-table-zebra" >
       <thead>
         <tr>
           <th>Name</th>
@@ -14,10 +15,9 @@
           <td>${asset.name}</td>
           <td>${asset.exchange}</td>
           <td>${asset.percentage}%</td>
-              <td><button class="daisy-btn daisy-btn-primary daisy-btn-outline">Set order</button></td>
-            </tr>
+          <td><button class="daisy-btn daisy-btn-primary daisy-btn-outline">Set order</button></td>
+        </tr>
       </tbody>
     </table>
     </div>
-  </div>
 </template>

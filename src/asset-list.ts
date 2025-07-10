@@ -8,7 +8,6 @@ interface IAsset {
   apiUrl: string;
 }
 
-@customElement('asset-list')
 export class AssetList {
   assets: Array<IAsset> = [];
 
