@@ -13,9 +13,9 @@
 						"regexp": ".*"
 					},
 					"background": {
-						"activeOnStart": false,
-						"beginsPattern": "^\\s*Local:\\s+http://localhost:9000",
-						"endsPattern": "$^"
+						"activeOnStart": true,
+						"beginsPattern": "^\\s*VITE",
+						"endsPattern": "^\\s*➜\\s*Local:\\s+http://localhost:5173"
 					}
 				}
 			]

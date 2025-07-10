@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   server: {
     open: false, // !process.env.CI,
-    port: 9000,
+    port: 5173,
   },
   esbuild: {
     target: 'es2022'

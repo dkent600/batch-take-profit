@@ -12,6 +12,7 @@
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint": "npm run lint:js && npm run lint:css",
     "pretest": "npm run lint",
+    "dev": "vite",
     "start": "vite",
     "build": "vite build",
     "test": "vitest"
