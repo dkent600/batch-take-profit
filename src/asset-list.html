@@ -1,23 +1,30 @@
 <template>
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <h1>Asset List</h1>
-    <table class="daisy-table daisy-table-zebra" >
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Exchange</th>
-          <th>Percentage</th>
-          <th>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr repeat.for="asset of assets">
-          <td>${asset.name}</td>
-          <td>${asset.exchange}</td>
-          <td>${asset.percentage}%</td>
-          <td><button class="daisy-btn daisy-btn-primary daisy-btn-outline">Set order</button></td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="flex flex-col items-center gap-6 p-6">
+    <h1 class="text-2xl font-bold text-center">Asset List</h1>
+
+    <div class="overflow-x-auto w-full">
+      <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+        <thead>
+          <tr>
+            <th class="text-left text-sm px-2">Coin</th>
+            <th class="text-left text-sm px-2">Exchange</th>
+            <th class="text-left text-sm px-2">% to Sell</th>
+            <th class="text-left text-sm px-2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr repeat.for="asset of assets">
+            <td class="text-left text-sm px-2">${asset.name}</td>
+            <td class="text-left text-sm px-2">${asset.exchange}</td>
+            <td class="text-left text-sm px-2">${asset.percentage}%</td>
+            <td class="text-left text-sm px-2">
+              <button class="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs">
+                Place market sell order
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </template>
