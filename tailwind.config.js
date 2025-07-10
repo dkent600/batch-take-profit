@@ -1,13 +1,9 @@
-/** @type {import('tailwindcss').Config} */
-import daisyui from 'daisyui';
-
+// tailwind.config.js
 export default {
   content: [
     './index.html',
-    './src/**/*.{js,ts,jsx,tsx,html}',
+    './src/**/*.{ts,html}',
+    './src/**/*.html' // <— redundant but ensures coverage of Aurelia views
   ],
-  theme: {
-    extend: {},
-  },
-  plugins: [daisyui],
+  safelist: ['btn-primary'] // add this temporarily
 };

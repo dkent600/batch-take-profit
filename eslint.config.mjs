@@ -21,5 +21,8 @@ export default [
       ecmaVersion: 2019,
       sourceType: "module",
     },
+    rules: {
+      "no-debugger": "off",
+    },
   }
 ];

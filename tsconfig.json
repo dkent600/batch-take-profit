@@ -1,24 +1,18 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "skipLibCheck": true,
-    "target": "es2022",
+    "target": "esnext",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "sourceMap": true,
-    "strict": true, /* Enable all strict type-checking options. */
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "sourceMap": true
   },
   "include": [
     "src"
   ],
   "files": [
     "src/resource.d.ts"
-  ],
-  "outDir": "./dist/", /* Specify an output folder for all emitted files. */
+  ]
 }

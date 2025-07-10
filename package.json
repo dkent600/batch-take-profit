@@ -7,10 +7,6 @@
   },
   "type": "module",
   "license": "MIT",
-  "dependencies": {
-    "@aurelia/router": "latest",
-    "aurelia": "latest"
-  },
   "scripts": {
     "lint:js": "eslint src test",
     "lint:css": "stylelint \"src/**/*.css\"",
@@ -20,22 +16,26 @@
     "build": "vite build",
     "test": "vitest"
   },
+  "dependencies": {
+    "@aurelia/router": "latest",
+    "@tailwindcss/vite": "^4.1.11",
+    "aurelia": "latest",
+    "latest": "^0.2.0",
+    "tailwindcss": "^4.1.11"
+  },
   "devDependencies": {
     "@aurelia/testing": "latest",
     "@aurelia/vite-plugin": "latest",
-    "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^22.10.2",
-    "autoprefixer": "^10.4.21",
-    "daisyui": "^5.0.43",
+    "daisyui": "^5.0.46",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
     "jsdom": "^25.0.1",
     "stylelint": "^16.12.0",
     "stylelint-config-standard": "^36.0.1",
-    "tailwindcss": "^4.1.11",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.36.0",
     "vite": "^6.0.3",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^2.1.8"

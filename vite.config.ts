@@ -1,10 +1,12 @@
 import { defineConfig } from 'vite';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import aurelia from '@aurelia/vite-plugin';
+// @ts-expect-error - TypeScript has issues with .d.mts files from @tailwindcss/vite
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   server: {
-    open: !process.env.CI,
+    open: false, // !process.env.CI,
     port: 9000,
   },
   esbuild: {
@@ -15,5 +17,6 @@ export default defineConfig({
       useDev: true,
     }),
     nodePolyfills(),
+    tailwindcss()
   ],
 });

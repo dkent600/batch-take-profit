@@ -13,7 +13,7 @@
 						"regexp": ".*"
 					},
 					"background": {
-						"activeOnStart": true,
+						"activeOnStart": false,
 						"beginsPattern": "^\\s*Local:\\s+http://localhost:9000",
 						"endsPattern": "$^"
 					}
@@ -27,6 +27,13 @@
 			"problemMatcher": [],
 			"label": "npm: build",
 			"detail": "vite build"
+		},
+		{
+			"type": "npm",
+			"script": "lint:css",
+			"problemMatcher": [],
+			"label": "npm: lint:css",
+			"detail": "stylelint \"src/**/*.css\""
 		}
 	]
 }
