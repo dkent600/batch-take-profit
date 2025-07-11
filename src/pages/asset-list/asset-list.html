@@ -39,13 +39,20 @@
         </tr>
       </tbody>
     </table>
-    <div class="flex justify-center mt-4">
+    <div class="flex flex-col items-center justify-center mt-4 gap-2">
+      <div
+      click.trigger="selectAll($event)"
+      class="daisy-link daisy-link-primary text-sm no-underline">
+      Select All
+      </div>
+      <div>
       <button
         click.trigger="createSellOrders($event)"
-        class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
+        class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
         disabled.bind="!hasSelection || hasInvalidSelection">
         Place selected market sell orders
       </button>
+      </div>
     </div>
   </div>
 </template>

@@ -23,6 +23,12 @@ export class AssetList {
     this.assets = await this.exchangeConfigService.getAssets();
   }
 
+  selectAll() {
+    for (const asset of this.assets) {
+      asset.selected = true;
+    }
+  }
+
   createSellOrder(_event: Event, asset: IAsset) {
     console.log(`Creating sell order for ${asset.percentage}% of:`, asset.name);
   }
