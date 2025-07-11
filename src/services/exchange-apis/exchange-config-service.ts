@@ -1,0 +1,134 @@
+import { IEnvService } from "./env-service.js";
+import { ILogService } from "./log-service.js";
+
+interface IAsset {
+  name: string;
+  exchange: string;
+  exchangeName: string;
+  percentage: number;
+  apiUrl: string;
+}
+
+interface IExchange {
+  name: string;
+  apiUrl?: string;
+  [key: string]: unknown;
+}
+
+interface IAssetConfig {
+  name: string;
+  exchange: string;
+  percentage?: number;
+  [key: string]: unknown;
+}
+
+interface IBatchConfig {
+  exchanges?: IExchange[];
+  assets?: IAssetConfig[];
+  [key: string]: unknown;
+}
+
+interface IConfig {
+  batchConfig?: IBatchConfig;
+  [key: string]: unknown;
+}
+
+// Define or import the interface as needed
+export interface IExchangeConfigService {
+  apiKey: string;
+  apiSecret: string;
+  baseUrl: string;
+  logFileName: string;
+  telegramBotToken: string;
+  telegramChatId: string;
+}
+
+export class ExchangeConfigService implements IExchangeConfigService {
+
+  private _apiKey: string;
+  private _apiSecret: string;
+  private _baseUrl: string;
+  private _logFileName: string;
+  private _telegramBotToken: string;
+  private _telegramChatId: string;
+  private _assets: IAsset[];
+
+  constructor(
+    private envService: IEnvService,
+    private logService: ILogService) {
+    this.apiKey = this.envService.get('API_KEY');
+    this.apiSecret = this.envService.get('API_SECRET');
+    this.baseUrl = this.envService.get('BASE_URL') || 'https://api.default.com';
+    this._telegramBotToken = this.envService.get('TELEGRAM_BOT_TOKEN');
+    this._telegramChatId = this.envService.get('TELEGRAM_CHAT_ID');
+  }
+  logFileName: string;
+  public get assets(): IAsset[] {
+    return this._assets;
+  }
+
+  public get telegramBotToken(): string {
+    return this._telegramBotToken;
+  }
+  public set telegramBotToken(value: string) {
+    this._telegramBotToken = value;
+  }
+
+  public get telegramChatId(): string {
+    return this._telegramChatId;
+  }
+  public set telegramChatId(value: string) {
+    this._telegramChatId = value;
+  }
+
+  get apiKey() {
+    return this._apiKey;
+  }
+  set apiKey(value) {
+    this._apiKey = value;
+  }
+
+  get apiSecret() {
+    return this._apiSecret;
+  }
+  set apiSecret(value) {
+    this._apiSecret = value;
+  }
+
+  get baseUrl() {
+    return this._baseUrl;
+  }
+  set baseUrl(value) {
+    this._baseUrl = value;
+  }
+
+  async fetchConfig() {
+    try {
+      const response = await fetch('/config.json');
+      const config = await response.json();
+      const exchanges = (config.batchConfig?.exchanges ?? []);
+      const exchangeMap = Object.fromEntries(exchanges.map((e: { name: string; }) => [e.name, e]));
+
+      this._assets = ((config as IConfig).batchConfig?.assets ?? []).map((asset: IAssetConfig): IAsset => ({
+        name: asset.name,
+        exchange: asset.exchange,
+        exchangeName: asset.exchange,
+        percentage: asset.percentage ?? 15,
+        apiUrl: exchangeMap[asset.exchange]?.apiUrl || ''
+      }));
+    } catch (err) {
+      let errMessage = "";
+      if (err instanceof Error) {
+
+        errMessage = err.message
+          .replace(this.apiKey || '', '[REDACTED_API_KEY]')
+          .replace(this.apiSecret || '', '[REDACTED_API_SECRET]')
+          // .replace(this.vpnIP || '', '[REDACTED_VPN_IP]')
+          .replace(this.telegramBotToken || '', '[REDACTED_BOT_TOKEN]');
+      }
+
+      this.logService.logError(`Error fetching config: ${errMessage}`);
+      this._assets = [];
+    }
+  }
+}

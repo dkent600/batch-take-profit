@@ -1,5 +1,11 @@
-import { ExchangeApiService } from "./exchange-api-services.js";
+import { IExchangeApiService } from "./exchange-api-service.js";
+import { IExchangeConfigService } from './exchange-config-service.js';
 
-export class CoinExApiService extends ExchangeApiService {
-  // Implementation of CoinEx API service methods
+export class CoinExApiService {
+
+  constructor(
+    private exchangeApiService: IExchangeApiService,
+    private exchangeConfigService: IExchangeConfigService) {
+    // Implementation of CoinEx API service methods
+  }
 }

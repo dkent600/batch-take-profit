@@ -1,19 +1,45 @@
-async function handleError(err: unknown) {
-  if (err instanceof Error) {
-    err.message = err.message
-      .replace(API_KEY || '', '[REDACTED_API_KEY]')
-      .replace(API_SECRET || '', '[REDACTED_API_SECRET]')
-      .replace(process.env.VPN_IP || '', '[REDACTED_VPN_IP]')
-      .replace(process.env.TELEGRAM_BOT_TOKEN || '', '[REDACTED_BOT_TOKEN]');
+import { log } from 'console';
+import * as fs from 'fs';
+import { IEnvService } from './env-service.js';
+
+export interface ILogService {
+  log(message: string): void;
+  logError(err: Error | unknown): void;
+  logReport(message: string): void;
+}
+
+export class LogService implements ILogService {
+  private logFileName: string;
+
+  constructor(envService: IEnvService) {
+    this.logFileName = envService.get('LOGFILENAME') || 'exchange.log';
   }
 
-  try {
-    await sendTelegramMessage(errorToTelegramMessage(err));
-  } catch { }
-
-  if (err instanceof Error) {
-    log(err.stack ?? err.message);
-  } else {
-    log(String(err));
+  log(message: string): void {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
+    fs.appendFileSync(this.logFileName, logMessage);
+    console.log(logMessage);
   }
-};
+
+  logReport(report: string | string[]): void {
+    if (!Array.isArray(report)) {
+      report = [report];
+    }
+    const _log = [...report].join('\n');
+
+    this.log(_log + '\n');
+  }
+
+  async logError(err: Error | unknown): Promise<void> {
+    // try {
+    //   await this.telegramService.sendTelegramErrorMessage(errorToTelegramMessage(err));
+    // } catch { }
+
+    if (err instanceof Error) {
+      log(err.stack ?? err.message);
+    } else {
+      log(String(err));
+    }
+  }
+}

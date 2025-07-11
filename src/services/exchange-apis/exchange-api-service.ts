@@ -1,8 +1,8 @@
 import axios from 'axios';
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
 import * as crypto from 'crypto';
-import ITelegramService from "../telegram-service.ts";
+import { ITelegramService } from "../telegram-service.js";
+import { ILogService } from "./log-service.js";
+import { IEnvService } from './env-service.js';
 
 export interface IExchangeApiService {
   createMarketSellOrder(pair: string, amount: number): Promise<void>;
@@ -15,8 +15,11 @@ export class ExchangeApiService implements IExchangeApiService {
   private logFileName: string
   private cachedTimeOffset = 0;
 
-  constructor(private telegramsService: ITelegramService) {
-    dotenv.config();
+  constructor(
+    private telegramsService: ITelegramService,
+    private envService: IEnvService,
+    private logService: ILogService) {
+
     this.apiKey = process.env.API_KEY || '';
     this.apiSecret = process.env.API_SECRET || '';
     this.baseUrl = process.env.BASE_URL || '';
@@ -41,16 +44,6 @@ export class ExchangeApiService implements IExchangeApiService {
   async syncTimeOffset() {
     const serverTime = await this.getServerTime();
     this.cachedTimeOffset = serverTime - Date.now();
-  }
-
-  log(report: string | string[]): void {
-    if (!Array.isArray(report)) {
-      report = [report];
-    }
-    const _log = [...report].join('\n');
-
-    fs.appendFileSync(this.logFileName, _log + '\n');
-    console.log(_log);
   }
 
   sign(queryString: string) {
@@ -80,12 +73,12 @@ export class ExchangeApiService implements IExchangeApiService {
       });
 
       const alertMessage = `✅ Order placed for ${coinpair}: ${response.statusText}`;
-      log(alertMessage);
+      this.logService.log(alertMessage);
       await this.telegramsService.sendTelegramMessage(alertMessage);
     } catch (err) {
-      const alertMessage = `❌ Failed to place order for ${coinpair}: ${err}`;
-      log(alertMessage);
-      await this.telegramsService.sendTelegramMessage(alertMessage);
+      err.message = `❌ Failed to place order for ${coinpair}: ${err}`;
+      this.logService.logError(err);
+      await this.telegramsService.sendTelegramMessage(err.message);
     }
   }
 
