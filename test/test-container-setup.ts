@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { DI, IContainer, Registration } from 'aurelia';
 import {
   IExchangeApiService, ExchangeApiServiceToken,
@@ -21,20 +22,20 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
   // Default mocks that can be overridden
   const defaultMocks = {
     exchangeApi: {
-      createMarketSellOrder: jest.fn(),
-      fetchPrice: jest.fn()
+      createMarketSellOrder: vi.fn(),
+      fetchPrice: vi.fn()
     },
     logService: {
-      log: jest.fn(),
-      logError: jest.fn(),
-      logReport: jest.fn()
+      log: vi.fn(),
+      logError: vi.fn(),
+      logReport: vi.fn()
     },
     telegramService: {
-      sendTelegramMessage: jest.fn(),
-      sendTelegramErrorMessage: jest.fn()
+      sendTelegramMessage: vi.fn(),
+      sendTelegramErrorMessage: vi.fn()
     },
     assetsConfig: {
-      getAssets: jest.fn().mockResolvedValue([]),
+      getAssets: vi.fn().mockResolvedValue([]),
       apiKey: 'test-key',
       apiSecret: 'test-secret',
       baseUrl: 'https://test-api.com',
@@ -43,9 +44,9 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
       telegramChatId: 'test-chat'
     },
     envService: {
-      get: jest.fn(),
-      getNumber: jest.fn(),
-      getBoolean: jest.fn()
+      get: vi.fn(),
+      getNumber: vi.fn(),
+      getBoolean: vi.fn()
     }
   };
 

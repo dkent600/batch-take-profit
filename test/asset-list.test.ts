@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest';
 import { createTestContainer, getMocksFromContainer } from './test-container-setup.js';
 import { AssetList } from '../src/pages/asset-list/asset-list.js';
 
@@ -6,7 +7,7 @@ describe('AssetList with Test Container Helper', () => {
     // Create container with custom mocks
     const container = createTestContainer({
       assetsConfig: {
-        getAssets: jest.fn().mockResolvedValue([
+        getAssets: vi.fn().mockResolvedValue([
           {
             name: 'Bitcoin',
             symbol: 'BTC',
@@ -36,7 +37,7 @@ describe('AssetList with Test Container Helper', () => {
   it('should handle errors when loading assets', async () => {
     const container = createTestContainer({
       assetsConfig: {
-        getAssets: jest.fn().mockRejectedValue(new Error('API Error'))
+        getAssets: vi.fn().mockRejectedValue(new Error('API Error'))
       }
     });
 

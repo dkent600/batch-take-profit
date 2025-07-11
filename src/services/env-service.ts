@@ -14,7 +14,7 @@ export class EnvService implements IEnvService {
   get(key: string): string | undefined {
     // In Vite/browser environment, use import.meta.env
     // This avoids the dotenv browser compatibility issues
-    return (import.meta as any).env[key];
+    return ((import.meta as unknown) as { env: Record<string, string> }).env[key];
   }
 
   getNumber(key: string): number | undefined {

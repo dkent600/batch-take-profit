@@ -129,22 +129,24 @@ export class AssetsConfigService implements IAssetsConfigService {
         percentage: asset.percentage ?? 15,
         apiUrl: exchangeMap[asset.exchange]?.apiUrl || ''
       }));
-    } catch (err) {
-      let errMessage = "";
-      if (err instanceof Error) {
+    } catch (error) {
+      const errMessage = "";
+      if (error instanceof Error) {
 
-        err.message = err.message
+        error.message = error.message
           .replace(this.apiKey || '', '[REDACTED_API_KEY]')
           .replace(this.apiSecret || '', '[REDACTED_API_SECRET]')
           // .replace(this.vpnIP || '', '[REDACTED_VPN_IP]')
           .replace(this.telegramBotToken || '', '[REDACTED_BOT_TOKEN]');
-        err.message = `Error fetching config: ${errMessage}`;
+        error.message = `Error fetching config: ${errMessage}`;
       }
       else {
-        err = `Error fetching config: ${String(err)}`;
+        const err = `Error fetching config: ${String(error)}`;
+        this.logService.logError(err);
+        return this._assets = [];
       }
 
-      this.logService.logError(err);
+      this.logService.logError(error);
       return this._assets = [];
     }
   }
