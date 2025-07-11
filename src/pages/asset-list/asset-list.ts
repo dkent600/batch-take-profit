@@ -1,6 +1,6 @@
 import "./asset-list.css";
-import { IExchangeConfigService, IAsset } from './services/exchange-apis/exchange-config-service.js';
-import { IExchangeApiService } from "./services/exchange-apis/exchange-api-service.js";
+import { IExchangeConfigService, IAsset } from '../../services/exchange-apis/exchange-config-service.js';
+import { IExchangeApiService } from "../../services/exchange-apis/exchange-api-service.js";
 
 export class AssetList {
   assets: IAsset[];
