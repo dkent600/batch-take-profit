@@ -34,7 +34,7 @@ interface IConfig {
 }
 
 // Define or import the interface as needed
-export interface IExchangeConfigService {
+export interface IAssetsConfigService {
   apiKey: string;
   apiSecret: string;
   baseUrl: string;
@@ -44,7 +44,7 @@ export interface IExchangeConfigService {
   getAssets(): Promise<IAsset[]>;
 }
 
-export class ExchangeConfigService implements IExchangeConfigService {
+export class AssetsConfigService implements IAssetsConfigService {
 
   private _apiKey: string;
   private _apiSecret: string;

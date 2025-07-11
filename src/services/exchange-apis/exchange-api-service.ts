@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as crypto from 'crypto';
 import { ITelegramService } from "../telegram-service.js";
-import { ILogService } from "./log-service.js";
-import { IExchangeConfigService } from './exchange-config-service.js';
+import { ILogService } from "../log-service.js";
+import { IAssetsConfigService } from '../assets-config-service.js';
 
 export interface IExchangeApiService {
   createMarketSellOrder(pair: string, amount: number): Promise<void>;
@@ -17,7 +17,7 @@ export class ExchangeApiService implements IExchangeApiService {
   constructor(
     private telegramsService: ITelegramService,
     private logService: ILogService,
-    private configService: IExchangeConfigService) {
+    private configService: IAssetsConfigService) {
 
     this.apiKey = this.configService.apiKey;
     this.apiSecret = this.configService.apiKey;

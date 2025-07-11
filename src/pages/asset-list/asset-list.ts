@@ -1,5 +1,5 @@
 import "./asset-list.css";
-import { IExchangeConfigService, IAsset } from '../../services/exchange-apis/exchange-config-service.js';
+import { IAssetsConfigService, IAsset } from '../../services/assets-config-service.js';
 import { IExchangeApiService } from "../../services/exchange-apis/exchange-api-service.js";
 
 export class AssetList {
@@ -7,7 +7,7 @@ export class AssetList {
 
   constructor(
     private exchangeApiService: IExchangeApiService,
-    private exchangeConfigService: IExchangeConfigService
+    private exchangeConfigService: IAssetsConfigService
   ) {
   }
 
