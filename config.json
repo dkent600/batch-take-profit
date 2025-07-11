@@ -13,20 +13,22 @@
     "assets": [
       {
         "name": "BTC",
-        "percentage": 50,
+        "percentage": 15,
         "exchange": "MexC"
       },
       {
         "name": "ETH",
+        "percentage": 15,
         "exchange": "MexC"
       },
       {
         "name": "ADA",
-        "percentage": 30,
+        "percentage": 15,
         "exchange": "CoinEx"
       },
       {
         "name": "SOL",
+        "percentage": 15,
         "exchange": "CoinEx"
       }
     ]
