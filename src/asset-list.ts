@@ -1,12 +1,22 @@
 import "./asset-list.css";
+import { IExchangeConfigService, IAsset } from './services/exchange-apis/exchange-config-service.js';
+import { IExchangeApiService } from "./services/exchange-apis/exchange-api-service.js";
+
 export class AssetList {
+  assets: IAsset[];
+
+  constructor(
+    private exchangeApiService: IExchangeApiService,
+    private exchangeConfigService: IExchangeConfigService
+  ) {
+  }
 
   async binding() {
     // Fetch config.json from the public root
-
+    this.assets = await this.exchangeConfigService.getAssets();
   }
 
-  createSellOrder(event: Event, asset: IAsset) {
+  createSellOrder(_event: Event, asset: IAsset) {
     console.log('Creating sell order for:', asset.name);
   }
 }

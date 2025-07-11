@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as crypto from 'crypto';
 import { ITelegramService } from "../telegram-service.js";
 import { ILogService } from "./log-service.js";
-import { IEnvService } from './env-service.js';
+import { IExchangeConfigService } from './exchange-config-service.js';
 
 export interface IExchangeApiService {
   createMarketSellOrder(pair: string, amount: number): Promise<void>;
@@ -12,19 +12,18 @@ export class ExchangeApiService implements IExchangeApiService {
   private apiKey: string;
   private apiSecret: string;
   private baseUrl: string;
-  private logFileName: string
   private cachedTimeOffset = 0;
 
   constructor(
     private telegramsService: ITelegramService,
-    private envService: IEnvService,
-    private logService: ILogService) {
+    private logService: ILogService,
+    private configService: IExchangeConfigService) {
 
-    this.apiKey = process.env.API_KEY || '';
-    this.apiSecret = process.env.API_SECRET || '';
-    this.baseUrl = process.env.BASE_URL || '';
-    this.logFileName = process.env.LOG_FILE_NAME || 'exchange-api.log';
+    this.apiKey = this.configService.apiKey;
+    this.apiSecret = this.configService.apiKey;
+    this.baseUrl = this.configService.baseUrl;
   }
+
   private getTimestampString = () => this.now().toString();
 
   now() {

@@ -1,7 +1,7 @@
 import { IEnvService } from "./env-service.js";
 import { ILogService } from "./log-service.js";
 
-interface IAsset {
+export interface IAsset {
   name: string;
   exchange: string;
   exchangeName: string;
@@ -41,6 +41,7 @@ export interface IExchangeConfigService {
   logFileName: string;
   telegramBotToken: string;
   telegramChatId: string;
+  getAssets(): Promise<IAsset[]>;
 }
 
 export class ExchangeConfigService implements IExchangeConfigService {
@@ -48,7 +49,6 @@ export class ExchangeConfigService implements IExchangeConfigService {
   private _apiKey: string;
   private _apiSecret: string;
   private _baseUrl: string;
-  private _logFileName: string;
   private _telegramBotToken: string;
   private _telegramChatId: string;
   private _assets: IAsset[];
@@ -102,14 +102,21 @@ export class ExchangeConfigService implements IExchangeConfigService {
     this._baseUrl = value;
   }
 
-  async fetchConfig() {
+  async getAssets(): Promise<IAsset[]> {
+    if (!this._assets) {
+      return this.fetchConfig();
+    }
+    return this._assets;
+  }
+
+  private async fetchConfig(): Promise<IAsset[]> {
     try {
       const response = await fetch('/config.json');
       const config = await response.json();
       const exchanges = (config.batchConfig?.exchanges ?? []);
       const exchangeMap = Object.fromEntries(exchanges.map((e: { name: string; }) => [e.name, e]));
 
-      this._assets = ((config as IConfig).batchConfig?.assets ?? []).map((asset: IAssetConfig): IAsset => ({
+      return this._assets = ((config as IConfig).batchConfig?.assets ?? []).map((asset: IAssetConfig): IAsset => ({
         name: asset.name,
         exchange: asset.exchange,
         exchangeName: asset.exchange,
@@ -120,15 +127,19 @@ export class ExchangeConfigService implements IExchangeConfigService {
       let errMessage = "";
       if (err instanceof Error) {
 
-        errMessage = err.message
+        err.message = err.message
           .replace(this.apiKey || '', '[REDACTED_API_KEY]')
           .replace(this.apiSecret || '', '[REDACTED_API_SECRET]')
           // .replace(this.vpnIP || '', '[REDACTED_VPN_IP]')
           .replace(this.telegramBotToken || '', '[REDACTED_BOT_TOKEN]');
+        err.message = `Error fetching config: ${errMessage}`;
+      }
+      else {
+        err = `Error fetching config: ${String(err)}`;
       }
 
-      this.logService.logError(`Error fetching config: ${errMessage}`);
-      this._assets = [];
+      this.logService.logError(err);
+      return this._assets = [];
     }
   }
 }
