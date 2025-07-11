@@ -12,24 +12,39 @@
     ],
     "assets": [
       {
-        "name": "BTC",
+        "name": "DOGE",
         "percentage": 15,
         "exchange": "MexC"
       },
       {
-        "name": "ETH",
+        "name": "SOL",
+        "percentage": 15,
+        "exchange": "MexC"
+      },
+      {
+        "name": "DOGE",
+        "percentage": 15,
+        "exchange": "CoinEx"
+      },
+      {
+        "name": "SHIB",
         "percentage": 15,
         "exchange": "MexC"
       },
       {
         "name": "ADA",
         "percentage": 15,
-        "exchange": "CoinEx"
+        "exchange": "MexC"
       },
       {
-        "name": "SOL",
+        "name": "XRP",
         "percentage": 15,
-        "exchange": "CoinEx"
+        "exchange": "Trezor"
+      },
+      {
+        "name": "XLM",
+        "percentage": 15,
+        "exchange": "Trezor"
       }
     ]
   }
