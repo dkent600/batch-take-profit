@@ -1,13 +1,18 @@
 import axios from 'axios';
 import * as crypto from 'crypto';
-import { ITelegramService } from "../telegram-service.js";
-import { ILogService } from "../log-service.js";
-import { IAssetsConfigService } from '../assets-config-service.js';
+import { DI, inject } from 'aurelia';
+import { ITelegramService, TelegramServiceToken } from "../telegram-service.js";
+import { ILogService, LogServiceToken } from "../log-service.js";
+import { IAssetsConfigService, AssetsConfigServiceToken } from '../assets-config-service.js';
 
-export interface IExchangeApiService {
+// Create a DI token for the interface
+export const ExchangeApiServiceToken = DI.createInterface<IExchangeApiService>('IExchangeApiService');
+export type IExchangeApiService = {
   createMarketSellOrder(pair: string, amount: number): Promise<void>;
-}
+  fetchPrice(pair: string): Promise<number>;
+};
 
+@inject(TelegramServiceToken, LogServiceToken, AssetsConfigServiceToken)
 export class ExchangeApiService implements IExchangeApiService {
   private apiKey: string;
   private apiSecret: string;

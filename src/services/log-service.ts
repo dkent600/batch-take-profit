@@ -1,6 +1,7 @@
 import { log } from 'console';
 import * as fs from 'fs';
-import { IEnvService } from './env-service.js';
+import { DI, inject } from 'aurelia';
+import { IEnvService, EnvServiceToken } from './env-service.js';
 
 export interface ILogService {
   log(message: string): void;
@@ -8,6 +9,9 @@ export interface ILogService {
   logReport(message: string): void;
 }
 
+export const LogServiceToken = DI.createInterface<ILogService>('ILogService');
+
+@inject(EnvServiceToken)
 export class LogService implements ILogService {
   private logFileName: string;
 

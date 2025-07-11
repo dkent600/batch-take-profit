@@ -1,15 +1,24 @@
-import * as dotenv from 'dotenv';
+import { IAssetsConfigService, AssetsConfigServiceToken } from './assets-config-service.js';
 import axios from 'axios';
+import { DI, inject } from 'aurelia';
 
 export interface ITelegramService {
   sendTelegramMessage(message: string): Promise<void>;
   sendTelegramErrorMessage(err: Error | unknown): Promise<void>;
 }
 
+export const TelegramServiceToken = DI.createInterface<ITelegramService>('ITelegramService');
+
+@inject(AssetsConfigServiceToken)
 export class TelegramService implements ITelegramService {
+
+  constructor(private readonly assetsConfigService: IAssetsConfigService) {
+
+  }
   async sendTelegramMessage(message: string): Promise<void> {
-    const token = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
+
+    const token = this.assetsConfigService.telegramBotToken;
+    const chatId = this.assetsConfigService.telegramChatId;
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
     return axios.post(url, {

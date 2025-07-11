@@ -1,5 +1,6 @@
-import { IEnvService } from "./env-service.js";
-import { ILogService } from "./log-service.js";
+import { DI, inject } from 'aurelia';
+import { IEnvService, EnvServiceToken } from "./env-service.js";
+import { ILogService, LogServiceToken } from "./log-service.js";
 
 export interface IAsset {
   name: string;
@@ -33,7 +34,7 @@ interface IConfig {
   [key: string]: unknown;
 }
 
-// Define or import the interface as needed
+// Define the interface
 export interface IAssetsConfigService {
   apiKey: string;
   apiSecret: string;
@@ -44,6 +45,10 @@ export interface IAssetsConfigService {
   getAssets(): Promise<IAsset[]>;
 }
 
+// Create DI token for the interface - using a different name to avoid conflict
+export const AssetsConfigServiceToken = DI.createInterface<IAssetsConfigService>('IAssetsConfigService');
+
+@inject(EnvServiceToken, LogServiceToken)
 export class AssetsConfigService implements IAssetsConfigService {
 
   private _apiKey: string;
@@ -56,9 +61,10 @@ export class AssetsConfigService implements IAssetsConfigService {
   constructor(
     private envService: IEnvService,
     private logService: ILogService) {
-    this.apiKey = this.envService.get('API_KEY');
-    this.apiSecret = this.envService.get('API_SECRET');
-    this.baseUrl = this.envService.get('BASE_URL') || 'https://api.default.com';
+
+    this._apiKey = this.envService.get('API_KEY');
+    this._apiSecret = this.envService.get('API_SECRET');
+    this._baseUrl = this.envService.get('BASE_URL') || 'https://api.default.com';
     this._telegramBotToken = this.envService.get('TELEGRAM_BOT_TOKEN');
     this._telegramChatId = this.envService.get('TELEGRAM_CHAT_ID');
   }
@@ -68,17 +74,17 @@ export class AssetsConfigService implements IAssetsConfigService {
   }
 
   public get telegramBotToken(): string {
-    return this._telegramBotToken;
+    return this.telegramBotToken;
   }
   public set telegramBotToken(value: string) {
-    this._telegramBotToken = value;
+    this.telegramBotToken = value;
   }
 
   public get telegramChatId(): string {
-    return this._telegramChatId;
+    return this.telegramChatId;
   }
   public set telegramChatId(value: string) {
-    this._telegramChatId = value;
+    this.telegramChatId = value;
   }
 
   get apiKey() {

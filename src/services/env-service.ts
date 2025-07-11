@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv';
+import { DI } from 'aurelia';
 
 export interface IEnvService {
   get(key: string): string | undefined;
@@ -6,25 +6,24 @@ export interface IEnvService {
   getBoolean(key: string): boolean | undefined;
 }
 
-export class EnvService implements IEnvService {
-  private env: Record<string, string>;
+export const EnvServiceToken = DI.createInterface<IEnvService>('IEnvService');
 
-  constructor() {
-    dotenv.config();
-    this.env = process.env;
-  }
+export class EnvService implements IEnvService {
+  constructor() { }
 
   get(key: string): string | undefined {
-    return this.env[key];
+    // In Vite/browser environment, use import.meta.env
+    // This avoids the dotenv browser compatibility issues
+    return (import.meta as any).env[key];
   }
 
   getNumber(key: string): number | undefined {
-    const value = this.env[key];
+    const value = this.get(key);
     return value ? parseFloat(value) : undefined;
   }
 
   getBoolean(key: string): boolean | undefined {
-    const value = this.env[key];
+    const value = this.get(key);
     return value ? value.toLowerCase() === 'true' : undefined;
   }
 }

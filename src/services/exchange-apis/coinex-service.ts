@@ -1,6 +1,8 @@
-import { IExchangeApiService } from "./exchange-api-service.js";
-import { IAssetsConfigService } from '../assets-config-service.js';
+import { inject } from 'aurelia';
+import { IExchangeApiService, ExchangeApiServiceToken } from "./exchange-api-service.js";
+import { IAssetsConfigService, AssetsConfigServiceToken } from '../assets-config-service.js';
 
+@inject(ExchangeApiServiceToken, AssetsConfigServiceToken)
 export class CoinExApiService {
 
   constructor(
