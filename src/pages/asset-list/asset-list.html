@@ -28,11 +28,12 @@
                 />%
             </td>
             <td class="text-left text-sm px-2">
-                <button 
-                click.trigger="createSellOrder($event, asset)" 
-                class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs' + (asset.percentageInvalid ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
-                disabled.bind="asset.percentageInvalid">
-                Place market sell order
+                <button
+                  style.bind="asset.percentageInvalid ? 'color: #6b7280;' : ''"
+                  click.trigger="createSellOrder($event, asset)"
+                  class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs' + (asset.percentageInvalid ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
+                  disabled.bind="asset.percentageInvalid">
+                  Place market sell order
                 </button>
             </td>
           </tr>
