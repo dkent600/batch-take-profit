@@ -12,7 +12,6 @@ export class AssetList {
   }
 
   async binding() {
-    // Fetch config.json from the public root
     this.assets = await this.exchangeConfigService.getAssets();
   }
 
