@@ -2,43 +2,50 @@
   <div class="flex flex-col items-center gap-6 p-6">
     <h1 class="text-2xl font-bold text-center">Asset List</h1>
 
-    <div class="overflow-x-auto w-full">
-      <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
-        <thead>
-          <tr>
-            <th class="text-left text-sm px-2">Coin</th>
-            <th class="text-left text-sm px-2">Exchange</th>
-            <th class="text-left text-sm px-2">% to Sell</th>
-            <th class="text-left text-sm px-2"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr repeat.for="asset of assets">
-            <td class="text-left text-sm px-2">${asset.name}</td>
-            <td class="text-left text-sm px-2">${asset.exchange}</td>
-            <td class="text-left text-sm px-2">
-                <input
-                type="number"
-                min="1"
-                max="100"
-                value.two-way="asset.percentage"
-                required
-                class.bind="'daisy-input daisy-input-xs w-16 text-center' + (asset.percentageInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-                input.trigger="validatePercentage(asset)"
-                />%
-            </td>
-            <td class="text-left text-sm px-2">
-                <button
-                  style.bind="asset.percentageInvalid ? 'color: #6b7280;' : ''"
-                  click.trigger="createSellOrder($event, asset)"
-                  class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs' + (asset.percentageInvalid ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
-                  disabled.bind="asset.percentageInvalid">
-                  Place market sell order
-                </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+      <thead>
+        <tr>
+          <th class="text-left text-sm px-2">Select</th>
+          <th class="text-left text-sm px-2">Coin</th>
+          <th class="text-left text-sm px-2">Exchange</th>
+          <th class="text-left text-sm px-2">% to Sell</th>
+          <!--th class="text-left text-sm px-2"></th-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr repeat.for="asset of assets">
+          <td class="text-left text-sm px-2">
+            <input type="checkbox" checked.bind="asset.selected" />
+          </td>
+          <td class="text-left text-sm px-2">${asset.name}</td>
+          <td class="text-left text-sm px-2">${asset.exchange}</td>
+          <td class="text-left text-sm px-2">
+              <input
+              type="number"
+              min="1"
+              max="100"
+              value.two-way="asset.percentage"
+              required
+              class.bind="'daisy-input daisy-input-xs w-16 text-center' + (asset.percentageInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
+              input.trigger="validatePercentage(asset)"
+              />%
+              <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
+          </td>
+          <!--td class="text-left text-sm px-2">
+            <button click.trigger="createSellOrder($event, asset)" class="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs">
+              Place market sell order
+            </button>
+          </td-->
+        </tr>
+      </tbody>
+    </table>
+    <div class="flex justify-center mt-4">
+      <button
+        click.trigger="createSellOrders($event)"
+        class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
+        disabled.bind="!hasSelection || hasInvalidSelection">
+        Place selected market sell orders
+      </button>
     </div>
   </div>
 </template>

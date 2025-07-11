@@ -5,6 +5,7 @@ import { IExchangeApiService, ExchangeApiServiceToken } from "../../services/exc
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
+  selected?: boolean;
 }
 
 @inject(ExchangeApiServiceToken, AssetsConfigServiceToken)
@@ -15,7 +16,6 @@ export class AssetList {
     private readonly exchangeApiService: IExchangeApiService,
     private readonly exchangeConfigService: IAssetsConfigService
   ) {
-    console.log('constructing assetlist');
 
   }
 
@@ -24,8 +24,30 @@ export class AssetList {
   }
 
   createSellOrder(_event: Event, asset: IAsset) {
-    console.log('Creating sell order for:', asset.name);
-  } validatePercentage(asset: IAssetEx): void {
+    console.log(`Creating sell order for ${asset.percentage}% of:`, asset.name);
+  }
+
+  createSellOrders(_event: Event) {
+    try {
+      for (const asset of this.assets) {
+        if (asset.selected) {
+          this.createSellOrder(_event, asset);
+        }
+      }
+    } catch (error) {
+      console.error('Error creating sell orders:', error);
+    }
+  }
+
+  get hasSelection() {
+    return this.assets.some(asset => asset.selected);
+  }
+
+  get hasInvalidSelection() {
+    return this.assets.some(asset => asset.selected && asset.percentageInvalid);
+  }
+
+  validatePercentage(asset: IAssetEx): void {
     const originalValue = String(asset.percentage);
 
     // Check if the string is a valid number format
@@ -41,7 +63,7 @@ export class AssetList {
 
     const parsedValue = Number.parseFloat(originalValue);
     asset.percentageInvalid = isNaN(parsedValue) || parsedValue <= 0 || parsedValue > 100;
-    console.log('Validated:', originalValue, 'parsed:', parsedValue, 'percentageInvalid:', asset.percentageInvalid);
+    // console.log('Validated:', originalValue, 'parsed:', parsedValue, 'percentageInvalid:', asset.percentageInvalid);
   }
 
 }
