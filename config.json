@@ -3,11 +3,11 @@
     "exchanges": [
       {
         "name": "MexC",
-        "apiUrl": "https://api.mexc.com"
+        "apiurl": "https://api.mexc.com/api/v3/order?${queryString}&signature=${signature}"
       },
       {
         "name": "CoinEx",
-        "apiUrl": "https://api.coinex.com"
+        "apiUrl": "https://api.coinex.com/api/v1/order?${queryString}&signature=${signature}"
       }
     ],
     "assets": [

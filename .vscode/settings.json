@@ -4,5 +4,19 @@
   },
   "editor.quickSuggestions": {
     "strings": "on"
-  }
+  },
+  "editor.formatOnSave": true,
+  "eslint.format.enable": false,
+  "editor.defaultFormatter": null,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.ts": "always",
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.validate": [
+    "typescript"
+  ],
+  "eslint.codeAction.showDocumentation": {
+    "enable": false
+  },
+  "eslint.enable": false
 }

@@ -4,7 +4,7 @@ import './app.css';
 import { AssetList } from './asset-list.js';
 
 Aurelia
-.register(AssetList)
+  .register(AssetList)
   .app(App)
   .start();
 

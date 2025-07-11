@@ -48,4 +48,8 @@ export class AssetList {
       apiUrl: exchangeMap[asset.exchange]?.apiUrl || ''
     }));
   }
+
+  createSellOrder(event: Event, asset: IAsset) {
+    console.log('Creating sell order for:', asset.name);
+  }
 }

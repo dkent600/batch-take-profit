@@ -18,7 +18,7 @@
             <td class="text-left text-sm px-2">${asset.exchange}</td>
             <td class="text-left text-sm px-2">${asset.percentage}%</td>
             <td class="text-left text-sm px-2">
-              <button class="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs">
+              <button click.trigger="createSellOrder($event, asset)" class="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs">
                 Place market sell order
               </button>
             </td>
