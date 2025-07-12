@@ -29,6 +29,12 @@ export class AssetList {
     }
   }
 
+  selectNone() {
+    for (const asset of this.assets) {
+      asset.selected = false;
+    }
+  }
+
   createSellOrder(_event: Event, asset: IAsset) {
     console.log(`Creating sell order for ${asset.percentage}% of:`, asset.name);
   }
@@ -47,6 +53,11 @@ export class AssetList {
 
   get hasSelection() {
     return this.assets.some(asset => asset.selected);
+  }
+
+  // Use a getter so it always reflects the current selection
+  get selectedOrders() {
+    return this.assets.filter(asset => asset.selected);
   }
 
   get hasInvalidSelection() {

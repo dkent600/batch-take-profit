@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center p-6">
-    <h1 class="text-2xl font-bold text-center">Asset List</h1>
+    <h1 class="text-2xl font-bold text-center">Scaled Take Profit Sales</h1>
 
     <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
       <thead>
@@ -40,17 +40,24 @@
       </tbody>
     </table>
     <div class="flex flex-col items-center justify-center mt-4 gap-2">
-      <div
-      click.trigger="selectAll($event)"
-      class="daisy-link daisy-link-primary text-sm no-underline">
-      Select All
+      <div class="flex flex-row gap-4">
+        <div
+          click.trigger="selectAll($event)"
+          class="daisy-link daisy-link-primary text-sm no-underline">
+          Select All
+        </div>
+        <div
+          click.trigger="selectNone($event)"
+          class="daisy-link daisy-link-primary text-sm no-underline">
+          Select None
+        </div>
       </div>
       <div>
       <button
         click.trigger="createSellOrders($event)"
         class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
         disabled.bind="!hasSelection || hasInvalidSelection">
-        Place selected market sell orders
+        Place the ${selectedOrders.length} selected market sell order<template if.bind="selectedOrders.length != 1">s</template>
       </button>
       </div>
     </div>
