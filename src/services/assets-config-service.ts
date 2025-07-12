@@ -5,7 +5,6 @@ import { ILogService, LogServiceToken } from "./log-service.js";
 export interface IAsset {
   name: string;
   exchange: string;
-  exchangeName: string;
   percentage: number;
   apiUrl: string;
 }
@@ -36,13 +35,12 @@ interface IConfig {
 
 // Define the interface
 export interface IAssetsConfigService {
-  apiKey: string;
-  apiSecret: string;
-  baseUrl: string;
   logFileName: string;
   telegramBotToken: string;
   telegramChatId: string;
   getAssets(): Promise<IAsset[]>;
+  getAPIKey(exchangeName: string): string;
+  getAPISecret(exchangeName: string): string;
 }
 
 // Create DI token for the interface - using a different name to avoid conflict
@@ -51,9 +49,6 @@ export const AssetsConfigServiceToken = DI.createInterface<IAssetsConfigService>
 @inject(EnvServiceToken, LogServiceToken)
 export class AssetsConfigService implements IAssetsConfigService {
 
-  private _apiKey: string;
-  private _apiSecret: string;
-  private _baseUrl: string;
   private _telegramBotToken: string;
   private _telegramChatId: string;
   private _assets: IAsset[];
@@ -62,12 +57,12 @@ export class AssetsConfigService implements IAssetsConfigService {
     private envService: IEnvService,
     private logService: ILogService) {
 
-    this._apiKey = this.envService.get('API_KEY');
-    this._apiSecret = this.envService.get('API_SECRET');
-    this._baseUrl = this.envService.get('BASE_URL') || 'https://api.default.com';
-    this._telegramBotToken = this.envService.get('TELEGRAM_BOT_TOKEN');
-    this._telegramChatId = this.envService.get('TELEGRAM_CHAT_ID');
+    this._telegramBotToken = this.envService.get('telegram.botToken');
+    this._telegramChatId = this.envService.get('telegram.chatId');
   }
+  apiKey: string;
+  apiSecret: string;
+  baseUrl: string;
   logFileName: string;
   public get assets(): IAsset[] {
     return this._assets;
@@ -87,25 +82,23 @@ export class AssetsConfigService implements IAssetsConfigService {
     this.telegramChatId = value;
   }
 
-  get apiKey() {
-    return this._apiKey;
-  }
-  set apiKey(value) {
-    this._apiKey = value;
-  }
-
-  get apiSecret() {
-    return this._apiSecret;
-  }
-  set apiSecret(value) {
-    this._apiSecret = value;
+  /**
+   * get API key given an exchange name like "MEXC"
+   * @param configKey 
+   * @returns 
+   */
+  getAPIKey(exchangeName: string): string {
+    return this.envService.get(`${exchangeName.toLowerCase()}.apiKey`) || '';
   }
 
-  get baseUrl() {
-    return this._baseUrl;
-  }
-  set baseUrl(value) {
-    this._baseUrl = value;
+  /**
+   * get API secret given an exchange name like "MEXC"
+   * 
+   * @param configKey 
+   * @returns 
+   */
+  getAPISecret(exchangeName: string): string {
+    return this.envService.get(`${exchangeName.toLowerCase()}.apiSecret`) || '';
   }
 
   async getAssets(): Promise<IAsset[]> {
@@ -120,14 +113,13 @@ export class AssetsConfigService implements IAssetsConfigService {
       const response = await fetch('/config.json');
       const config = await response.json();
       const exchanges = (config.batchConfig?.exchanges ?? []);
-      const exchangeMap = Object.fromEntries(exchanges.map((e: { name: string; }) => [e.name, e]));
+      const exchangeMap = Object.fromEntries(exchanges.map((e: { name: string; }) => [e.name.toUpperCase(), e]));
 
       return this._assets = ((config as IConfig).batchConfig?.assets ?? []).map((asset: IAssetConfig): IAsset => ({
         name: asset.name,
         exchange: asset.exchange,
-        exchangeName: asset.exchange,
         percentage: asset.percentage ?? 15,
-        apiUrl: exchangeMap[asset.exchange]?.apiUrl || ''
+        apiUrl: exchangeMap[asset.exchange.toUpperCase()]?.apiUrl || ''
       }));
     } catch (error) {
       const errMessage = "";

@@ -9,21 +9,31 @@ import {
   AssetsConfigService, AssetsConfigServiceToken,
   EnvService, EnvServiceToken,
   MexcApiService,
-  CoinExApiService
+  CoinExApiService,
+  MexcApiServiceToken
 } from './services/index.js';
 
-Aurelia
-  .register(
-    // Register services with proper interface-to-implementation mapping
-    Registration.singleton(ExchangeApiServiceToken, ExchangeApiService),
-    Registration.singleton(LogServiceToken, LogService),
-    Registration.singleton(TelegramServiceToken, TelegramService),
-    Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
-    Registration.singleton(EnvServiceToken, EnvService),
-    Registration.singleton(MexcApiService, MexcApiService),
-    Registration.singleton(CoinExApiService, CoinExApiService),
-    AssetList
-  )
-  .app(App)
-  .start();
+async function startApp() {
+  const container = Aurelia
+    .register(
+      // Register services with proper interface-to-implementation mapping
+      Registration.singleton(ExchangeApiServiceToken, ExchangeApiService),
+      Registration.singleton(LogServiceToken, LogService),
+      Registration.singleton(TelegramServiceToken, TelegramService),
+      Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
+      Registration.singleton(EnvServiceToken, EnvService),
+      Registration.singleton(MexcApiServiceToken, MexcApiService),
+      Registration.singleton(CoinExApiService, CoinExApiService),
+      AssetList
+    )
+    .app(App);
+
+  // Initialize environment service before starting the app
+  const envService = container.container.get(EnvServiceToken);
+  await envService.init();
+
+  await container.start();
+}
+
+startApp().catch(console.error);
 

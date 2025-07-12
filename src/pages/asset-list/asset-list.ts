@@ -1,20 +1,22 @@
-import { inject } from 'aurelia';
+import { inject, IContainer } from 'aurelia';
 import "./asset-list.css";
 import { AssetsConfigServiceToken, IAssetsConfigService, IAsset } from '../../services/assets-config-service.js';
-import { IExchangeApiService, ExchangeApiServiceToken } from "../../services/exchange-apis/exchange-api-service.js";
+import { IExchangeService } from '../../services/exchange-service.js';
+import { MexcApiServiceToken } from '../../services/exchange-apis/mexc-api-service.js';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
   selected?: boolean;
 }
 
-@inject(ExchangeApiServiceToken, AssetsConfigServiceToken)
+@inject(AssetsConfigServiceToken, IContainer)
 export class AssetList {
   assets: IAssetEx[];
+  mexcService: IExchangeService
 
   constructor(
-    private readonly exchangeApiService: IExchangeApiService,
-    private readonly exchangeConfigService: IAssetsConfigService
+    private readonly exchangeConfigService: IAssetsConfigService,
+    private readonly container: IContainer
   ) {
 
   }
@@ -37,6 +39,17 @@ export class AssetList {
 
   createSellOrder(_event: Event, asset: IAsset) {
     console.log(`Creating sell order for ${asset.percentage}% of:`, asset.name);
+    let exchangeService: IExchangeService;
+    switch (asset.exchange.toUpperCase()) {
+      case "MEXC":
+        if (!this.mexcService) {
+          // instantiate the service if not already done, using dependency injection
+          this.mexcService = this.container.get(MexcApiServiceToken);
+        }
+        exchangeService = this.mexcService;
+        break;
+    }
+    exchangeService.createMarketSellOrder(asset);
   }
 
   createSellOrders(_event: Event) {

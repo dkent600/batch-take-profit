@@ -23,6 +23,9 @@ yarn-error.log*
 .env
 .env.*
 
+# Local configuration files (private)
+config.local.json
+
 # OS-generated files
 .DS_Store
 Thumbs.db

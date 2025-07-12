@@ -16,7 +16,7 @@ export class LogService implements ILogService {
   private logFileName: string;
 
   constructor(envService: IEnvService) {
-    this.logFileName = envService.get('LOGFILENAME') || 'exchange.log';
+    this.logFileName = envService.get('logging.filename') || 'exchange.log';
   }
 
   log(message: string): void {
