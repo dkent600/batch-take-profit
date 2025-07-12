@@ -69,17 +69,17 @@ export class AssetsConfigService implements IAssetsConfigService {
   }
 
   public get telegramBotToken(): string {
-    return this.telegramBotToken;
+    return this._telegramBotToken;
   }
   public set telegramBotToken(value: string) {
-    this.telegramBotToken = value;
+    this._telegramBotToken = value;
   }
 
   public get telegramChatId(): string {
-    return this.telegramChatId;
+    return this._telegramChatId;
   }
   public set telegramChatId(value: string) {
-    this.telegramChatId = value;
+    this._telegramChatId = value;
   }
 
   /**

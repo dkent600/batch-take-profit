@@ -1,4 +1,5 @@
 import { IAssetsConfigService, AssetsConfigServiceToken } from './assets-config-service.js';
+import { IApiProxyService, ApiProxyServiceToken } from './api-proxy-service.js';
 import axios from 'axios';
 import { DI, inject } from 'aurelia';
 
@@ -9,23 +10,44 @@ export interface ITelegramService {
 
 export const TelegramServiceToken = DI.createInterface<ITelegramService>('ITelegramService');
 
-@inject(AssetsConfigServiceToken)
+@inject(AssetsConfigServiceToken, ApiProxyServiceToken)
 export class TelegramService implements ITelegramService {
 
-  constructor(private readonly assetsConfigService: IAssetsConfigService) {
+  constructor(
+    private readonly assetsConfigService: IAssetsConfigService,
+    private readonly apiProxyService: IApiProxyService
+  ) {
 
-  }
-  async sendTelegramMessage(message: string): Promise<void> {
+  } async sendTelegramMessage(message: string): Promise<void> {
 
     const token = this.assetsConfigService.telegramBotToken;
     const chatId = this.assetsConfigService.telegramChatId;
-    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+    const baseUrl = 'https://api.telegram.org';
+    const path = `/bot${token}/sendMessage`;
+    const url = this.apiProxyService.getProxyUrl(baseUrl, path);
 
-    return axios.post(url, {
-      chat_id: chatId,
-      text: message,
-      parse_mode: "HTML"
-    });
+    // console.log('Telegram API debug:', {
+    //   token: token ? token.substring(0, 10) + '...' : 'missing',
+    //   chatId,
+    //   url,
+    //   messageLength: message.length
+    // });
+
+    try {
+      const response = await axios.post(url, {
+        chat_id: chatId,
+        text: message,
+        parse_mode: "HTML"
+      });
+
+      // console.log('Telegram API success:', response.status);
+      return;
+    } catch (error) {
+      console.error('Telegram API error:', error);
+      console.error('Telegram error response:', error.response?.data);
+      console.error('Telegram error status:', error.response?.status);
+      throw error;
+    }
   }
 
   private escapeHtml(text: string): string {

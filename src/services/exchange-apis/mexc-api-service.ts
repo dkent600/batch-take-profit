@@ -1,13 +1,14 @@
 import { DI, inject } from 'aurelia';
 import { IExchangeApiService, ExchangeApiServiceToken } from "./exchange-api-service.js";
 import { IAssetsConfigService, AssetsConfigServiceToken, IAsset } from "../assets-config-service.js";
+import { IApiProxyService, ApiProxyServiceToken } from "../api-proxy-service.js";
 import axios from 'axios';
 import { ExchangeTimeSyncer, IExchangeTimeSyncer } from '../../stores/exchange-time-syncer.js';
 import { IExchangeService } from '../exchange-service.js';
 
 export const MexcApiServiceToken = DI.createInterface<MexcApiService>('MexcApiService');
 
-@inject(ExchangeApiServiceToken, AssetsConfigServiceToken)
+@inject(ExchangeApiServiceToken, AssetsConfigServiceToken, ApiProxyServiceToken)
 export class MexcApiService implements IExchangeService {
   private readonly exchangeTimeSyncer: IExchangeTimeSyncer;
   /**
@@ -17,7 +18,8 @@ export class MexcApiService implements IExchangeService {
 
   constructor(
     private readonly exchangeApiService: IExchangeApiService,
-    private readonly assetsConfigService: IAssetsConfigService) {
+    private readonly assetsConfigService: IAssetsConfigService,
+    private readonly apiProxyService: IApiProxyService) {
   }
 
   private async getTimeSyncer(asset: IAsset): Promise<IExchangeTimeSyncer> {
@@ -29,9 +31,28 @@ export class MexcApiService implements IExchangeService {
     return Promise.resolve(this.cachedTimeSyncers.get(asset));
   }
 
+  /**
+   * Constructs the full API URL for a given asset and endpoint path.
+   *
+   * @param asset - The asset object containing API configuration details.
+   * @param path - The specific API endpoint path to append.
+   * @returns The proxied API URL as a string.
+   */
+  private getApiUrl(asset: IAsset, path: string): string {
+    return this.apiProxyService.getProxyUrl(asset.apiUrl, path);
+  }
+
   private async getRealServerTime(asset: IAsset): Promise<number> {
-    const response = await axios.get(`${asset.apiUrl}/api/v3/time`);
-    return response.data.serverTime;
+    try {
+      const url = this.getApiUrl(asset, '/api/v3/time');
+      // console.log('Fetching server time from URL:', url);
+      const response = await axios.get(url);
+      return response.data.serverTime;
+    } catch (error) {
+      console.error(`Failed to fetch server time for ${asset.name}:`, error);
+      console.error('Attempted URL was:', this.getApiUrl(asset, '/api/v3/time'));
+      throw new Error(`Could not fetch server time for ${asset.name}`);
+    }
   }
 
   private async getServerTimestamp(asset: IAsset): Promise<string> {
@@ -49,10 +70,16 @@ export class MexcApiService implements IExchangeService {
   }
 
   async fetchPrice(asset: IAsset): Promise<number> {
-    const { data } = await axios.get(`${asset.apiUrl}/api/v3/ticker/price`, {
-      params: { symbol: `${this.createPair(asset)}` },
-    });
-    return parseFloat(data.price);
+    try {
+      const url = this.getApiUrl(asset, '/api/v3/ticker/price');
+      const { data } = await axios.get(url, {
+        params: { symbol: `${this.createPair(asset)}` },
+      });
+      return parseFloat(data.price);
+    } catch (error) {
+      console.error(`Failed to fetch price for ${asset.name}:`, error);
+      throw new Error(`Could not fetch price for ${asset.name}`);
+    }
   }
 
   /**
@@ -63,30 +90,62 @@ export class MexcApiService implements IExchangeService {
   async fetchBalance(asset: IAsset): Promise<number> {
     const timestamp = await this.getServerTimestamp(asset);
     const queryString = `timestamp=${timestamp}`;
-    const signature = this.exchangeApiService.sign(
-      queryString,
-      this.assetsConfigService.getAPISecret(asset.exchange));
 
-    const { data } = await axios.get(`${asset.apiUrl}/api/v3/account`, {
-      headers: {
-        'X-MEXC-APIKEY': this.assetsConfigService.getAPIKey(asset.exchange),
-        "Content-Type": "application/json",
-      },
-      params: {
-        timestamp,
-        signature,
-      },
-    });
+    const apiKey = this.assetsConfigService.getAPIKey(asset.exchange);
+    const apiSecret = this.assetsConfigService.getAPISecret(asset.exchange);
 
-    let balance = 0;
-
-    for (const coin of data.balances) {
-      if (coin.asset.toLowerCase() === asset.name.toLowerCase()) {
-        balance = parseFloat(coin.free);
-      }
+    // Validate we have the required credentials
+    if (!apiKey || !apiSecret) {
+      throw new Error(`Missing API credentials for ${asset.exchange}. API Key: ${!!apiKey}, API Secret: ${!!apiSecret}`);
     }
 
-    return balance;
+    const signature = this.exchangeApiService.sign(queryString, apiSecret);
+
+    // console.log('fetchBalance debug info:', {
+    //   asset: asset.name,
+    //   exchange: asset.exchange,
+    //   timestamp,
+    //   queryString,
+    //   signature: signature.substring(0, 10) + '...', // Only show first 10 chars for security
+    //   apiKey: apiKey.substring(0, 10) + '...',
+    //   url: this.getApiUrl(asset, '/api/v3/account'),
+    //   timestampAge: Date.now() - parseInt(timestamp)
+    // });
+
+    try {
+      const baseUrl = this.getApiUrl(asset, '/api/v3/account');
+      const url = `${baseUrl}?${queryString}&signature=${signature}`;
+
+      // console.log('Final request URL:', url);
+
+      const { data } = await axios.get(url, {
+        headers: {
+          'X-MEXC-APIKEY': apiKey,
+          "Content-Type": "application/json",
+        },
+      });
+
+      let balance = 0;
+
+      for (const coin of data.balances) {
+        if (coin.asset.toLowerCase() === asset.name.toLowerCase()) {
+          balance = parseFloat(coin.free);
+        }
+      }
+
+      return balance;
+    } catch (error) {
+      console.error(`Failed to fetch balance for ${asset.name}:`, error);
+      console.error('Request details:', {
+        url: this.getApiUrl(asset, '/api/v3/account'),
+        timestamp,
+        queryString,
+        hasApiKey: !!apiKey,
+        hasApiSecret: !!apiSecret,
+        errorResponse: error.response?.data
+      });
+      throw new Error(`Could not fetch balance for ${asset.name}`);
+    }
   }
 
   async createMarketSellOrder(asset: IAsset, to: string = 'USDT') {
@@ -98,7 +157,7 @@ export class MexcApiService implements IExchangeService {
 
     const signature = this.exchangeApiService.sign(queryString, this.assetsConfigService.getAPISecret(asset.exchange));
 
-    const url = `https://api.mexc.com/api/v3/order?${queryString}&signature=${signature}`;
+    const url = `${this.getApiUrl(asset, '/api/v3/order/test')}?${queryString}&signature=${signature}`;
 
     const headers = {
       'X-MEXC-APIKEY': this.assetsConfigService.getAPIKey(asset.exchange),

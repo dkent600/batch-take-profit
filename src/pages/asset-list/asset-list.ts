@@ -37,19 +37,24 @@ export class AssetList {
     }
   }
 
-  createSellOrder(_event: Event, asset: IAsset) {
+  async createSellOrder(_event: Event, asset: IAsset) {
     console.log(`Creating sell order for ${asset.percentage}% of:`, asset.name);
     let exchangeService: IExchangeService;
-    switch (asset.exchange.toUpperCase()) {
-      case "MEXC":
-        if (!this.mexcService) {
-          // instantiate the service if not already done, using dependency injection
-          this.mexcService = this.container.get(MexcApiServiceToken);
-        }
-        exchangeService = this.mexcService;
-        break;
+    try {
+      switch (asset.exchange.toUpperCase()) {
+        case "MEXC":
+          if (!this.mexcService) {
+            // instantiate the service if not already done, using dependency injection
+            this.mexcService = this.container.get(MexcApiServiceToken);
+          }
+          exchangeService = this.mexcService;
+          break;
+      }
+      await exchangeService.createMarketSellOrder(asset);
+    } catch (error) {
+      console.error(`Failed to create sell order for ${asset.name}:`, error);
+      alert(`Error creating sell order for ${asset.name}. Check console for details.`);
     }
-    exchangeService.createMarketSellOrder(asset);
   }
 
   createSellOrders(_event: Event) {

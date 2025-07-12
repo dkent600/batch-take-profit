@@ -1,7 +1,5 @@
 import { log } from 'console';
-import * as fs from 'fs';
-import { DI, inject } from 'aurelia';
-import { IEnvService, EnvServiceToken } from './env-service.js';
+import { DI } from 'aurelia';
 
 export interface ILogService {
   log(message: string): void;
@@ -11,18 +9,14 @@ export interface ILogService {
 
 export const LogServiceToken = DI.createInterface<ILogService>('ILogService');
 
-@inject(EnvServiceToken)
 export class LogService implements ILogService {
-  private logFileName: string;
-
-  constructor(envService: IEnvService) {
-    this.logFileName = envService.get('logging.filename') || 'exchange.log';
-  }
 
   log(message: string): void {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}\n`;
-    fs.appendFileSync(this.logFileName, logMessage);
+    const logMessage = `[${timestamp}] ${message}`;
+
+    // In browser environment, just use console.log
+    // File logging would need to be implemented differently (e.g., send to server)
     console.log(logMessage);
   }
 

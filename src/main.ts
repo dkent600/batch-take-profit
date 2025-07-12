@@ -3,6 +3,7 @@ import { App } from './pages/app/app.js';
 import './pages/app/app.css';
 import { AssetList } from './pages/asset-list/asset-list.js';
 import {
+  ApiProxyService, ApiProxyServiceToken,
   ExchangeApiService, ExchangeApiServiceToken,
   LogService, LogServiceToken,
   TelegramService, TelegramServiceToken,
@@ -14,25 +15,29 @@ import {
 } from './services/index.js';
 
 async function startApp() {
-  const container = Aurelia
-    .register(
-      // Register services with proper interface-to-implementation mapping
-      Registration.singleton(ExchangeApiServiceToken, ExchangeApiService),
-      Registration.singleton(LogServiceToken, LogService),
-      Registration.singleton(TelegramServiceToken, TelegramService),
-      Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
-      Registration.singleton(EnvServiceToken, EnvService),
-      Registration.singleton(MexcApiServiceToken, MexcApiService),
-      Registration.singleton(CoinExApiService, CoinExApiService),
-      AssetList
-    )
-    .app(App);
+  // First, create a minimal container just for EnvService
+  const app = Aurelia.register(
+    Registration.singleton(EnvServiceToken, EnvService)
+  );
 
-  // Initialize environment service before starting the app
-  const envService = container.container.get(EnvServiceToken);
+  // Initialize environment service first
+  const envService = app.container.get(EnvServiceToken);
   await envService.init();
 
-  await container.start();
+  // Register other services with proper interface-to-implementation mapping
+  app.register(
+    Registration.singleton(ApiProxyServiceToken, ApiProxyService),
+    Registration.singleton(ExchangeApiServiceToken, ExchangeApiService),
+    Registration.singleton(LogServiceToken, LogService),
+    Registration.singleton(TelegramServiceToken, TelegramService),
+    Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
+    Registration.singleton(MexcApiServiceToken, MexcApiService),
+    Registration.singleton(CoinExApiService, CoinExApiService),
+    AssetList
+  )
+    .app(App);
+
+  return app.start();
 }
 
 startApp().catch(console.error);

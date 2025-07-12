@@ -10,7 +10,7 @@ export interface IEnvService {
 export const EnvServiceToken = DI.createInterface<IEnvService>('IEnvService');
 
 export class EnvService implements IEnvService {
-  private config: any = {};
+  private config: Record<string, unknown> = {};
 
   constructor() {
     // No async loading in constructor
@@ -25,10 +25,10 @@ export class EnvService implements IEnvService {
       // Try to load local config first
       const response = await fetch('/config.local.json');
       if (response.ok) {
-        this.config = await response.json();
+        this.config = await response.json() as Record<string, unknown>;
         return;
       }
-    } catch (error) {
+    } catch {
       console.warn('Local config not found, falling back to public config');
     }
   }
@@ -36,22 +36,31 @@ export class EnvService implements IEnvService {
   get(key: string): string | undefined {
     // Support dot notation for nested keys like "mexc.apiKey"
     const keys = key.split('.');
-    let value = this.config;
+    let value: unknown = this.config;
 
     for (const k of keys) {
-      if (value && typeof value === 'object') {
-        value = value[k];
+      if (value && typeof value === 'object' && value !== null && k in value) {
+        value = (value as Record<string, unknown>)[k];
       } else {
         return undefined;
       }
     }
 
-    return typeof value === 'string' ? value : undefined;
+    if (typeof value === 'string') {
+      return value;
+    } else if (typeof value === 'number' || typeof value === 'boolean') {
+      return String(value);
+    }
+
+    return undefined;
   }
 
   getNumber(key: string): number | undefined {
     const value = this.get(key);
-    return value ? parseFloat(value) : undefined;
+    if (!value) return undefined;
+
+    const parsed = parseFloat(value);
+    return isNaN(parsed) ? undefined : parsed;
   }
 
   getBoolean(key: string): boolean | undefined {

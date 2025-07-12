@@ -50,11 +50,10 @@ export class ExchangeApiService implements IExchangeApiService {
 
       const response = await axios.post(apiUrl, null, {
         headers,
-        params: {
-          timestamp
-        }
+        // Don't add params - the URL already contains all required parameters including signature
       });
 
+      // TODO these messages shoud not be implemented in this service
       const alertMessage = `✅ Order placed with ${exchangeName} for ${quantity} ${coinpair}: ${response.statusText}`;
       this.logService.log(alertMessage);
       await this.telegramsService.sendTelegramMessage(alertMessage);
