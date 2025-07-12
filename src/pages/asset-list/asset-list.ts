@@ -51,9 +51,10 @@ export class AssetList {
           break;
       }
       await exchangeService.createMarketSellOrder(asset);
+      alert(`✅ Order placed for ${asset.name}.`);
     } catch (error) {
-      console.error(`Failed to create sell order for ${asset.name}:`, error);
-      alert(`Error creating sell order for ${asset.name}. Check console for details.`);
+      // console.error(`Failed to create sell order for ${asset.name}:`, error);
+      alert(`❌ Error creating sell order for ${asset.name}. Check console for details.`);
     }
   }
 
