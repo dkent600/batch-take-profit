@@ -12,11 +12,6 @@
     ],
     "assets": [
       {
-        "name": "DOGE",
-        "percentage": 15,
-        "exchange": "MexC"
-      },
-      {
         "name": "SOL",
         "percentage": 15,
         "exchange": "MexC"
@@ -24,7 +19,7 @@
       {
         "name": "DOGE",
         "percentage": 15,
-        "exchange": "CoinEx"
+        "exchange": "MexC"
       },
       {
         "name": "SHIB",
