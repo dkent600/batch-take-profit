@@ -1,14 +1,13 @@
 import { DI, inject } from 'aurelia';
 import { IExchangeApiService, ExchangeApiServiceToken } from "./exchange-api-service.js";
 import { IAssetsConfigService, AssetsConfigServiceToken, IAsset } from "../assets-config-service.js";
-import { IApiProxyService, ApiProxyServiceToken } from "../api-proxy-service.js";
 import axios from 'axios';
 import { ExchangeTimeSyncer, IExchangeTimeSyncer } from '../../stores/exchange-time-syncer.js';
 import { IExchangeService } from '../exchange-service.js';
 
 export const MexcApiServiceToken = DI.createInterface<MexcApiService>('MexcApiService');
 
-@inject(ExchangeApiServiceToken, AssetsConfigServiceToken, ApiProxyServiceToken)
+@inject(ExchangeApiServiceToken, AssetsConfigServiceToken)
 export class MexcApiService implements IExchangeService {
   private readonly exchangeTimeSyncer: IExchangeTimeSyncer;
   /**
@@ -18,8 +17,7 @@ export class MexcApiService implements IExchangeService {
 
   constructor(
     private readonly exchangeApiService: IExchangeApiService,
-    private readonly assetsConfigService: IAssetsConfigService,
-    private readonly apiProxyService: IApiProxyService) {
+    private readonly assetsConfigService: IAssetsConfigService) {
   }
 
   private async getTimeSyncer(asset: IAsset): Promise<IExchangeTimeSyncer> {
@@ -36,10 +34,10 @@ export class MexcApiService implements IExchangeService {
    *
    * @param asset - The asset object containing API configuration details.
    * @param path - The specific API endpoint path to append.
-   * @returns The proxied API URL as a string.
+   * @returns The direct API URL as a string.
    */
   private getApiUrl(asset: IAsset, path: string): string {
-    return this.apiProxyService.getProxyUrl(asset.apiUrl, path);
+    return `${asset.apiUrl}${path}`;
   }
 
   private async getRealServerTime(asset: IAsset): Promise<number> {

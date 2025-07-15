@@ -5,5 +5,5 @@ export interface IExchangeService {
   getSellAmount(asset: IAsset): Promise<number>;
   fetchPrice(asset: IAsset): Promise<number>;
   fetchBalance(asset: IAsset): Promise<number>;
-  createMarketSellOrder(asset: IAsset, to?: string): Promise<any>;
+  createMarketSellOrder(asset: IAsset, to?: string): Promise<unknown>;
 }

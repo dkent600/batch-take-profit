@@ -1,4 +1,3 @@
-export * from './api-proxy-service.js';
 export * from './assets-config-service.js';
 export * from './env-service.js';
 export * from './log-service.js';

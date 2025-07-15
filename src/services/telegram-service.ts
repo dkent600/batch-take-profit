@@ -1,5 +1,4 @@
 import { IAssetsConfigService, AssetsConfigServiceToken } from './assets-config-service.js';
-import { IApiProxyService, ApiProxyServiceToken } from './api-proxy-service.js';
 import axios from 'axios';
 import { DI, inject } from 'aurelia';
 
@@ -10,12 +9,11 @@ export interface ITelegramService {
 
 export const TelegramServiceToken = DI.createInterface<ITelegramService>('ITelegramService');
 
-@inject(AssetsConfigServiceToken, ApiProxyServiceToken)
+@inject(AssetsConfigServiceToken)
 export class TelegramService implements ITelegramService {
 
   constructor(
-    private readonly assetsConfigService: IAssetsConfigService,
-    private readonly apiProxyService: IApiProxyService
+    private readonly assetsConfigService: IAssetsConfigService
   ) {
 
   } async sendTelegramMessage(message: string): Promise<void> {
@@ -24,7 +22,7 @@ export class TelegramService implements ITelegramService {
     const chatId = this.assetsConfigService.telegramChatId;
     const baseUrl = 'https://api.telegram.org';
     const path = `/bot${token}/sendMessage`;
-    const url = this.apiProxyService.getProxyUrl(baseUrl, path);
+    const url = `${baseUrl}${path}`;
 
     // console.log('Telegram API debug:', {
     //   token: token ? token.substring(0, 10) + '...' : 'missing',
@@ -34,7 +32,7 @@ export class TelegramService implements ITelegramService {
     // });
 
     try {
-      const response = await axios.post(url, {
+      await axios.post(url, {
         chat_id: chatId,
         text: message,
         parse_mode: "HTML"

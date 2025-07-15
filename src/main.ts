@@ -3,7 +3,6 @@ import { App } from './pages/app/app.js';
 import './pages/app/app.css';
 import { AssetList } from './pages/asset-list/asset-list.js';
 import {
-  ApiProxyService, ApiProxyServiceToken,
   ExchangeApiService, ExchangeApiServiceToken,
   LogService, LogServiceToken,
   TelegramService, TelegramServiceToken,
@@ -26,7 +25,6 @@ async function startApp() {
 
   // Register other services with proper interface-to-implementation mapping
   app.register(
-    Registration.singleton(ApiProxyServiceToken, ApiProxyService),
     Registration.singleton(ExchangeApiServiceToken, ExchangeApiService),
     Registration.singleton(LogServiceToken, LogService),
     Registration.singleton(TelegramServiceToken, TelegramService),
