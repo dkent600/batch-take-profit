@@ -1,7 +1,6 @@
 import { vi } from 'vitest';
 import { DI, IContainer, Registration } from 'aurelia';
 import {
-  IExchangeApiService, ExchangeApiServiceToken,
   ILogService, LogServiceToken,
   ITelegramService, TelegramServiceToken,
   AssetsConfigServiceToken, IAssetsConfigService,
@@ -9,7 +8,6 @@ import {
 } from '../src/services/index.js';
 
 export interface TestMocks {
-  exchangeApi?: Partial<IExchangeApiService>;
   logService?: Partial<ILogService>;
   telegramService?: Partial<ITelegramService>;
   assetsConfig?: Partial<IAssetsConfigService>;
@@ -52,7 +50,6 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
 
   // Merge provided mocks with defaults
   const finalMocks = {
-    exchangeApi: { ...defaultMocks.exchangeApi, ...mocks.exchangeApi },
     logService: { ...defaultMocks.logService, ...mocks.logService },
     telegramService: { ...defaultMocks.telegramService, ...mocks.telegramService },
     assetsConfig: { ...defaultMocks.assetsConfig, ...mocks.assetsConfig },
@@ -61,7 +58,6 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
 
   // Register mocks using the same tokens as main.ts
   container.register(
-    Registration.instance(ExchangeApiServiceToken, finalMocks.exchangeApi as IExchangeApiService),
     Registration.instance(LogServiceToken, finalMocks.logService as ILogService),
     Registration.instance(TelegramServiceToken, finalMocks.telegramService as ITelegramService),
     Registration.instance(AssetsConfigServiceToken, finalMocks.assetsConfig as IAssetsConfigService),
@@ -73,7 +69,6 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
 
 export function getMocksFromContainer(container: IContainer): TestMocks {
   return {
-    exchangeApi: container.get(ExchangeApiServiceToken),
     logService: container.get(LogServiceToken),
     telegramService: container.get(TelegramServiceToken),
     assetsConfig: container.get(AssetsConfigServiceToken),

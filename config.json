@@ -1,5 +1,6 @@
 {
   "batchConfig": {
+    "serviceUrl": "http://localhost:3000",
     "exchanges": [
       {
         "name": "MexC",

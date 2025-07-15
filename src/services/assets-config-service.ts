@@ -38,6 +38,7 @@ export interface IAssetsConfigService {
   logFileName: string;
   telegramBotToken: string;
   telegramChatId: string;
+  serviceUrl: string;
   getAssets(): Promise<IAsset[]>;
   getAPIKey(exchangeName: string): string;
   getAPISecret(exchangeName: string): string;
@@ -52,6 +53,7 @@ export class AssetsConfigService implements IAssetsConfigService {
   private _telegramBotToken: string;
   private _telegramChatId: string;
   private _assets: IAsset[];
+  private _serviceUrl: string;
 
   constructor(
     private envService: IEnvService,
@@ -80,6 +82,10 @@ export class AssetsConfigService implements IAssetsConfigService {
   }
   public set telegramChatId(value: string) {
     this._telegramChatId = value;
+  }
+
+  public get serviceUrl(): string {
+    return this._serviceUrl;
   }
 
   /**
@@ -114,6 +120,9 @@ export class AssetsConfigService implements IAssetsConfigService {
       const config = await response.json();
       const exchanges = (config.batchConfig?.exchanges ?? []);
       const exchangeMap = Object.fromEntries(exchanges.map((e: { name: string; }) => [e.name.toUpperCase(), e]));
+
+      // Set the service URL from config
+      this._serviceUrl = config.batchConfig?.serviceUrl || 'http://localhost:3000';
 
       return this._assets = ((config as IConfig).batchConfig?.assets ?? []).map((asset: IAssetConfig): IAsset => ({
         name: asset.name,
