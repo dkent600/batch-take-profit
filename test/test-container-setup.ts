@@ -6,12 +6,15 @@ import {
   AssetsConfigServiceToken, IAssetsConfigService,
   IEnvService, EnvServiceToken
 } from '../src/services/index.js';
+import { IAssetExchangeService } from '../src/services/exchange-service.js';
+import { AssetExchangeApiServiceToken } from '../src/services/exchange-apis/exchange-api-service.js';
 
 export interface TestMocks {
   logService?: Partial<ILogService>;
   telegramService?: Partial<ITelegramService>;
   assetsConfig?: Partial<IAssetsConfigService>;
   envService?: Partial<IEnvService>;
+  assetExchangeService?: Partial<IAssetExchangeService>;
 }
 
 export function createTestContainer(mocks: TestMocks = {}): IContainer {
@@ -19,9 +22,10 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
 
   // Default mocks that can be overridden
   const defaultMocks = {
-    exchangeApi: {
+    assetExchangeService: {
       createMarketSellOrder: vi.fn(),
-      fetchPrice: vi.fn()
+      fetchPrice: vi.fn(),
+      fetchBalance: vi.fn()
     },
     logService: {
       log: vi.fn(),
@@ -39,7 +43,8 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
       baseUrl: 'https://test-api.com',
       logFileName: 'test.log',
       telegramBotToken: 'test-token',
-      telegramChatId: 'test-chat'
+      telegramChatId: 'test-chat',
+      serviceUrl: 'http://localhost:3000'
     },
     envService: {
       get: vi.fn(),
@@ -53,7 +58,8 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
     logService: { ...defaultMocks.logService, ...mocks.logService },
     telegramService: { ...defaultMocks.telegramService, ...mocks.telegramService },
     assetsConfig: { ...defaultMocks.assetsConfig, ...mocks.assetsConfig },
-    envService: { ...defaultMocks.envService, ...mocks.envService }
+    envService: { ...defaultMocks.envService, ...mocks.envService },
+    assetExchangeService: { ...defaultMocks.assetExchangeService, ...mocks.assetExchangeService }
   };
 
   // Register mocks using the same tokens as main.ts
@@ -61,7 +67,8 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
     Registration.instance(LogServiceToken, finalMocks.logService as ILogService),
     Registration.instance(TelegramServiceToken, finalMocks.telegramService as ITelegramService),
     Registration.instance(AssetsConfigServiceToken, finalMocks.assetsConfig as IAssetsConfigService),
-    Registration.instance(EnvServiceToken, finalMocks.envService as IEnvService)
+    Registration.instance(EnvServiceToken, finalMocks.envService as IEnvService),
+    Registration.instance(AssetExchangeApiServiceToken, finalMocks.assetExchangeService as IAssetExchangeService)
   );
 
   return container;
@@ -72,6 +79,7 @@ export function getMocksFromContainer(container: IContainer): TestMocks {
     logService: container.get(LogServiceToken),
     telegramService: container.get(TelegramServiceToken),
     assetsConfig: container.get(AssetsConfigServiceToken),
-    envService: container.get(EnvServiceToken)
+    envService: container.get(EnvServiceToken),
+    assetExchangeService: container.get(AssetExchangeApiServiceToken)
   };
 }

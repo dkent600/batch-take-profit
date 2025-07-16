@@ -7,8 +7,8 @@ import {
   TelegramService, TelegramServiceToken,
   AssetsConfigService, AssetsConfigServiceToken,
   EnvService, EnvServiceToken,
-  MexcApiService,
-  MexcApiServiceToken
+  AssetExchangeApiService,
+  AssetExchangeApiServiceToken
 } from './services/index.js';
 
 async function startApp() {
@@ -26,7 +26,7 @@ async function startApp() {
     Registration.singleton(LogServiceToken, LogService),
     Registration.singleton(TelegramServiceToken, TelegramService),
     Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
-    Registration.singleton(MexcApiServiceToken, MexcApiService),
+    Registration.singleton(AssetExchangeApiServiceToken, AssetExchangeApiService),
     AssetList
   )
     .app(App);
