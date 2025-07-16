@@ -6,12 +6,10 @@ export interface IAsset {
   name: string;
   exchange: string;
   percentage: number;
-  apiUrl: string;
 }
 
 interface IExchange {
   name: string;
-  apiUrl?: string;
   [key: string]: unknown;
 }
 
@@ -128,7 +126,6 @@ export class AssetsConfigService implements IAssetsConfigService {
         name: asset.name,
         exchange: asset.exchange,
         percentage: asset.percentage ?? 15,
-        apiUrl: exchangeMap[asset.exchange.toUpperCase()]?.apiUrl || ''
       }));
     } catch (error) {
       const errMessage = "";

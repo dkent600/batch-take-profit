@@ -14,7 +14,6 @@ export class AssetExchangeApiService implements IAssetExchangeService {
       const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/price/${encodeURIComponent(asset.name)}`,
         {
           params: {
-            apiUrl: asset.apiUrl,
             to: 'USDT',
           },
         }
@@ -31,7 +30,6 @@ export class AssetExchangeApiService implements IAssetExchangeService {
       const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/balance/${encodeURIComponent(asset.name)}`,
         {
           params: {
-            apiUrl: asset.apiUrl,
             percentage: asset.percentage ?? 100,
           },
         }
@@ -50,7 +48,6 @@ export class AssetExchangeApiService implements IAssetExchangeService {
           name: asset.name,
           exchange: asset.exchange,
           percentage: asset.percentage ?? 100,
-          apiUrl: asset.apiUrl,
         },
         to,
       });

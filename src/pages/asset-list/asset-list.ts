@@ -1,20 +1,23 @@
+import { LogServiceToken } from './../../services/log-service';
 import { inject } from 'aurelia';
 import "./asset-list.css";
 import { AssetsConfigServiceToken, IAssetsConfigService, IAsset } from '../../services/assets-config-service.js';
 import { IAssetExchangeService } from '../../services/exchange-service.js';
 import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/exchange-api-service.js';
+import { ILogService } from '../../services/log-service.js';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
   selected?: boolean;
 }
 
-@inject(AssetsConfigServiceToken, AssetExchangeApiServiceToken)
+@inject(AssetsConfigServiceToken, LogServiceToken, AssetExchangeApiServiceToken)
 export class AssetList {
   assets: IAssetEx[];
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
+    private readonly logService: ILogService,
     private readonly assetExchangeService: IAssetExchangeService
   ) {
 
@@ -38,11 +41,12 @@ export class AssetList {
 
   async createSellOrder(_event: Event, asset: IAsset) {
     try {
-      console.log(`Creating sell order for ${asset.percentage}% of:`, asset.name);
+      this.logService.log(`Creating sell order for ${asset.percentage}% of: ${asset.name}`);
       await this.assetExchangeService.createMarketSellOrder(asset);
+      this.logService.log(`Created sell order for ${asset.percentage}% of: ${asset.name}`);
       alert(`✅ Order placed for ${asset.name}.`);
     } catch (error) {
-      console.error(`Failed to create sell order for ${asset.name}:`, error);
+      this.logService.logError(error);
       alert(`❌ Error creating sell order for ${asset.name}. Check console for details.`);
     }
   }

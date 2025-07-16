@@ -6,7 +6,6 @@ interface TestAsset {
   name: string;
   exchange: string;
   exchangeName: string;
-  apiUrl: string;
   percentage: unknown;
   percentageInvalid?: boolean;
 }
@@ -16,7 +15,6 @@ function createTestAsset(percentage: unknown): TestAsset {
     name: 'TestCoin',
     exchange: 'test-exchange',
     exchangeName: 'Test Exchange',
-    apiUrl: 'https://test.com',
     percentage
   };
 }
@@ -32,9 +30,7 @@ describe('AssetList with Test Container Helper', () => {
             symbol: 'BTC',
             exchange: 'binance',
             exchangeName: 'Binance',
-            percentage: 5,
-            apiUrl: 'https://api.binance.com'
-          }
+            percentage: 5
         ])
       }
     });

@@ -3,12 +3,13 @@
     "serviceUrl": "http://localhost:3000",
     "exchanges": [
       {
-        "name": "MexC",
-        "apiUrl": "https://api.mexc.com"
+        "name": "MexC"
       },
       {
-        "name": "CoinEx",
-        "apiUrl": "https://api.coinex.com"
+        "name": "Kraken"
+      },
+      {
+        "name": "CoinEx"
       }
     ],
     "assets": [
@@ -35,7 +36,7 @@
       {
         "name": "XRP",
         "percentage": 15,
-        "exchange": "Trezor"
+        "exchange": "Kraken"
       },
       {
         "name": "XLM",
