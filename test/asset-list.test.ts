@@ -31,6 +31,7 @@ describe('AssetList with Test Container Helper', () => {
             exchange: 'binance',
             exchangeName: 'Binance',
             percentage: 5
+          }
         ])
       }
     });
