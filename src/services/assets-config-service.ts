@@ -116,8 +116,6 @@ export class AssetsConfigService implements IAssetsConfigService {
     try {
       const response = await fetch('/config.json');
       const config = await response.json();
-      const exchanges = (config.batchConfig?.exchanges ?? []);
-      const exchangeMap = Object.fromEntries(exchanges.map((e: { name: string; }) => [e.name.toUpperCase(), e]));
 
       // Set the service URL from config
       this._serviceUrl = config.batchConfig?.serviceUrl || 'http://localhost:3000';
