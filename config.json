@@ -7,31 +7,28 @@
       },
       {
         "name": "Kraken"
-      },
-      {
-        "name": "CoinEx"
       }
     ],
     "assets": [
       {
         "name": "SOL",
         "percentage": 15,
-        "exchange": "MexC"
+        "exchange": "Kraken"
       },
       {
         "name": "DOGE",
         "percentage": 15,
-        "exchange": "MexC"
+        "exchange": "Kraken"
       },
       {
         "name": "SHIB",
-        "percentage": 15,
-        "exchange": "MexC"
+        "percentage": 20,
+        "exchange": "Kraken"
       },
       {
         "name": "ADA",
         "percentage": 15,
-        "exchange": "MexC"
+        "exchange": "Kraken"
       },
       {
         "name": "XRP",
@@ -40,8 +37,8 @@
       },
       {
         "name": "XLM",
-        "percentage": 15,
-        "exchange": "Trezor"
+        "percentage": 20,
+        "exchange": "Kraken"
       }
     ]
   }
