@@ -1,4 +1,4 @@
-import { LogServiceToken } from './../../services/log-service';
+import { LogServiceToken } from './../../services/log-service.js';
 import { inject } from 'aurelia';
 import "./asset-list.css";
 import { AssetsConfigServiceToken, IAssetsConfigService, IAsset } from '../../services/assets-config-service.js';
