@@ -6,6 +6,8 @@ export interface IAsset {
   name: string;
   exchange: string;
   percentage: number;
+  amount?: number;
+  balance?: number;
 }
 
 interface IExchange {
@@ -124,6 +126,8 @@ export class AssetsConfigService implements IAssetsConfigService {
         name: asset.name,
         exchange: asset.exchange,
         percentage: asset.percentage ?? 15,
+        amount: 0, // Default to 0 if not provided
+        balance: 0 // Default to 0 if not provided
       }));
     } catch (error) {
       const errMessage = "";

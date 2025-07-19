@@ -8,7 +8,8 @@
           <th class="text-left text-sm px-2">Select</th>
           <th class="text-left text-sm px-2">Coin</th>
           <th class="text-left text-sm px-2">Exchange</th>
-          <th class="text-left text-sm px-2">% to Sell</th>
+          <th class="text-left text-sm px-2">Percent</th>
+          <th class="text-left text-sm px-2">Amount</th>
           <!--th class="text-left text-sm px-2"></th-->
         </tr>
       </thead>
@@ -21,6 +22,7 @@
           <td class="text-left text-sm px-2">${asset.exchange}</td>
           <td class="text-left text-sm px-2">
               <input
+              if.bind="!useAmount"
               type="number"
               min="1"
               max="100"
@@ -28,8 +30,22 @@
               required
               class.bind="'daisy-input daisy-input-xs w-16 text-center' + (asset.percentageInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
               input.trigger="validatePercentage(asset)"
-              />%
+              />
+              <div else>${asset.percentage}</div>
               <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
+          </td>
+          <td class="text-left text-sm px-2">
+              <input
+              if.bind="useAmount"
+              type="number"
+              min="0"
+              value.two-way="asset.amount"
+              required
+              class.bind="'daisy-input daisy-input-xs w-16 text-center' + (asset.amountInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
+              input.trigger="validateAmount(asset)"
+              />
+              <div else>${asset.amount}</div>
+              <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
           </td>
           <!--td class="text-left text-sm px-2">
             <button click.trigger="createSellOrder($event, asset)" class="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs">
@@ -50,6 +66,11 @@
           click.trigger="selectNone($event)"
           class="daisy-link daisy-link-primary text-sm no-underline">
           Select None
+        </div>
+        <div
+          click.trigger="toggleUseAmount()"
+          class="daisy-link daisy-link-primary text-sm no-underline w-32">
+          <div>${useAmount ? 'Use Percentage' : 'Use Amount'}</div>
         </div>
       </div>
       <div>

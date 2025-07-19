@@ -27,13 +27,7 @@ export class AssetExchangeApiService implements IAssetExchangeService {
 
   async fetchBalance(asset: IAsset): Promise<number> {
     try {
-      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/balance/${encodeURIComponent(asset.name)}`,
-        {
-          params: {
-            percentage: asset.percentage ?? 100,
-          },
-        }
-      );
+      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/balance/${encodeURIComponent(asset.name)}`);
       return response.data.balance;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } }; message?: string };
@@ -41,13 +35,17 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     }
   }
 
-  async createMarketSellOrder(asset: IAsset, to: string = 'USDT'): Promise<unknown> {
+  async createMarketSellOrder(asset: IAsset, to: string = 'USD'): Promise<unknown> {
     try {
+      if (!asset.amount) {
+        throw new Error('Amount is required to create a market sell order');
+      }
       const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/sell`, {
         asset: {
           name: asset.name,
           exchange: asset.exchange,
-          percentage: asset.percentage ?? 100,
+          // percentage: asset.percentage ?? 100,
+          amount: asset.amount,
         },
         to,
       });
