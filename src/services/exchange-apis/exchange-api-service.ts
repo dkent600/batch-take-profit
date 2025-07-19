@@ -9,6 +9,12 @@ export const AssetExchangeApiServiceToken = DI.createInterface<IAssetExchangeSer
 export class AssetExchangeApiService implements IAssetExchangeService {
   constructor(private readonly configService: IAssetsConfigService) { }
 
+  /**
+   * Fetch from the exchange API an exchange rate of an asset.
+   * @param asset 
+   * @param to if MexC should be USDT.  Kraken, USD
+   * @returns 
+   */
   async fetchPrice(asset: IAsset, to = "USD"): Promise<number> {
     try {
       const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/price/${encodeURIComponent(asset.name)}`,
