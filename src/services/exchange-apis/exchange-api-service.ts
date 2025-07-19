@@ -9,12 +9,12 @@ export const AssetExchangeApiServiceToken = DI.createInterface<IAssetExchangeSer
 export class AssetExchangeApiService implements IAssetExchangeService {
   constructor(private readonly configService: IAssetsConfigService) { }
 
-  async fetchPrice(asset: IAsset): Promise<number> {
+  async fetchPrice(asset: IAsset, to = "USD"): Promise<number> {
     try {
       const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/price/${encodeURIComponent(asset.name)}`,
         {
           params: {
-            to: 'USDT',
+            to,
           },
         }
       );
