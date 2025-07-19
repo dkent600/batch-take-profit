@@ -149,7 +149,9 @@ export class AssetList {
       }
 
       this.logService.log(`Creating ${limit ? 'limit' : 'market'} sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
-      await this.assetExchangeService.createMarketSellOrder(asset);
+      await this.assetExchangeService.createMarketSellOrder(asset,
+        asset.exchange === 'MEXC' ? 'USDT' : 'USD'
+      );
       this.logService.log(`Created sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
       alert(`✅ Order placed for ${asset.name}.`);
     } catch (error) {

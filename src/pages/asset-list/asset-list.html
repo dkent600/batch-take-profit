@@ -41,7 +41,7 @@
               min="0"
               value.two-way="asset.amount"
               required
-              class.bind="'daisy-input daisy-input-xs w-16 text-center' + (asset.amountInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
+              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.amountInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
               input.trigger="validateAmount(asset)"
               />
               <div else>${asset.amount}</div>
@@ -81,6 +81,7 @@
         Place the ${selectedOrders.length} selected market sell order<template if.bind="selectedOrders.length != 1">s</template>
       </button>
       </div>
+      <div class="text-yellow-500 text-xs mt-1">Amount is always used for the order. Percent is only to help compute the order amount.</div>
     </div>
   </div>
 </template>

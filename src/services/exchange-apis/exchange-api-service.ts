@@ -15,7 +15,7 @@ export class AssetExchangeApiService implements IAssetExchangeService {
    * @param to if MexC should be USDT.  Kraken, USD
    * @returns 
    */
-  async fetchPrice(asset: IAsset, to = "USD"): Promise<number> {
+  async fetchPrice(asset: IAsset, to: string): Promise<number> {
     try {
       const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/price/${encodeURIComponent(asset.name)}`,
         {
@@ -41,12 +41,12 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     }
   }
 
-  async createMarketSellOrder(asset: IAsset, to: string = 'USD'): Promise<unknown> {
+  async createMarketSellOrder(asset: IAsset, to: string): Promise<unknown> {
     try {
       if (!asset.amount) {
         throw new Error('Amount is required to create a market sell order');
       }
-      const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/sell`, {
+      const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/sell/market`, {
         asset: {
           name: asset.name,
           exchange: asset.exchange,
