@@ -77,7 +77,7 @@ export class AssetList {
           asset.currentPrice = price;
         })
         .catch(error => {
-          this.logService.logError(`Failed to update current price for ${asset.name}: ${error}`);
+          this.logService.logError(`Failed to fetch current price for ${asset.name}: ${error}`);
         });
     }
   }
