@@ -45,7 +45,7 @@ export class AssetList {
      * At this point these requests need to be made one-by-one or the 
      * butterfly service will fail due to invalid nonce.
     */
-    this.updateCurrentPrices();
+    this.updateAllCurrentPrices();
     this.updateAllBalances();
   }
 
@@ -70,7 +70,7 @@ export class AssetList {
     return asset.amount / asset.balance * 100;
   }
 
-  private updateCurrentPrices(): void {
+  private updateAllCurrentPrices(): void {
     for (const asset of this.assets) {
       this.assetExchangeService.fetchPrice(asset, this.getToCoin(asset))
         .then(price => {
@@ -82,42 +82,51 @@ export class AssetList {
     }
   }
 
-  private updateAllBalances(): void {
+  private async updateAllBalances(): Promise<void> {
     for (const asset of this.assets) {
-      try {
-        const balance = await this.assetExchangeService.fetchBalance(asset);
-        // const balance = await this.assetExchangeService.fetchBalance(asset);
-          const balanceChanged = balance !== asset.balance;
-          asset.balance = balance || 0; // Ensure balance is always a number
-          if (balanceChanged) {
-            /**
-             * assumes that if the balance changes, the user wants to update the percentage or amount
-             * based on the new balance, but only if the user is not currently editing
-             * the percentage or amount to avoid infinite loops and overwriting the user's entry.
-             * The user may not be aware of this behavior which could be a problem
-             * but it is a common pattern in financial applications to update the percentage or amount
-             * based on the new balance when the balance changes.
-             */
-            if (this.useAmount) {
-              // user may not be aware that the amount they are editing is 
-              // no longer based on the balance
-              asset.percentage = this.percentageFromAmount(asset);
-            } else {
-              // user may not be aware that the percentage they are editing is 
-              // no longer based on the amount
-              asset.amount = this.amountFromPercentage(asset);
-            }
-          }
-      } catch (error) {
-          this.logService.logError(`Failed to update balance for ${asset.name}: ${error}`);
-      }
-      // .then(balance => {
-      // this.assetExchangeService.fetchBalance(asset).then(balance => {
-      //   asset.balance = balance || 0; // Ensure balance is always a number
-      // }).catch(error => {
-      //   this.logService.logError(`Failed to update balance for ${asset.name}: ${error}`);
-      // });
+      this.updateAssetBalance(asset);
     }
+  }
+
+  private async updateAssetBalance(asset: IAssetEx): Promise<void> {
+    this.assetExchangeService.fetchBalance(asset)
+      .then(balance => {
+        const balanceChanged = balance !== asset.balance;
+        asset.balance = balance || 0; // Ensure balance is always a number
+        if (balanceChanged) {
+          /**
+           * assumes that if the balance changes, the user wants to update the percentage or amount
+           * based on the new balance, but only if the user is not currently editing
+           * the percentage or amount to avoid infinite loops and overwriting the user's entry.
+           * The user may not be aware of this behavior which could be a problem
+           * but it is a common pattern in financial applications to update the percentage or amount
+           * based on the new balance when the balance changes.
+           */
+          if (this.useAmount) {
+            // user may not be aware that the amount they are editing is 
+            // no longer based on the balance
+            asset.percentage = this.percentageFromAmount(asset);
+          } else {
+            // user may not be aware that the percentage they are editing is 
+            // no longer based on the amount
+            asset.amount = this.amountFromPercentage(asset);
+          }
+        }
+      })
+      .catch(error => {
+        // Check for invalid nonce error and retry once
+        if (error.message && error.message.includes('EAPI:Invalid nonce')) {
+          this.logService.log(`Invalid nonce error for ${asset.name}, retrying...`);
+          /**
+           * we receive intermittent invalid nonce errors due to being unable to avoid
+           * requests to the exchange arriving out of order.  So we do the retry.
+           * Note it is recursive, assuming it the error won't happen forever.
+           */
+          this.updateAssetBalance(asset)
+        } else {
+          this.logService.logError(`Failed to fetch balance for ${asset.name}: ${error}`);
+        }
+      });
   }
 
   selectAll() {
