@@ -8,9 +8,9 @@
           <th class="text-left text-sm px-2">Select</th>
           <th class="text-left text-sm px-2">Coin</th>
           <th class="text-left text-sm px-2">Exchange</th>
-          <th class="text-left text-sm px-2">Current Price</th>
+          <th class="text-left text-sm px-2">USD Price</th>
+          <th class="text-left text-sm px-2">Coin Balance</th>
           <th class="text-left text-sm px-2">Percent</th>
-          <th class="text-left text-sm px-2">Coins</th>
           <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Price</th>
           <!--th class="text-left text-sm px-2"></th-->
         </tr>
@@ -25,6 +25,19 @@
           <td class="text-left text-sm px-2">${asset.currentPrice}</td>
           <td class="text-left text-sm px-2">
               <input
+              if.bind="useAmount"
+              type="number"
+              min="0"
+              value.two-way="asset.amount"
+              required
+              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.amountInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
+              input.trigger="validateAmount(asset)"
+              />
+              <div else>${asset.amount}</div>
+              <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
+          </td>
+          <td class="text-left text-sm px-2">
+              <input
               if.bind="!useAmount"
               type="number"
               min="1"
@@ -36,19 +49,6 @@
               />
               <div else>${asset.percentage}</div>
               <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
-          </td>
-          <td class="text-left text-sm px-2">
-              <input
-              if.bind="useAmount"
-              type="number"
-              min="0"
-              value.two-way="asset.amount"
-              required
-              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.amountInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validateAmount(asset)"
-              />
-              <div else>${asset.amount}</div>
-              <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
           </td>
           <td class="text-left text-sm px-2" if.bind="limitOrder">
               <input
@@ -82,9 +82,9 @@
           Select None
         </div>
         <div
-          click.trigger="refreshBalances()"
+          click.trigger="refresh()"
           class="flex justify-center daisy-link daisy-link-primary text-sm no-underline w-36">
-            <span class="whitespace-nowrap">Refresh Coin Balances</span>
+            <span class="whitespace-nowrap">Refresh Prices and Balances</span>
             <span if.bind="isRefreshingBalances" class="flex items-center justify-center h-full ml-1" style="margin-left: 4px;">
               <svg class="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

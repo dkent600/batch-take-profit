@@ -20,7 +20,7 @@ export class AssetList {
   private isUpdating = false; // Flag to prevent infinite loops
   private useAmount = false; // Flag to toggle between allowing percentage or amount to be edited
   private limitOrder = false; // Flag to indicate if limit orders should be created
-  isRefreshingBalances: boolean;
+  isRefreshinging: boolean;
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
@@ -140,10 +140,11 @@ export class AssetList {
       asset.selected = false;
     }
   }
-  async refreshBalances(): Promise<void> {
-    this.isRefreshingBalances = true;
+  async refresh(): Promise<void> {
+    this.isRefreshinging = true;
     await this.updateAllBalances();
-    this.isRefreshingBalances = false;
+    await this.updateAllCurrentPrices();
+    this.isRefreshinging = false;
     alert('✅ All balances refreshed.');
   }
 
