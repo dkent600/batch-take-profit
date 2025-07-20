@@ -9,8 +9,8 @@
           <th class="text-left text-sm px-2">Coin</th>
           <th class="text-left text-sm px-2">Exchange</th>
           <th class="text-left text-sm px-2">Percent</th>
-          <th class="text-left text-sm px-2">Amount</th>
-          <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Order Price</th>
+          <th class="text-left text-sm px-2">Coins</th>
+          <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Price</th>
           <!--th class="text-left text-sm px-2"></th-->
         </tr>
       </thead>
@@ -110,6 +110,7 @@
       </button>
       </div>
       <div class="text-yellow-500 text-xs mt-1">Amount is always used for the order. Percent is only to help compute the order amount.</div>
+      <div class="text-yellow-500 text-xs mt-1">The amount is sent as-is. To round it, edit it.</div>
     </div>
   </div>
 </template>

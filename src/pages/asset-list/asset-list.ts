@@ -156,7 +156,7 @@ export class AssetList {
         asset.exchange === 'MEXC' ? 'USDT' : 'USD', this.limitOrder
       );
       // this.logService.log(`Created sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
-      alert(`✅ Order placed for ${asset.name}.`);
+      alert(`✅ ${this.limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
     } catch (error) {
       this.logService.logError(error);
       alert(`❌ Error creating sell order for ${asset.name}. Check console for details.`);
