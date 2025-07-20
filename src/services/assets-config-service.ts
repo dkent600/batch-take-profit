@@ -8,6 +8,7 @@ export interface IAsset {
   percentage: number;
   amount?: number;
   balance?: number;
+  limitOrderPrice?: number;
 }
 
 interface IExchange {
@@ -120,7 +121,7 @@ export class AssetsConfigService implements IAssetsConfigService {
       const config = await response.json();
 
       // Set the service URL from config
-      this._serviceUrl = config.batchConfig?.serviceUrl || 'http://localhost:3000';
+      this._serviceUrl = config.batchConfig?.serviceUrl;
 
       return this._assets = ((config as IConfig).batchConfig?.assets ?? []).map((asset: IAssetConfig): IAsset => ({
         name: asset.name,

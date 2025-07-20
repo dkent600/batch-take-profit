@@ -9,45 +9,18 @@ import { ILogService } from '../../services/log-service.js';
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
   amountInvalid?: boolean;
+  limitOrderPriceInvalid?: boolean;
   selected?: boolean;
 }
-
-// class AssetEx implements IAssetEx {
-//   name: string;
-//   exchange: string;
-//   @watch
-//   get percentage(): number
-//   {
-//     return this.amount / this.balance * 100;
-//   }
-
-//   @watch
-//   get amount(): number {
-//     return this.percentage / 100 * this.balance
-//   };
-//   balance?: number;
-//   percentageInvalid?: boolean;
-//   amountInvalid?: boolean;
-//   selected?: boolean;
-
-//   constructor(asset: IAsset) {
-//     this.name = asset.name;
-//     this.exchange = asset.exchange;
-//     this.percentage = asset.percentage ?? 15; // Default to 15% if not provided
-//     this.amount = asset.amount ?? 0; // Default to 0 if not provided
-//     this.balance = asset.balance ?? 0; // Default to 0 if not provided
-//     this.percentageInvalid = false;
-//     this.amountInvalid = false;
-//     this.selected = false;
-//   }
-// }
 
 @inject(AssetsConfigServiceToken, LogServiceToken, AssetExchangeApiServiceToken)
 export class AssetList {
   assets: IAssetEx[];
-  private balanceUpdateTimer: NodeJS.Timeout | null = null;
+  // private balanceUpdateTimer: NodeJS.Timeout | null = null;
   private isUpdating = false; // Flag to prevent infinite loops
-  private useAmount = false;
+  private useAmount = false; // Flag to toggle between allowing percentage or amount to be edited
+  private limitOrder = false; // Flag to indicate if limit orders should be created
+  isRefreshingBalances: boolean;
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
@@ -59,22 +32,29 @@ export class AssetList {
 
   async binding() {
     this.assets = await this.exchangeConfigService.getAssets();
+    this.initAssets();
   }
 
   attached() {
     // Update balances every 30 seconds
-    this.balanceUpdateTimer = setInterval(async () => {
-      this.updateAllBalances();
-    }, 30000);
+    // this.balanceUpdateTimer = setInterval(async () => {
+    //   this.updateAllBalances();
+    // }, 30000);
 
     // Initial balance update
     return this.updateAllBalances();
   }
 
-  detached() {
-    if (this.balanceUpdateTimer) {
-      clearInterval(this.balanceUpdateTimer);
-      this.balanceUpdateTimer = null;
+  // detached() {
+  //   if (this.balanceUpdateTimer) {
+  //     clearInterval(this.balanceUpdateTimer);
+  //     this.balanceUpdateTimer = null;
+  //   }
+  // }
+
+  private initAssets(): void {
+    for (const asset of this.assets) {
+      asset.limitOrderPrice = 0; // Initialize limit order price
     }
   }
 
@@ -87,17 +67,28 @@ export class AssetList {
   }
 
   private async updateAllBalances(): Promise<void> {
-    if (!this.assets) return;
-
     for (const asset of this.assets) {
       try {
         const balance = await this.assetExchangeService.fetchBalance(asset);
+        // const balance = await this.assetExchangeService.fetchBalance(asset);
         const balanceChanged = balance !== asset.balance;
         asset.balance = balance || 0; // Ensure balance is always a number
         if (balanceChanged) {
+          /**
+           * assumes that if the balance changes, the user wants to update the percentage or amount
+           * based on the new balance, but only if the user is not currently editing
+           * the percentage or amount to avoid infinite loops and overwriting the user's entry.
+           * The user may not be aware of this behavior which could be a problem
+           * but it is a common pattern in financial applications to update the percentage or amount
+           * based on the new balance when the balance changes.
+           */
           if (this.useAmount) {
+            // user may not be aware that the amount they are editing is 
+            // no longer based on the balance
             asset.percentage = this.percentageFromAmount(asset);
           } else {
+            // user may not be aware that the percentage they are editing is 
+            // no longer based on the amount
             asset.amount = this.amountFromPercentage(asset);
           }
         }
@@ -124,35 +115,47 @@ export class AssetList {
       asset.selected = false;
     }
   }
-
+  async refreshBalances(): Promise<void> {
+    this.isRefreshingBalances = true;
+    await this.updateAllBalances();
+    this.isRefreshingBalances = false;
+    alert('✅ All balances refreshed.');
+  }
 
   toggleUseAmount() {
     this.useAmount = !this.useAmount;
   }
 
-  async createSellOrder(_event: Event, asset: IAssetEx, limit: boolean = false) {
+  toggleLimitOrder() {
+    this.limitOrder = !this.limitOrder;
+  }
+
+  async createSellOrder(_event: Event, asset: IAssetEx) {
     try {
       const balance = asset.balance;
       asset.balance = await this.assetExchangeService.fetchBalance(asset);
       const balanceChanged = balance !== asset.balance;
       this.validatePercentage(asset);
       this.validateAmount(asset);
+      if (this.limitOrder) {
+        this.validateLimitOrderPrice(asset);
+      }
 
       if (balanceChanged) {
         alert(`❌ The asset balance has changed.  Make sure the numbers are still what you want.`);
         return;
       }
 
-      if (asset.percentageInvalid || asset.amountInvalid) {
-        alert(`❌ Invalid input for ${asset.name}. Please check percentage and amount.`);
+      if (asset.percentageInvalid || asset.amountInvalid || (this.limitOrder ? asset.limitOrderPriceInvalid : false)) {
+        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
         return;
       }
 
-      this.logService.log(`Creating ${limit ? 'limit' : 'market'} sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
-      await this.assetExchangeService.createMarketSellOrder(asset,
-        asset.exchange === 'MEXC' ? 'USDT' : 'USD'
+      // this.logService.log(`Creating ${this.limitOrder ? 'limit' : 'market'} sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
+      await this.assetExchangeService.createSellOrder(asset,
+        asset.exchange === 'MEXC' ? 'USDT' : 'USD', this.limitOrder
       );
-      this.logService.log(`Created sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
+      // this.logService.log(`Created sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
       alert(`✅ Order placed for ${asset.name}.`);
     } catch (error) {
       this.logService.logError(error);
@@ -182,7 +185,7 @@ export class AssetList {
   }
 
   get hasInvalidSelection() {
-    return this.assets.some(asset => asset.selected && asset.percentageInvalid && asset.amountInvalid);
+    return this.assets.some(asset => asset.selected && (asset.percentageInvalid || asset.amountInvalid || (this.limitOrder && asset.limitOrderPriceInvalid)));
   }
 
   async validatePercentage(asset: IAssetEx): Promise<void> {
@@ -237,5 +240,23 @@ export class AssetList {
       asset.percentage = (parsedValue / asset.balance) * 100;
       this.isUpdating = false;
     }
+  }
+
+  async validateLimitOrderPrice(asset: IAssetEx): Promise<void> {
+    const originalValue = String(asset.limitOrderPrice);
+
+    // Check if the string is a valid number format
+    // Allows: whole numbers (4, 100), full decimals (.5, 4.5, 50.555), numbers with commas (1,000.50)
+    // Rejects: "1." "4." (decimal with no digits after), "5.5.5" (multiple decimals), negative numbers, non-numeric chars except commas
+    const isValidNumberFormat = /^(?!.*-)(\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?|\.\d+)$/.test(originalValue.trim());
+
+    if (!isValidNumberFormat) {
+      asset.limitOrderPriceInvalid = true;
+      console.log('Invalid format:', originalValue, 'limitOrderPriceInvalid:', asset.limitOrderPriceInvalid);
+      return;
+    }
+
+    const parsedValue = Number.parseFloat(originalValue);
+    asset.limitOrderPriceInvalid = isNaN(parsedValue) || parsedValue < 0;
   }
 }

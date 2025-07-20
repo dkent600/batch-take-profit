@@ -41,18 +41,25 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     }
   }
 
-  async createMarketSellOrder(asset: IAsset, to: string): Promise<unknown> {
+  async createSellOrder(asset: IAsset, to: string, limit: boolean): Promise<unknown> {
     try {
+      asset.amount = +asset.amount || 0; // Ensure amount is a number
+      asset.limitOrderPrice = +asset.limitOrderPrice || 0;
+
       if (!asset.amount) {
         throw new Error('Amount is required to create a market sell order');
       }
-      const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/sell/market`, {
+      if (limit && !asset.limitOrderPrice) {
+        throw new Error('Limit price is required to create a limit sell order');
+      }
+      const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/sell/${limit ? "limit" : "market"}`, {
         asset: {
           name: asset.name,
           exchange: asset.exchange,
           // percentage: asset.percentage ?? 100,
           amount: asset.amount,
         },
+        price: asset.limitOrderPrice, // will be ignored for market orders
         to,
       });
       return response.data;

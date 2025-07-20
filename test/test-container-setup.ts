@@ -23,7 +23,7 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
   // Default mocks that can be overridden
   const defaultMocks = {
     assetExchangeService: {
-      createMarketSellOrder: vi.fn(),
+      createSellOrder: vi.fn(),
       fetchPrice: vi.fn(),
       fetchBalance: vi.fn()
     },

@@ -3,5 +3,5 @@ import { IAsset } from "./assets-config-service.js";
 export interface IAssetExchangeService {
   fetchPrice(asset: IAsset, to: string): Promise<number>;
   fetchBalance(asset: IAsset): Promise<number>;
-  createMarketSellOrder(asset: IAsset, to: string): Promise<unknown>;
+  createSellOrder(asset: IAsset, to: string, limit: boolean): Promise<unknown>;
 }
