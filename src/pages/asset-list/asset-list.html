@@ -8,6 +8,7 @@
           <th class="text-left text-sm px-2">Select</th>
           <th class="text-left text-sm px-2">Coin</th>
           <th class="text-left text-sm px-2">Exchange</th>
+          <th class="text-left text-sm px-2">Current Price</th>
           <th class="text-left text-sm px-2">Percent</th>
           <th class="text-left text-sm px-2">Coins</th>
           <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Price</th>
@@ -21,6 +22,7 @@
           </td>
           <td class="text-left text-sm px-2">${asset.name}</td>
           <td class="text-left text-sm px-2">${asset.exchange}</td>
+          <td class="text-left text-sm px-2">${asset.currentPrice}</td>
           <td class="text-left text-sm px-2">
               <input
               if.bind="!useAmount"

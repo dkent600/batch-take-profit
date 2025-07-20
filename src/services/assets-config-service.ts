@@ -6,6 +6,7 @@ export interface IAsset {
   name: string;
   exchange: string;
   percentage: number;
+  currentPrice: number
   amount?: number;
   balance?: number;
   limitOrderPrice?: number;
@@ -127,6 +128,7 @@ export class AssetsConfigService implements IAssetsConfigService {
         name: asset.name,
         exchange: asset.exchange,
         percentage: asset.percentage ?? 15,
+        currentPrice: 0,
         amount: 0, // Default to 0 if not provided
         balance: 0 // Default to 0 if not provided
       }));

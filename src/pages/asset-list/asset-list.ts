@@ -35,14 +35,18 @@ export class AssetList {
     this.initAssets();
   }
 
-  attached() {
+  async attached(): Promise<void> {
     // Update balances every 30 seconds
     // this.balanceUpdateTimer = setInterval(async () => {
     //   this.updateAllBalances();
     // }, 30000);
 
-    // Initial balance update
-    return this.updateAllBalances();
+    /**
+     * At this point these requests need to be made one-by-one or the 
+     * butterfly service will fail due to invalid nonce.
+    */
+    this.updateCurrentPrices();
+    this.updateAllBalances();
   }
 
   // detached() {
@@ -66,34 +70,46 @@ export class AssetList {
     return asset.amount / asset.balance * 100;
   }
 
-  private async updateAllBalances(): Promise<void> {
+  private updateCurrentPrices(): void {
+    for (const asset of this.assets) {
+      this.assetExchangeService.fetchPrice(asset, this.getToCoin(asset))
+        .then(price => {
+          asset.currentPrice = price;
+        })
+        .catch(error => {
+          this.logService.logError(`Failed to update current price for ${asset.name}: ${error}`);
+        });
+    }
+  }
+
+  private updateAllBalances(): void {
     for (const asset of this.assets) {
       try {
         const balance = await this.assetExchangeService.fetchBalance(asset);
         // const balance = await this.assetExchangeService.fetchBalance(asset);
-        const balanceChanged = balance !== asset.balance;
-        asset.balance = balance || 0; // Ensure balance is always a number
-        if (balanceChanged) {
-          /**
-           * assumes that if the balance changes, the user wants to update the percentage or amount
-           * based on the new balance, but only if the user is not currently editing
-           * the percentage or amount to avoid infinite loops and overwriting the user's entry.
-           * The user may not be aware of this behavior which could be a problem
-           * but it is a common pattern in financial applications to update the percentage or amount
-           * based on the new balance when the balance changes.
-           */
-          if (this.useAmount) {
-            // user may not be aware that the amount they are editing is 
-            // no longer based on the balance
-            asset.percentage = this.percentageFromAmount(asset);
-          } else {
-            // user may not be aware that the percentage they are editing is 
-            // no longer based on the amount
-            asset.amount = this.amountFromPercentage(asset);
+          const balanceChanged = balance !== asset.balance;
+          asset.balance = balance || 0; // Ensure balance is always a number
+          if (balanceChanged) {
+            /**
+             * assumes that if the balance changes, the user wants to update the percentage or amount
+             * based on the new balance, but only if the user is not currently editing
+             * the percentage or amount to avoid infinite loops and overwriting the user's entry.
+             * The user may not be aware of this behavior which could be a problem
+             * but it is a common pattern in financial applications to update the percentage or amount
+             * based on the new balance when the balance changes.
+             */
+            if (this.useAmount) {
+              // user may not be aware that the amount they are editing is 
+              // no longer based on the balance
+              asset.percentage = this.percentageFromAmount(asset);
+            } else {
+              // user may not be aware that the percentage they are editing is 
+              // no longer based on the amount
+              asset.amount = this.amountFromPercentage(asset);
+            }
           }
-        }
       } catch (error) {
-        this.logService.logError(`Failed to update balance for ${asset.name}: ${error}`);
+          this.logService.logError(`Failed to update balance for ${asset.name}: ${error}`);
       }
       // .then(balance => {
       // this.assetExchangeService.fetchBalance(asset).then(balance => {
@@ -130,6 +146,10 @@ export class AssetList {
     this.limitOrder = !this.limitOrder;
   }
 
+  getToCoin(asset: IAsset): string {
+    return asset.exchange === 'MEXC' ? 'USDT' : 'USD';
+  }
+
   async createSellOrder(_event: Event, asset: IAssetEx) {
     try {
       const balance = asset.balance;
@@ -153,7 +173,7 @@ export class AssetList {
 
       // this.logService.log(`Creating ${this.limitOrder ? 'limit' : 'market'} sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
       await this.assetExchangeService.createSellOrder(asset,
-        asset.exchange === 'MEXC' ? 'USDT' : 'USD', this.limitOrder
+        this.getToCoin(asset), this.limitOrder
       );
       // this.logService.log(`Created sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
       alert(`✅ ${this.limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
