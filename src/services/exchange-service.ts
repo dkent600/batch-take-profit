@@ -4,4 +4,6 @@ export interface IAssetExchangeService {
   fetchPrice(asset: IAsset, to: string): Promise<number>;
   fetchBalance(asset: IAsset): Promise<number>;
   createSellOrder(asset: IAsset, to: string, limit: boolean): Promise<unknown>;
+  fetchOpenOrders(exchange: string): Promise<[]>;
+  fetchClosedOrders(exchange: string): Promise<[]>;
 }

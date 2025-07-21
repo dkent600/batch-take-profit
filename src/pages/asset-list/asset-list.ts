@@ -20,7 +20,9 @@ export class AssetList {
   private isUpdating = false; // Flag to prevent infinite loops
   private useAmount = false; // Flag to toggle between allowing percentage or amount to be edited
   private limitOrder = false; // Flag to indicate if limit orders should be created
-  isRefreshing: boolean;
+  private isRefreshing: boolean;
+  private openOrders: [];
+  private closedOrders: [];
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
@@ -33,6 +35,8 @@ export class AssetList {
   async binding() {
     this.assets = await this.exchangeConfigService.getAssets();
     this.initAssets();
+    await this.fetchOpenOrders();
+    await this.fetchClosedOrders();
   }
 
   async attached(): Promise<void> {
@@ -145,6 +149,24 @@ export class AssetList {
       });
   }
 
+
+  async fetchOpenOrders(): Promise<void> {
+    try {
+      this.openOrders = await this.assetExchangeService.fetchOpenOrders("kraken");
+      console.log('Open Orders:', this.openOrders);
+    } catch (error) {
+      console.error('Error fetching open orders:', error);
+    }
+  }
+
+  async fetchClosedOrders(): Promise<void> {
+    try {
+      this.closedOrders = await this.assetExchangeService.fetchClosedOrders("kraken");
+      console.log('Closed Orders:', this.closedOrders);
+    } catch (error) {
+      console.error('Error fetching closed orders:', error);
+    }
+  }
   selectAll() {
     for (const asset of this.assets) {
       asset.selected = true;

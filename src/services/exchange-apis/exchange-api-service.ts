@@ -53,12 +53,8 @@ export class AssetExchangeApiService implements IAssetExchangeService {
         throw new Error('Limit price is required to create a limit sell order');
       }
       const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/sell/${limit ? "limit" : "market"}`, {
-        asset: {
-          name: asset.name,
-          exchange: asset.exchange,
-          // percentage: asset.percentage ?? 100,
-          amount: asset.amount,
-        },
+        name: asset.name,
+        amount: asset.amount,
         price: asset.limitOrderPrice, // will be ignored for market orders
         to,
       });
@@ -66,6 +62,26 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } }; message?: string };
       throw new Error(err?.response?.data?.message || err.message || 'Failed to create market sell order');
+    }
+  }
+
+  async fetchOpenOrders(exchange: string): Promise<[]> {
+    try {
+      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/open`);
+      return response.data.orders;
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      throw new Error(err?.response?.data?.message || err.message || 'Failed to fetch open orders');
+    }
+  }
+
+  async fetchClosedOrders(exchange: string): Promise<[]> {
+    try {
+      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/closed`);
+      return response.data.orders;
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      throw new Error(err?.response?.data?.message || err.message || 'Failed to fetch closed orders');
     }
   }
 }

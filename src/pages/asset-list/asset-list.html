@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center p-6">
-    <h1 class="text-2xl font-bold text-center">Scaled Take Profit Sales</h1>
+    <h1 class="text-2xl font-bold text-center">Scaled Take-Profit Sales</h1>
 
     <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
       <thead>
@@ -127,5 +127,46 @@
       <div class="text-yellow-500 text-xs mt-1">"Coins" is the amount for the order to sell. "Percent" is only to help compute the order amount.</div>
       <div class="text-yellow-500 text-xs mt-1">The amount is sent as-is. Best to round it, by editing it.</div>
     </div>
+  </div>
+  <div>
+    <h2 class="text-2xl font-bold text-center">Open Orders</h2>
+    <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+      <thead>
+        <tr>
+          <th class="text-left text-sm px-2">Pair</th>
+          <th class="text-left text-sm px-2">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr repeat.for="order of openOrders">
+          <td class="text-left text-sm px-2">
+            ${order.descr.pair}
+          </td>
+          <td class="text-left text-sm px-2">
+            ${order.status}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    <h2 class="text-2xl font-bold text-center">Closed Orders</h2>
+    <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+      <thead>
+        <tr>
+          <th class="text-left text-sm px-2">Pair</th>
+          <th class="text-left text-sm px-2">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr repeat.for="order of closedOrders">
+          <td class="text-left text-sm px-2">
+            ${order.descr.pair}
+          </td>
+          <td class="text-left text-sm px-2">
+            ${order.status}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
