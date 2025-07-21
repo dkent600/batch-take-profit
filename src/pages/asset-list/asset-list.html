@@ -8,10 +8,10 @@
           <th class="text-left text-sm px-2">Select</th>
           <th class="text-left text-sm px-2">Coins to Sell</th>
           <th class="text-left text-sm px-2">Exchange</th>
-          <th class="text-left text-sm px-2">$USD/Coin</th>
           <th class="text-left text-sm px-2">Coin Total Balance</th>
           <th class="text-left text-sm px-2">Percent</th>
           <th class="text-left text-sm px-2">Net Sale in Coins</th>
+          <th class="text-left text-sm px-2">$USD/Coin</th>
           <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Price</th>
           <th class="text-left text-sm px-2">Total Sale $USD</th>
           <!--th class="text-left text-sm px-2"></th-->
@@ -24,7 +24,6 @@
           </td>
           <td class="text-left text-sm px-2">${asset.name}</td>
           <td class="text-left text-sm px-2">${asset.exchange}</td>
-          <td class="text-left text-sm px-2">${asset.currentPrice}</td>
           <td class="text-left text-sm px-2">${asset.balance}</td>
           <td class="text-left text-sm px-2">
               <input
@@ -53,6 +52,7 @@
               <div else>${asset.amount}</div>
               <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
           </td>
+          <td class="text-left text-sm px-2">${asset.currentPrice}</td>
           <td class="text-left text-sm px-2" if.bind="limitOrder">
               <input
               type="number"
