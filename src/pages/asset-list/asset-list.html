@@ -9,7 +9,7 @@
           <th class="text-left text-sm px-2">Coin</th>
           <th class="text-left text-sm px-2">Exchange</th>
           <th class="text-left text-sm px-2">USD Price</th>
-          <th class="text-left text-sm px-2">Coin Balance</th>
+          <th class="text-left text-sm px-2">Coins</th>
           <th class="text-left text-sm px-2">Percent</th>
           <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Price</th>
           <!--th class="text-left text-sm px-2"></th-->
@@ -73,24 +73,13 @@
       <div class="flex flex-row gap-4">
         <div
           click.trigger="selectAll($event)"
-          class="daisy-link daisy-link-primary text-sm no-underline">
+          class="flex justify-centerdaisy-link daisy-link-primary text-sm no-underline">
           Select All
         </div>
         <div
           click.trigger="selectNone($event)"
           class="flex justify-center daisy-link daisy-link-primary text-sm no-underline">
           Select None
-        </div>
-        <div
-          click.trigger="refresh()"
-          class="flex justify-center daisy-link daisy-link-primary text-sm no-underline w-36">
-            <span class="whitespace-nowrap">Refresh Prices and Balances</span>
-            <span if.bind="isRefreshingBalances" class="flex items-center justify-center h-full ml-1" style="margin-left: 4px;">
-              <svg class="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-              </svg>
-            </span>
         </div>
         <div
           click.trigger="toggleUseAmount()"
@@ -104,15 +93,26 @@
           <div>${limitOrder ? 'Is a Market Order' : 'Is a Limit Order'}</div>
         </div>
       <div>
-      <button
+      <div
+        click.trigger="refresh()"
+        class="daisy-link daisy-link-primary text-sm no-underline">
+          <span class="flex justify-center whitespace-nowrap">Refresh Prices and Balances</span>
+          <span if.bind="isRefreshing" class="flex items-center justify-center h-full ml-1" style="margin-left: 4px;">
+            <svg class="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+          </span>
+      </div>
+      <div
         click.trigger="createSellOrders($event)"
         class.bind="'daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
         disabled.bind="!hasSelection || hasInvalidSelection">
         Place the ${selectedOrders.length} selected market sell order<template if.bind="selectedOrders.length != 1">s</template>
-      </button>
       </div>
-      <div class="text-yellow-500 text-xs mt-1">Amount is always used for the order. Percent is only to help compute the order amount.</div>
-      <div class="text-yellow-500 text-xs mt-1">The amount is sent as-is. To round it, edit it.</div>
+      </div>
+      <div class="text-yellow-500 text-xs mt-1">"Coins" is the amount for the order to sell. "Percent" is only to help compute the order amount.</div>
+      <div class="text-yellow-500 text-xs mt-1">The amount is sent as-is. Best to round it, by editing it.</div>
     </div>
   </div>
 </template>

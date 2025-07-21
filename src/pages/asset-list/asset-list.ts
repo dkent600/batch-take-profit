@@ -20,7 +20,7 @@ export class AssetList {
   private isUpdating = false; // Flag to prevent infinite loops
   private useAmount = false; // Flag to toggle between allowing percentage or amount to be edited
   private limitOrder = false; // Flag to indicate if limit orders should be created
-  isRefreshinging: boolean;
+  isRefreshing: boolean;
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
@@ -70,22 +70,38 @@ export class AssetList {
     return asset.amount / asset.balance * 100;
   }
 
-  private updateAllCurrentPrices(): void {
-    for (const asset of this.assets) {
-      this.assetExchangeService.fetchPrice(asset, this.getToCoin(asset))
-        .then(price => {
-          asset.currentPrice = price;
-        })
-        .catch(error => {
-          this.logService.logError(`Failed to fetch current price for ${asset.name}: ${error}`);
-        });
-    }
+  private async updateAllCurrentPrices(): Promise<void> {
+
+    let count = this.assets.length;
+
+    return new Promise(resolve => {
+      for (const asset of this.assets) {
+        this.assetExchangeService.fetchPrice(asset, this.getToCoin(asset))
+          .then(price => {
+            asset.currentPrice = price;
+            if (--count === 0) {
+              resolve();
+            }
+          })
+          .catch(error => {
+            this.logService.logError(`Failed to fetch current price for ${asset.name}: ${error}`);
+          });
+      }
+    });
   }
 
   private async updateAllBalances(): Promise<void> {
-    for (const asset of this.assets) {
-      this.updateAssetBalance(asset);
-    }
+    let count = this.assets.length;
+    return new Promise(resolve => {
+      for (const asset of this.assets) {
+        this.updateAssetBalance(asset)
+          .then(() => {
+            if (--count === 0) {
+              resolve();
+            }
+          });
+      }
+    });
   }
 
   private async updateAssetBalance(asset: IAssetEx): Promise<void> {
@@ -141,12 +157,20 @@ export class AssetList {
     }
   }
   async refresh(): Promise<void> {
-    this.isRefreshinging = true;
-    await this.updateAllBalances();
-    await this.updateAllCurrentPrices();
-    this.isRefreshinging = false;
-    alert('✅ All balances refreshed.');
+    this.isRefreshing = true;
+    Promise.all([this.updateAllBalances(), this.updateAllCurrentPrices()])
+      .then(() => {
+        this.isRefreshing = false;
+        // wait so isRefreshing can take effect, then show the alert (which otherwise would
+        // freeze the page refresh) 
+        this.run(() => alert('✅ All balances refreshed.'), 100);
+      });
   }
+
+  run(fn: () => void, ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(() => { fn(); resolve(); }, ms));
+  }
+
 
   toggleUseAmount() {
     this.useAmount = !this.useAmount;
