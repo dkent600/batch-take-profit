@@ -63,11 +63,11 @@ export class AssetList {
   }
 
   private amountFromPercentage(asset: IAsset): number {
-    return asset.percentage / 100 * asset.balance;
+    return (asset.percentage * asset.balance) / 100;
   }
 
   private percentageFromAmount(asset: IAsset): number {
-    return asset.amount / asset.balance * 100;
+    return (asset.amount * 100) / asset.balance;
   }
 
   private async updateAllCurrentPrices(): Promise<void> {
@@ -186,6 +186,12 @@ export class AssetList {
 
   async createSellOrder(_event: Event, asset: IAssetEx) {
     try {
+
+      if (this.isInvalid(asset)) {
+        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
+        return;
+      }
+
       const balance = asset.balance;
       asset.balance = await this.assetExchangeService.fetchBalance(asset);
       const balanceChanged = balance !== asset.balance;
@@ -195,13 +201,14 @@ export class AssetList {
         this.validateLimitOrderPrice(asset);
       }
 
-      if (balanceChanged) {
-        alert(`❌ The asset balance has changed.  Make sure the numbers are still what you want.`);
+      if (this.isInvalid(asset)) {
+        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
         return;
       }
 
-      if (asset.percentageInvalid || asset.amountInvalid || (this.limitOrder ? asset.limitOrderPriceInvalid : false)) {
-        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
+
+      if (balanceChanged) {
+        alert(`❌ The asset balance has changed.  Make sure the numbers are still what you want.`);
         return;
       }
 
@@ -239,7 +246,11 @@ export class AssetList {
   }
 
   get hasInvalidSelection() {
-    return this.assets.some(asset => asset.selected && (asset.percentageInvalid || asset.amountInvalid || (this.limitOrder && asset.limitOrderPriceInvalid)));
+    return this.assets.some(asset => asset.selected && this.isInvalid(asset));
+  }
+
+  isInvalid(asset: IAssetEx) {
+    return asset.percentageInvalid || asset.amountInvalid || (this.limitOrder && asset.limitOrderPriceInvalid);
   }
 
   async validatePercentage(asset: IAssetEx): Promise<void> {
@@ -311,6 +322,6 @@ export class AssetList {
     }
 
     const parsedValue = Number.parseFloat(originalValue);
-    asset.limitOrderPriceInvalid = isNaN(parsedValue) || parsedValue < 0;
+    asset.limitOrderPriceInvalid = isNaN(parsedValue) || parsedValue <= 0;
   }
 }
