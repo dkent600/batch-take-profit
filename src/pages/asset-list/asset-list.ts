@@ -184,58 +184,6 @@ export class AssetList {
     return asset.exchange === 'MEXC' ? 'USDT' : 'USD';
   }
 
-  async createSellOrder(_event: Event, asset: IAssetEx) {
-    try {
-
-      if (this.isInvalid(asset)) {
-        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
-        return;
-      }
-
-      const balance = asset.balance;
-      asset.balance = await this.assetExchangeService.fetchBalance(asset);
-      const balanceChanged = balance !== asset.balance;
-      this.validatePercentage(asset);
-      this.validateAmount(asset);
-      if (this.limitOrder) {
-        this.validateLimitOrderPrice(asset);
-      }
-
-      if (this.isInvalid(asset)) {
-        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
-        return;
-      }
-
-
-      if (balanceChanged) {
-        alert(`❌ The asset balance has changed.  Make sure the numbers are still what you want.`);
-        return;
-      }
-
-      // this.logService.log(`Creating ${this.limitOrder ? 'limit' : 'market'} sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
-      await this.assetExchangeService.createSellOrder(asset,
-        this.getToCoin(asset), this.limitOrder
-      );
-      // this.logService.log(`Created sell order for ${this.useAmount ? asset.amount : (asset.percentage + '%')} of: ${asset.name}`);
-      alert(`✅ ${this.limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
-    } catch (error) {
-      this.logService.logError(error);
-      alert(`❌ Error creating sell order for ${asset.name}. Check console for details.`);
-    }
-  }
-
-  createSellOrders(_event: Event) {
-    try {
-      for (const asset of this.assets) {
-        if (asset.selected) {
-          this.createSellOrder(_event, asset);
-        }
-      }
-    } catch (error) {
-      console.error('Error creating sell orders:', error);
-    }
-  }
-
   get hasSelection() {
     return this.assets.some(asset => asset.selected);
   }
@@ -323,5 +271,55 @@ export class AssetList {
 
     const parsedValue = Number.parseFloat(originalValue);
     asset.limitOrderPriceInvalid = isNaN(parsedValue) || parsedValue <= 0;
+  }
+
+  async createSellOrder(_event: Event, asset: IAssetEx) {
+    try {
+
+      if (this.isInvalid(asset)) {
+        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
+        return;
+      }
+
+      const balance = asset.balance;
+      asset.balance = await this.assetExchangeService.fetchBalance(asset);
+      const balanceChanged = balance !== asset.balance;
+      this.validatePercentage(asset);
+      this.validateAmount(asset);
+      if (this.limitOrder) {
+        this.validateLimitOrderPrice(asset);
+      }
+
+      if (this.isInvalid(asset)) {
+        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
+        return;
+      }
+
+      if (balanceChanged) {
+        alert(`❌ The asset balance has changed.  Make sure the numbers are still what you want.`);
+        return;
+      }
+
+      await this.assetExchangeService.createSellOrder(asset,
+        this.getToCoin(asset), this.limitOrder
+      );
+
+      alert(`✅ ${this.limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
+    } catch (error) {
+      this.logService.logError(error);
+      alert(`❌ Error creating sell order for ${asset.name}. Check console for details.`);
+    }
+  }
+
+  createSellOrders(_event: Event) {
+    try {
+      for (const asset of this.assets) {
+        if (asset.selected) {
+          this.createSellOrder(_event, asset);
+        }
+      }
+    } catch (error) {
+      console.error('Error creating sell orders:', error);
+    }
   }
 }
