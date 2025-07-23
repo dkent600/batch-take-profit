@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center p-6">
     <h1 class="text-2xl font-bold text-center">Scaled Take-Profit Sales</h1>
-
+    <!-- ***** GRID SECTION ***** -->
     <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
       <thead>
         <tr>
@@ -13,7 +13,7 @@
           <th class="text-left text-sm px-2">Net Sale in Coins</th>
           <th class="text-left text-sm px-2">$USD/Coin</th>
           <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Price</th>
-          <th class="text-left text-sm px-2">Total Sale $USD</th>
+          <th class="text-left text-sm px-2">Total Sale in $USD</th>
           <!--th class="text-left text-sm px-2"></th-->
         </tr>
       </thead>
@@ -77,6 +77,7 @@
         </tr>
       </tbody>
     </table>
+      <!-- ***** BUTTON LINKS SECTION ***** -->
     <div class="flex flex-col items-center justify-center mt-4 gap-2">
       <div class="flex flex-row gap-4">
         <div
@@ -125,14 +126,19 @@
           Place the ${selectedOrders.length} selected ${limitOrder ? 'limit' : 'market'} sell order<template if.bind="selectedOrders.length != 1">s</template>
         </div>
       </div>
-      <div class="text-yellow-500 text-xs mt-1">The "Net Sale in Coins" is sent as you see it. Is best to round it, by editing it (click Edit Net Sale).</div>
-      <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the "Net Sale in Coins".</div>
+      <!-- ***** HELP MESSAGES SECTION ***** -->
+      <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of the "Net Sale in Coins". Is best to round it, by editing it (click "Edit Net Sale").</div>
+      <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Net Sale in Coins".</div>
       <div class="text-yellow-500 text-xs mt-1">Order history in Kraken can be found in KrakenPro => History => Spot & Margin => Orders, not in Kraken regular.</div>
     </div>
   </div>
+  <!-- ***** OPEN ORDERS SECTION ***** -->
   <div>
     <h2 class="text-2xl font-bold text-center">Open Orders</h2>
-    <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+    <div if.bind="openOrders.size === 0" class="text-center text-gray-500 mt-2">
+      No open orders found
+    </div>
+    <table else class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
       <thead>
         <tr>
           <th class="text-left text-sm px-2">Pair</th>
@@ -166,6 +172,7 @@
       </tbody>
     </table>
   </div>
+  <!-- ***** CLOSED ORDERS SECTION ***** -->
   <div class="daisy-collapse daisy-collapse-arrow bg-base-200 my-4 max-w-fit mx-auto">
     <input type="checkbox" class="daisy-peer" />
     <div class="daisy-collapse-title text-2xl font-bold text-center">
