@@ -35,8 +35,8 @@ export class AssetList {
   async binding() {
     this.assets = await this.exchangeConfigService.getAssets();
     this.initAssets();
-    await this.fetchOpenOrders();
-    await this.fetchClosedOrders();
+    this.fetchOpenOrders();
+    this.fetchClosedOrders();
   }
 
   async attached(): Promise<void> {
@@ -151,22 +151,25 @@ export class AssetList {
 
 
   async fetchOpenOrders(): Promise<void> {
-    try {
-      this.openOrders = await this.assetExchangeService.fetchOpenOrders("kraken");
-      console.log('Open Orders:', this.openOrders);
-    } catch (error) {
-      console.error('Error fetching open orders:', error);
-    }
+    return this.assetExchangeService.fetchOpenOrders("kraken")
+      .then(orders => {
+        this.openOrders = orders || [] // Ensure openOrders is always an array;
+      })
+      .catch(error => {
+        console.error('Error fetching open orders:', error);
+      });
   }
 
   async fetchClosedOrders(): Promise<void> {
-    try {
-      this.closedOrders = await this.assetExchangeService.fetchClosedOrders("kraken");
-      console.log('Closed Orders:', this.closedOrders);
-    } catch (error) {
-      console.error('Error fetching closed orders:', error);
-    }
+    return this.assetExchangeService.fetchClosedOrders("kraken")
+      .then(orders => {
+        this.closedOrders = orders || [] // Ensure closedOrders is always an array
+      })
+      .catch(error => {
+        console.error('Error fetching closed orders:', error);
+      });
   }
+
   selectAll() {
     for (const asset of this.assets) {
       asset.selected = true;
@@ -295,12 +298,12 @@ export class AssetList {
     asset.limitOrderPriceInvalid = isNaN(parsedValue) || parsedValue <= 0;
   }
 
-  async createSellOrder(_event: Event, asset: IAssetEx) {
+  async _createSellOrder(asset: IAssetEx): Promise<void> {
+    const nullPromise = Promise.resolve();
     try {
-
       if (this.isInvalid(asset)) {
         alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
-        return;
+        return nullPromise;
       }
 
       const balance = asset.balance;
@@ -314,34 +317,58 @@ export class AssetList {
 
       if (this.isInvalid(asset)) {
         alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
-        return;
+        return nullPromise;
       }
 
       if (balanceChanged) {
         alert(`❌ The asset balance has changed.  Make sure the numbers are still what you want.`);
-        return;
+        return nullPromise;
       }
 
-      await this.assetExchangeService.createSellOrder(asset,
-        this.getToCoin(asset), this.limitOrder
-      );
-
-      alert(`✅ ${this.limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
+      return this.assetExchangeService.createSellOrder(asset, this.getToCoin(asset), this.limitOrder)
+        .then(() => {
+          alert(`✅ ${this.limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
+        });
     } catch (error) {
       this.logService.logError(error);
       alert(`❌ Error creating sell order for ${asset.name}. Check console for details.`);
+      return nullPromise;
     }
   }
 
+  async createSellOrder(_event: Event, asset: IAssetEx) {
+    this._createSellOrder(asset)
+      .then(() => {
+        this.fetchOpenOrders();
+      });
+  }
+
   createSellOrders(_event: Event) {
-    try {
-      for (const asset of this.assets) {
-        if (asset.selected) {
-          this.createSellOrder(_event, asset);
-        }
+    const all = [];
+    for (const asset of this.assets) {
+      if (asset.selected) {
+        all.push(
+          this._createSellOrder(asset).catch(error => {
+            console.error('Error creating sell orders:', error);
+          }));
       }
-    } catch (error) {
-      console.error('Error creating sell orders:', error);
     }
+
+    Promise.all(all).then(() => {
+      this.fetchOpenOrders();
+    });
+  }
+
+  cancelOrder(txId: string): void {
+    this.assetExchangeService.cancelOrder("kraken", txId)
+      .then(async () => {
+        alert(`✅ Order ${txId} cancelled successfully.`);
+        this.fetchClosedOrders();
+        this.fetchOpenOrders();
+      })
+      .catch(error => {
+        console.error('Error cancelling order:', error);
+        alert(`❌ Error cancelling order ${txId}. Check console for details.`);
+      });
   }
 }

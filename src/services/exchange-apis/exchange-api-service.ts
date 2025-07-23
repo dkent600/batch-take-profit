@@ -67,7 +67,7 @@ export class AssetExchangeApiService implements IAssetExchangeService {
 
   async fetchOpenOrders(exchange: string): Promise<[]> {
     try {
-      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/open`);
+      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/opened`);
       return response.data.orders;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } }; message?: string };
@@ -82,6 +82,19 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } }; message?: string };
       throw new Error(err?.response?.data?.message || err.message || 'Failed to fetch closed orders');
+    }
+  }
+
+  async cancelOrder(exchange: string, txId: string): Promise<void> {
+    if (!txId) {
+      throw new Error('Transaction ID is required to cancel an order');
+    }
+    try {
+      const response = await axios.delete(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}orders/cancel/${txId}`);
+      return response.data;
+    } catch (error) {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      throw new Error(err?.response?.data?.message || err.message || 'Failed to create market sell order');
     }
   }
 }

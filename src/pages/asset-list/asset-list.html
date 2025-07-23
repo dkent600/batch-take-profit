@@ -134,6 +134,7 @@
       <thead>
         <tr>
           <th class="text-left text-sm px-2">Pair</th>
+          <th class="text-left text-sm px-2">Type</th>
           <th class="text-left text-sm px-2">Status</th>
         </tr>
       </thead>
@@ -143,7 +144,17 @@
             ${order.descr.pair}
           </td>
           <td class="text-left text-sm px-2">
+            ${order.descr.type}
+          </td>
+          <td class="text-left text-sm px-2">
             ${order.status}
+          </td>
+          <td class="text-left text-sm px-2">
+            <div
+              click.trigger="cancelOrder(order.txId)"
+              class="justify-center daisy-link daisy-link-primary text-sm no-underline">
+              Cancel
+            </div>
           </td>
         </tr>
       </tbody>
@@ -154,6 +165,7 @@
       <thead>
         <tr>
           <th class="text-left text-sm px-2">Pair</th>
+          <th class="text-left text-sm px-2">Type</th>
           <th class="text-left text-sm px-2">Status</th>
         </tr>
       </thead>
@@ -161,6 +173,9 @@
         <tr repeat.for="order of closedOrders">
           <td class="text-left text-sm px-2">
             ${order.descr.pair}
+          </td>
+          <td class="text-left text-sm px-2">
+            ${order.descr.type}
           </td>
           <td class="text-left text-sm px-2">
             ${order.status}
