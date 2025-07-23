@@ -136,10 +136,11 @@
           <th class="text-left text-sm px-2">Pair</th>
           <th class="text-left text-sm px-2">Type</th>
           <th class="text-left text-sm px-2">Status</th>
+          <th class="text-left text-sm px-2">txID</th>
         </tr>
       </thead>
       <tbody>
-        <tr repeat.for="order of openOrders">
+        <tr repeat.for="[key, order] of openOrders">
           <td class="text-left text-sm px-2">
             ${order.descr.pair}
           </td>
@@ -150,8 +151,11 @@
             ${order.status}
           </td>
           <td class="text-left text-sm px-2">
+            ${key}
+          </td>
+          <td class="text-left text-sm px-2">
             <div
-              click.trigger="cancelOrder(order.txId)"
+              click.trigger="cancelOrder(key)"
               class="justify-center daisy-link daisy-link-primary text-sm no-underline">
               Cancel
             </div>
@@ -170,7 +174,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr repeat.for="order of closedOrders">
+        <tr repeat.for="[key, order] of closedOrders">
           <td class="text-left text-sm px-2">
             ${order.descr.pair}
           </td>

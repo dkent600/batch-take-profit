@@ -21,8 +21,8 @@ export class AssetList {
   private useAmount = false; // Flag to toggle between allowing percentage or amount to be edited
   private limitOrder = false; // Flag to indicate if limit orders should be created
   private isRefreshing: boolean;
-  private openOrders: [];
-  private closedOrders: [];
+  private openOrders: Map<string, any>;
+  private closedOrders: Map<string, any>;
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
@@ -153,7 +153,7 @@ export class AssetList {
   async fetchOpenOrders(): Promise<void> {
     return this.assetExchangeService.fetchOpenOrders("kraken")
       .then(orders => {
-        this.openOrders = orders || [] // Ensure openOrders is always an array;
+        this.openOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
       })
       .catch(error => {
         console.error('Error fetching open orders:', error);
@@ -163,7 +163,7 @@ export class AssetList {
   async fetchClosedOrders(): Promise<void> {
     return this.assetExchangeService.fetchClosedOrders("kraken")
       .then(orders => {
-        this.closedOrders = orders || [] // Ensure closedOrders is always an array
+        this.closedOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
       })
       .catch(error => {
         console.error('Error fetching closed orders:', error);
