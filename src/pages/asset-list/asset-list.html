@@ -166,28 +166,35 @@
       </tbody>
     </table>
   </div>
-    <h2 class="text-2xl font-bold text-center">Closed Orders</h2>
-    <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
-      <thead>
-        <tr>
-          <th class="text-left text-sm px-2">Pair</th>
-          <th class="text-left text-sm px-2">Type</th>
-          <th class="text-left text-sm px-2">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr repeat.for="[key, order] of closedOrders">
-          <td class="text-left text-sm px-2">
-            ${order.descr.pair}
-          </td>
-          <td class="text-left text-sm px-2">
-            ${order.descr.type}
-          </td>
-          <td class="text-left text-sm px-2">
-            ${order.status}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="daisy-collapse daisy-collapse-arrow bg-base-200 my-4 max-w-fit mx-auto">
+    <input type="checkbox" class="daisy-peer" />
+    <div class="daisy-collapse-title text-2xl font-bold text-center">
+      Closed Orders
+    </div>
+    <div class="daisy-collapse-content">
+      <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+        <thead>
+          <tr>
+            <th class="text-left text-sm px-2">Pair</th>
+            <th class="text-left text-sm px-2">Type</th>
+            <th class="text-left text-sm px-2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr repeat.for="[key, order] of closedOrders">
+            <td class="text-left text-sm px-2">
+              ${order.descr.pair}
+            </td>
+            <td class="text-left text-sm px-2">
+              ${order.descr.type}
+            </td>
+            <td class="text-left text-sm px-2">
+              ${order.status}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+</div>
 </template>
