@@ -70,7 +70,7 @@
               </div>
           </td>
           <!--td class="text-left text-sm px-2">
-            <button click.trigger="createSellOrder($event, asset)" class="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs">
+            <button click.trigger="createSellOrder(asset)" class="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs">
               Place market sell order
             </button>
           </td-->
@@ -81,12 +81,12 @@
     <div class="flex flex-col items-center justify-center mt-4 gap-2">
       <div class="flex flex-row gap-4">
         <div
-          click.trigger="selectAll($event)"
+          click.trigger="selectAll()"
           class="justify-centerdaisy-link daisy-link-primary text-sm no-underline">
           Select All
         </div>
         <div
-          click.trigger="selectNone($event)"
+          click.trigger="selectNone()"
           class="justify-center daisy-link daisy-link-primary text-sm no-underline">
           Select None
         </div>
@@ -120,7 +120,7 @@
       </div>
       <div class="flex flex-row gap-4 py-2">
         <div
-          click.trigger="createSellOrders($event)"
+          click.trigger="createSellOrders()"
           class.bind="'flex daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
           disabled.bind="!hasSelection || hasInvalidSelection">
           Place the ${selectedOrders.length} selected ${limitOrder ? 'limit' : 'market'} sell order<template if.bind="selectedOrders.length != 1">s</template>

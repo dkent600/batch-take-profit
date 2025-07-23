@@ -93,18 +93,18 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     const url = `${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/cancel/${txId}`;
 
     try {
-      return axios.delete(url);
+      await axios.delete(url);
     }
-    catch (error: unknown) {
+    catch (error) {
       const err = error as {
         response?: {
           status?: number;
           statusText?: string;
-          data?: any;
-          headers?: any;
+          data?: unknown;
+          headers?: unknown;
         };
         message?: string;
-        request?: any;
+        request?: unknown;
       };
 
       console.log('Cancel order error:', {
@@ -118,7 +118,9 @@ export class AssetExchangeApiService implements IAssetExchangeService {
         hasRequest: !!err.request
       });
 
-      throw new Error(err?.response?.data?.message || err.message || 'Failed to cancel order');
+      throw new Error(
+        (err?.response?.data as { message?: string })?.message || err.message || 'Failed to cancel order'
+      );
     }
   }
 }

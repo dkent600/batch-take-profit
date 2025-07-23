@@ -21,8 +21,8 @@ export class AssetList {
   private useAmount = false; // Flag to toggle between allowing percentage or amount to be edited
   private limitOrder = false; // Flag to indicate if limit orders should be created
   private isRefreshing: boolean;
-  private openOrders: Map<string, any>;
-  private closedOrders: Map<string, any>;
+  private openOrders: Map<string, unknown>;
+  private closedOrders: Map<string, unknown>;
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
@@ -150,23 +150,25 @@ export class AssetList {
   }
 
 
-  async fetchOpenOrders(): Promise<void> {
+  async fetchOpenOrders(): Promise<Map<string, unknown>> {
     return this.assetExchangeService.fetchOpenOrders("kraken")
       .then(orders => {
-        this.openOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
+        return this.openOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
       })
       .catch(error => {
         console.error('Error fetching open orders:', error);
+        return new Map<string, unknown>();
       });
   }
 
-  async fetchClosedOrders(): Promise<void> {
+  async fetchClosedOrders(): Promise<Map<string, unknown>> {
     return this.assetExchangeService.fetchClosedOrders("kraken")
       .then(orders => {
-        this.closedOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
+        return this.closedOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
       })
       .catch(error => {
         console.error('Error fetching closed orders:', error);
+        return new Map<string, unknown>();
       });
   }
 
@@ -336,12 +338,12 @@ export class AssetList {
     }
   }
 
-  async createSellOrder(_event: Event, asset: IAssetEx) {
+  async createSellOrder(asset: IAssetEx) {
     await this._createSellOrder(asset);
     this.fetchOpenOrders();
   }
 
-  async createSellOrders(_event: Event): Promise<void> {
+  async createSellOrders(): Promise<void> {
     for (const asset of this.assets) {
       if (asset.selected) {
         await this._createSellOrder(asset).catch(error => {
