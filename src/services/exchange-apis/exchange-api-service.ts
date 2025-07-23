@@ -89,12 +89,36 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     if (!txId) {
       throw new Error('Transaction ID is required to cancel an order');
     }
+
+    const url = `${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/cancel/${txId}`;
+
     try {
-      const response = await axios.delete(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}orders/cancel/${txId}`);
-      return response.data;
-    } catch (error) {
-      const err = error as { response?: { data?: { message?: string } }; message?: string };
-      throw new Error(err?.response?.data?.message || err.message || 'Failed to create market sell order');
+      return axios.delete(url);
+    }
+    catch (error: unknown) {
+      const err = error as {
+        response?: {
+          status?: number;
+          statusText?: string;
+          data?: any;
+          headers?: any;
+        };
+        message?: string;
+        request?: any;
+      };
+
+      console.log('Cancel order error:', {
+        message: err.message,
+        response: err.response ? {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          data: err.response.data,
+          headers: err.response.headers
+        } : null,
+        hasRequest: !!err.request
+      });
+
+      throw new Error(err?.response?.data?.message || err.message || 'Failed to cancel order');
     }
   }
 }
