@@ -89,12 +89,13 @@
           class="justify-center daisy-link daisy-link-primary text-sm no-underline">
           Select None
         </div>
+      </div>
+      <div class="flex flex-row gap-4">
         <div
           click.trigger="toggleUseAmount()"
           class="justify-center daisy-link daisy-link-primary text-sm no-underline">
-          <div>${useAmount ? 'Edit Percentage' : 'Edit Amount'}</div>
+          <div>${useAmount ? 'Edit Percentage' : 'Edit Net Sale'}</div>
         </div>
-      </div>
       </div>
       <div class="flex flex-row gap-4">
         <div
@@ -124,8 +125,9 @@
           Place the ${selectedOrders.length} selected ${limitOrder ? 'limit' : 'market'} sell order<template if.bind="selectedOrders.length != 1">s</template>
         </div>
       </div>
-      <div class="text-yellow-500 text-xs mt-1">"Coins" is the amount for the order to sell. "Percent" is only to help compute the order amount.</div>
-      <div class="text-yellow-500 text-xs mt-1">The amount is sent as-is. Best to round it, by editing it.</div>
+      <div class="text-yellow-500 text-xs mt-1">The "Net Sale in Coins" is sent as you see it. Is best to round it, by editing it (click Edit Net Sale).</div>
+      <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the "Net Sale in Coins".</div>
+      <div class="text-yellow-500 text-xs mt-1">Order history in Kraken can be found in KrakenPro => History => Spot & Margin => Orders, not in Kraken regular.</div>
     </div>
   </div>
   <div>
@@ -134,9 +136,9 @@
       <thead>
         <tr>
           <th class="text-left text-sm px-2">Pair</th>
-          <th class="text-left text-sm px-2">Type</th>
-          <th class="text-left text-sm px-2">Status</th>
-          <th class="text-left text-sm px-2">txID</th>
+          <th class="text-left text-sm px-2">Price</th>
+          <th class="text-left text-sm px-2">Amount</th>
+          <!-- th class="text-left text-sm px-2">txID</th-->
         </tr>
       </thead>
       <tbody>
@@ -145,14 +147,14 @@
             ${order.descr.pair}
           </td>
           <td class="text-left text-sm px-2">
-            ${order.descr.type}
+            ${order.descr.price}
           </td>
           <td class="text-left text-sm px-2">
-            ${order.status}
+            ${order.vol}
           </td>
-          <td class="text-left text-sm px-2">
+          <!--td class="text-left text-sm px-2">
             ${key}
-          </td>
+          </td-->
           <td class="text-left text-sm px-2">
             <div
               click.trigger="cancelOrder(key)"
