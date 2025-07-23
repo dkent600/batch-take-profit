@@ -35,8 +35,14 @@ export class AssetList {
   async binding() {
     this.assets = await this.exchangeConfigService.getAssets();
     this.initAssets();
-    this.fetchOpenOrders();
-    this.fetchClosedOrders();
+    await this.fetchOpenOrders();
+    await this.fetchClosedOrders();
+  }
+
+  private initAssets(): void {
+    for (const asset of this.assets) {
+      asset.limitOrderPrice = 0; // Initialize limit order price
+    }
   }
 
   async attached(): Promise<void> {
@@ -49,7 +55,7 @@ export class AssetList {
      * At this point these requests need to be made one-by-one or the 
      * butterfly service will fail due to invalid nonce.
     */
-    this.updateAllCurrentPrices();
+    await this.updateAllCurrentPrices();
     this.updateAllBalances();
   }
 
@@ -59,12 +65,6 @@ export class AssetList {
   //     this.balanceUpdateTimer = null;
   //   }
   // }
-
-  private initAssets(): void {
-    for (const asset of this.assets) {
-      asset.limitOrderPrice = 0; // Initialize limit order price
-    }
-  }
 
   private amountFromPercentage(asset: IAsset): number {
     return (asset.percentage * asset.balance) / 100;
@@ -337,26 +337,20 @@ export class AssetList {
   }
 
   async createSellOrder(_event: Event, asset: IAssetEx) {
-    this._createSellOrder(asset)
-      .then(() => {
-        this.fetchOpenOrders();
-      });
+    await this._createSellOrder(asset);
+    this.fetchOpenOrders();
   }
 
-  createSellOrders(_event: Event) {
-    const all = [];
+  async createSellOrders(_event: Event): Promise<void> {
     for (const asset of this.assets) {
       if (asset.selected) {
-        all.push(
-          this._createSellOrder(asset).catch(error => {
-            console.error('Error creating sell orders:', error);
-          }));
+        await this._createSellOrder(asset).catch(error => {
+          console.error('Error creating sell orders:', error);
+        });
       }
     }
 
-    Promise.all(all).then(() => {
-      this.fetchOpenOrders();
-    });
+    this.fetchOpenOrders();
   }
 
   cancelOrder(txId: string): void {
