@@ -185,6 +185,10 @@
             <th class="text-left text-sm px-2">Pair</th>
             <th class="text-left text-sm px-2">Type</th>
             <th class="text-left text-sm px-2">Status</th>
+            <th class="text-left text-sm px-2">Coins</th>
+            <th class="text-left text-sm px-2">Executed Price</th>
+            <th class="text-left text-sm px-2">Limit price</th>
+            <th class="text-left text-sm px-2">Total Cost</th>
           </tr>
         </thead>
         <tbody>
@@ -193,10 +197,23 @@
               ${order.descr.pair}
             </td>
             <td class="text-left text-sm px-2">
-              ${order.descr.type}
+              ${order.descr.type + (order.descr.ordertype === 'limit' ? ' (limit)' : ' (market)')}
             </td>
             <td class="text-left text-sm px-2">
-              ${order.status}
+               ${order.status === 'closed' ? 'executed' : order.status }
+            </td>
+            <td class="text-left text-sm px-2">
+               ${order.status === 'closed' ? order.vol_exec : order.vol }
+            </td>
+            <td class="text-left text-sm px-2">
+              <!-- 'closed' means executed. order.price will be the executed price -->
+               ${order.status === 'closed' ? order.price : '' }
+            </td>
+            <td class="text-left text-sm px-2">
+               ${order.descr.ordertype === 'limit' ? order.descr.price : '' }
+            </td>
+            <td class="text-left text-sm px-2">
+               ${order.status === 'closed' ? order.cost : '' }
             </td>
           </tr>
         </tbody>
