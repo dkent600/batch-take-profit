@@ -175,7 +175,8 @@ export class AssetList {
   async fetchOpenOrders(): Promise<IOpenedOrderListItem[]> {
     return this.assetExchangeService.fetchOpenOrders("kraken")
       .then(orders => {
-        return this.openOrders = orders as IOpenedOrderListItem[]; // ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
+        const openOrders = orders as IOpenedOrderListItem[]; // ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
+        return this.openOrders = openOrders
       })
       .catch(error => {
         console.error('Error fetching open orders:', error);
