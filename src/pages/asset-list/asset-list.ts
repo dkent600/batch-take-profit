@@ -13,6 +13,28 @@ interface IAssetEx extends IAsset {
   selected?: boolean;
 }
 
+interface IOpenedOrderListItem {
+  orderId: string;
+  pair: string;
+  price: string;
+  amount: string;
+  direction: 'buy' | 'sell';
+  type: 'market' | 'limit';
+}
+
+interface IClosedOrderListItem {
+  orderId: string;
+  pair: string;
+  price: string;
+  amount: string;
+  direction: 'buy' | 'sell';
+  type: 'market' | 'limit';
+  status: string;
+  amountExecuted: string;
+  limitPrice: string;
+  cost: string;
+}
+
 @inject(AssetsConfigServiceToken, LogServiceToken, AssetExchangeApiServiceToken)
 export class AssetList {
   assets: IAssetEx[];
@@ -21,8 +43,8 @@ export class AssetList {
   private useAmount = false; // Flag to toggle between allowing percentage or amount to be edited
   private limitOrder = false; // Flag to indicate if limit orders should be created
   private isRefreshing: boolean;
-  private openOrders: Map<string, unknown>;
-  private closedOrders: Map<string, unknown>;
+  private openOrders: IOpenedOrderListItem[];
+  private closedOrders: IClosedOrderListItem[];
 
   constructor(
     private readonly exchangeConfigService: IAssetsConfigService,
@@ -150,25 +172,26 @@ export class AssetList {
   }
 
 
-  async fetchOpenOrders(): Promise<Map<string, unknown>> {
+  async fetchOpenOrders(): Promise<IOpenedOrderListItem[]> {
     return this.assetExchangeService.fetchOpenOrders("kraken")
       .then(orders => {
-        return this.openOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
+        return this.openOrders = orders as IOpenedOrderListItem[]; // ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
       })
       .catch(error => {
         console.error('Error fetching open orders:', error);
-        return new Map<string, unknown>();
+        return [] as IOpenedOrderListItem[];
       });
   }
 
-  async fetchClosedOrders(): Promise<Map<string, unknown>> {
+  async fetchClosedOrders(): Promise<IClosedOrderListItem[]> {
     return this.assetExchangeService.fetchClosedOrders("kraken")
       .then(orders => {
-        return this.closedOrders = orders ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
+        const closedOrders = orders as IClosedOrderListItem[]; // ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
+        return this.closedOrders = closedOrders;
       })
       .catch(error => {
         console.error('Error fetching closed orders:', error);
-        return new Map<string, unknown>();
+        return [] as IClosedOrderListItem[];
       });
   }
 
