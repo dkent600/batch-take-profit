@@ -81,6 +81,7 @@ export class AssetList {
     this.updateAllBalances();
   }
 
+
   // detached() {
   //   if (this.balanceUpdateTimer) {
   //     clearInterval(this.balanceUpdateTimer);
@@ -102,7 +103,7 @@ export class AssetList {
 
     return new Promise(resolve => {
       for (const asset of this.assets) {
-        this.assetExchangeService.fetchPrice(asset, this.getToCoin(asset))
+        this.assetExchangeService.fetchPrice(asset, this.getQuoteCoin(asset))
           .then(price => {
             asset.currentPrice = price;
             if (--count === 0) {
@@ -185,7 +186,7 @@ export class AssetList {
   }
 
   async fetchClosedOrders(): Promise<IClosedOrderListItem[]> {
-    return this.assetExchangeService.fetchClosedOrders("kraken")
+    return this.assetExchangeService.fetchClosedOrders(this.baseAssets, this.quoteAssets)
       .then(orders => {
         const closedOrders = orders as IClosedOrderListItem[]; // ? new Map(Object.entries(orders)) : new Map(); // Convert to Map with property names as keys
         return this.closedOrders = closedOrders;
@@ -231,8 +232,16 @@ export class AssetList {
     this.limitOrder = !this.limitOrder;
   }
 
-  getToCoin(asset: IAsset): string {
+  getQuoteCoin(asset: IAsset): string {
     return asset.exchange === 'MEXC' ? 'USDT' : 'USD';
+  }
+
+  get baseAssets(): string[] {
+    return this.assets.map(asset => asset.name);
+  }
+
+  get quoteAssets(): string[] {
+    return this.assets.map(asset => this.getQuoteCoin(asset));
   }
 
   get hasSelection() {
@@ -351,7 +360,7 @@ export class AssetList {
         return nullPromise;
       }
 
-      return this.assetExchangeService.createSellOrder(asset, this.getToCoin(asset), this.limitOrder)
+      return this.assetExchangeService.createSellOrder(asset, this.getQuoteCoin(asset), this.limitOrder)
         .then(() => {
           alert(`✅ ${this.limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
         });

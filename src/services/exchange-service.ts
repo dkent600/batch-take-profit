@@ -5,6 +5,6 @@ export interface IAssetExchangeService {
   fetchBalance(asset: IAsset): Promise<number>;
   createSellOrder(asset: IAsset, to: string, limit: boolean): Promise<unknown>;
   fetchOpenOrders(exchange: string): Promise<[]>;
-  fetchClosedOrders(exchange: string): Promise<[]>;
+  fetchClosedOrders(baseCoins: string[], quoteCoins: string[]): Promise<[]>;
   cancelOrder(exchange: string, txId: string): Promise<unknown>;
 }

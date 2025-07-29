@@ -75,9 +75,12 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     }
   }
 
-  async fetchClosedOrders(exchange: string): Promise<[]> {
+  async fetchClosedOrders(baseCoins: string[], quoteCoins: string[]): Promise<[]> {
     try {
-      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/closed`);
+      const response = await axios.post(`${this.configService.serviceUrl}/api/v1/kraken/orders/closed`, {
+        baseCoins,
+        quoteCoins
+      });
       return response.data.orders;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } }; message?: string };
