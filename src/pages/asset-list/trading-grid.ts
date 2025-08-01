@@ -4,10 +4,11 @@ import { AssetsConfigServiceToken, IAsset, IAssetsConfigService } from '../../se
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { AssetsStoreToken } from '../../stores/asset-store.js';
 import { inject } from 'aurelia';
-import { IAssetExchangeService } from '../../services/exchange-service.js';
+import { IAssetExchangeService, IRequestQueueService } from '../../services/interfaces.js';
 import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/exchange-api-service.js';
 import { OrdersStoreToken } from '../../stores/orders-store.js';
-import { IAssetsStore, IOrdersStore } from '../../stores/stores.js';
+import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
+import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
@@ -42,6 +43,7 @@ interface IClosedOrderListItem {
   AssetExchangeApiServiceToken,
   LogServiceToken,
   OrdersStoreToken,
+  RequestQueueServiceToken,
   AssetsStoreToken
 )
 export class TradingGrid {
@@ -49,6 +51,7 @@ export class TradingGrid {
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly logService: ILogService,
     private readonly ordersStore: IOrdersStore,
+    private readonly queueService: IRequestQueueService,
     private readonly assetsStore: IAssetsStore) {
   }
 
@@ -65,8 +68,8 @@ export class TradingGrid {
      * At this point these requests need to be made one-by-one or the 
      * butterfly service will fail due to invalid nonce.
     */
-    await this.updateAllCurrentPrices();
-    this.updateAllBalances();
+    this.queueService.enqueue(() => this.updateAllCurrentPrices());
+    this.queueService.enqueue(() => this.updateAllBalances());
   }
 
   get hasSelection(): boolean {

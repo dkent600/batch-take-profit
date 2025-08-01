@@ -1,6 +1,6 @@
 import { DI, inject } from 'aurelia';
 import { IAsset, IAssetsConfigService, AssetsConfigServiceToken } from "../assets-config-service.js";
-import { IAssetExchangeService } from '../exchange-service.js';
+import { IAssetExchangeService } from '../interfaces.js';
 import axios from 'axios';
 
 export const AssetExchangeApiServiceToken = DI.createInterface<IAssetExchangeService>('IAssetExchangeApiService');

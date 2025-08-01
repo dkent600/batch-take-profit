@@ -1,13 +1,14 @@
 import { bindable } from '@aurelia/runtime-html';
 import './orders-display.css';
 import { AssetsConfigServiceToken, IAsset } from '../../services/assets-config-service.js';
-import { IAssetExchangeService } from '../../services/exchange-service.js';
+import { IAssetExchangeService, IRequestQueueService } from '../../services/interfaces.js';
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { inject } from 'aurelia';
 import { AssetExchangeApiServiceToken } from '../../services/index.js';
 import { AssetsStoreToken } from '../../stores/asset-store.js';
-import { IAssetsStore, IOrdersStore } from '../../stores/stores.js';
+import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
 import { OrdersStoreToken } from '../../stores/orders-store.js';
+import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
 
 interface IAssetEx extends IAsset {
   exchange: string;
@@ -17,12 +18,15 @@ interface IAssetEx extends IAsset {
   AssetExchangeApiServiceToken,
   LogServiceToken,
   OrdersStoreToken,
-  AssetsStoreToken)
+  AssetsStoreToken,
+  RequestQueueServiceToken)
 export class OrdersDisplay {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly logService: ILogService,
     private readonly ordersStore: IOrdersStore,
+    private readonly queueService: IRequestQueueService,
+
     private readonly assetsStore: IAssetsStore
   ) {
 
@@ -30,8 +34,8 @@ export class OrdersDisplay {
   @bindable assets: IAssetEx[];
 
   async attached(): Promise<void> {
-    await this.ordersStore.fetchOpenedOrders();
-    await this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets);
+    this.queueService.enqueue(() => this.ordersStore.fetchOpenedOrders());
+    this.queueService.enqueue(() => this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets));
   }
 
   // detached() {

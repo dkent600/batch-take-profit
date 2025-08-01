@@ -1,8 +1,8 @@
 import { DI, inject } from "aurelia";
-import { IAssetExchangeService } from "../services/exchange-service.js";
+import { IAssetExchangeService } from "../services/interfaces.js";
 import { AssetExchangeApiServiceToken } from "../services/index.js";
 import { LogServiceToken, ILogService } from "../services/log-service.js";
-import { IClosedOrderListItem, IOpenedOrderListItem, IOrdersStore } from "./stores.js";
+import { IClosedOrderListItem, IOpenedOrderListItem, IOrdersStore } from "./interfaces.js";
 
 export const OrdersStoreToken = DI.createInterface<IOrdersStore>('IOrdersStore');
 

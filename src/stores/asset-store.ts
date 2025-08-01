@@ -1,6 +1,6 @@
 import { DI } from "aurelia";
 import { IAsset } from "../services/assets-config-service.js";
-import { IAssetsStore } from "./stores.js";
+import { IAssetsStore } from "./interfaces.js";
 
 export const AssetsStoreToken = DI.createInterface<IAssetsStore>('IAssetsStore');
 
