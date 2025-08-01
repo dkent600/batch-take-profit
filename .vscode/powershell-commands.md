@@ -98,6 +98,137 @@ Get-ChildItem -Recurse | Where-Object { $_.Length -gt 1MB } | Sort-Object Length
 
 ### Disable Logging
 ```powershell
+# Edit request-queue-service.ts to disable logging
+(Get-Content src/services/request-queue-service.ts) -replace 'enableLogging = true', 'enableLogging = false' | Set-Content src/services/request-queue-service.ts
+```
+
+### Monitor Request Queue
+```powershell
+# Watch for queue-related log messages
+npm run dev | Select-String "Queue|Request|API"
+```
+
+## Package Management
+
+### Update Dependencies
+```powershell
+# Check for outdated packages
+npm outdated
+
+# Update all dependencies
+npm update
+
+# Update specific package
+npm install axios@latest
+```
+
+### Audit Security
+```powershell
+npm audit
+npm audit fix
+```
+
+## Development Workflow
+
+### Quick Development Cycle
+```powershell
+# Complete development restart
+if (Test-Path "dist") { Remove-Item -Recurse -Force "dist" }
+npm run build
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✅ Build successful, starting dev server..." -ForegroundColor Green
+    npm run dev
+} else {
+    Write-Host "❌ Build failed, check errors above" -ForegroundColor Red
+}
+```
+
+### Code Quality Check
+```powershell
+# Full quality check pipeline
+Write-Host "🔍 Running TypeScript check..." -ForegroundColor Blue
+npx tsc --noEmit
+if ($LASTEXITCODE -eq 0) { 
+    Write-Host "✅ TypeScript check passed" -ForegroundColor Green
+    
+    Write-Host "🔍 Running linter..." -ForegroundColor Blue
+    npm run lint
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "✅ Lint check passed" -ForegroundColor Green
+        
+        Write-Host "🔍 Running tests..." -ForegroundColor Blue
+        npm test
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "✅ All checks passed! Ready for commit." -ForegroundColor Green
+        }
+    }
+}
+```
+
+## Backend Integration Testing
+
+### Test Backend Connection
+```powershell
+# Quick API connectivity test
+$apiUrl = "http://localhost:3000/api/v1/health"
+try {
+    $response = Invoke-RestMethod -Uri $apiUrl -Method GET -TimeoutSec 5
+    Write-Host "✅ Backend is responding: $($response | ConvertTo-Json)" -ForegroundColor Green
+} catch {
+    Write-Host "❌ Backend connection failed: $($_.Exception.Message)" -ForegroundColor Red
+}
+```
+
+### Monitor API Requests
+```powershell
+# Enable request logging and monitor
+(Get-Content src/services/request-queue-service.ts) -replace 'enableLogging = false', 'enableLogging = true' | Set-Content src/services/request-queue-service.ts
+Write-Host "✅ Request logging enabled. Check browser console for API requests." -ForegroundColor Green
+```
+
+## Utility Functions
+
+### Project Health Check
+```powershell
+function Get-ProjectHealth {
+    Write-Host "🏥 Butterfly App Frontend Health Check" -ForegroundColor Cyan
+    Write-Host "============================================" -ForegroundColor Cyan
+    
+    # Check Node.js version
+    $nodeVersion = node --version
+    Write-Host "Node.js: $nodeVersion" -ForegroundColor $(if ($nodeVersion -match "v1[89]|v[2-9][0-9]") { "Green" } else { "Yellow" })
+    
+    # Check npm version
+    $npmVersion = npm --version
+    Write-Host "npm: $npmVersion" -ForegroundColor Green
+    
+    # Check if backend is running
+    try {
+        $health = Invoke-RestMethod -Uri "http://localhost:3000/api/v1/health" -TimeoutSec 2
+        Write-Host "Backend: ✅ Connected" -ForegroundColor Green
+    } catch {
+        Write-Host "Backend: ❌ Not responding" -ForegroundColor Red
+    }
+    
+    # Check build status
+    $buildTest = npx tsc --noEmit 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "TypeScript: ✅ No errors" -ForegroundColor Green
+    } else {
+        Write-Host "TypeScript: ❌ Has errors" -ForegroundColor Red
+    }
+    
+    # Check dependencies
+    if (Test-Path "node_modules") {
+        Write-Host "Dependencies: ✅ Installed" -ForegroundColor Green
+    } else {
+        Write-Host "Dependencies: ❌ Missing (run npm install)" -ForegroundColor Red
+    }
+}
+
+# Run health check
+Get-ProjectHealth
+```
 # Disable logging for performance
 (Get-Content src/services/request-queue-service.ts) -replace 'enableLogging = true', 'enableLogging = false' | Set-Content src/services/request-queue-service.ts
 ```

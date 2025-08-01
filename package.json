@@ -1,7 +1,7 @@
 {
   "name": "batch-take-profit",
-  "version": "0.0.1",
-  "description": "Execute take profit sales",
+  "version": "1.0.0",
+  "description": "Sophisticated cryptocurrency portfolio management application for executing scaled take-profit sales across multiple exchanges",
   "repository": {
     "type": "git"
   },
