@@ -18,15 +18,14 @@ interface IAssetEx extends IAsset {
   AssetExchangeApiServiceToken,
   LogServiceToken,
   OrdersStoreToken,
-  AssetsStoreToken,
-  RequestQueueServiceToken)
+  RequestQueueServiceToken,
+  AssetsStoreToken,)
 export class OrdersDisplay {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly logService: ILogService,
     private readonly ordersStore: IOrdersStore,
     private readonly queueService: IRequestQueueService,
-
     private readonly assetsStore: IAssetsStore
   ) {
 

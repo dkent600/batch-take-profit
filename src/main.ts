@@ -12,6 +12,7 @@ import {
 } from './services/index.js';
 import { AssetsStore, AssetsStoreToken } from './stores/asset-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
+import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
 
 async function startApp() {
   // First, create a minimal container just for EnvService
@@ -31,6 +32,7 @@ async function startApp() {
     Registration.singleton(AssetExchangeApiServiceToken, AssetExchangeApiService),
     Registration.singleton(AssetsStoreToken, AssetsStore),
     Registration.singleton(OrdersStoreToken, OrdersStore),
+    Registration.singleton(RequestQueueServiceToken, RequestQueueService),
     AssetList
   )
     .app(App);
