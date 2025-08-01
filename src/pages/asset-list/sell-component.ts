@@ -1,6 +1,6 @@
 import { bindable } from '@aurelia/runtime-html';
 import './sell-component.css';
-import { AssetsConfigServiceToken, IAsset, IAssetsConfigService } from '../../services/assets-config-service.js';
+import { IAsset } from '../../services/assets-config-service.js';
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { AssetsStoreToken } from '../../stores/asset-store.js';
 import { inject } from 'aurelia';
@@ -15,28 +15,6 @@ interface IAssetEx extends IAsset {
   amountInvalid?: boolean;
   limitOrderPriceInvalid?: boolean;
   selected?: boolean;
-}
-
-interface IOpenedOrderListItem {
-  orderId: string;
-  pair: string;
-  price: string;
-  amount: string;
-  direction: 'buy' | 'sell';
-  type: 'market' | 'limit';
-}
-
-interface IClosedOrderListItem {
-  orderId: string;
-  pair: string;
-  price: string;
-  amount: string;
-  direction: 'buy' | 'sell';
-  type: 'market' | 'limit';
-  status: string;
-  amountExecuted: string;
-  limitPrice: string;
-  cost: string;
 }
 
 @inject(
@@ -184,7 +162,7 @@ export class SellComponent {
   // Handle refresh event from TradingGrid
   async refresh(): Promise<void> {
     this.isRefreshing = true;
-    Promise.all([this.updateAllBalances(), this.updateAllCurrentPrices()])
+    return Promise.all([this.queueService.enqueue(() => this.updateAllBalances()), this.queueService.enqueue(() => this.updateAllCurrentPrices())])
       .then(() => {
         this.isRefreshing = false;
         // wait so isRefreshing can take effect, then show the alert (which otherwise would
@@ -198,7 +176,7 @@ export class SellComponent {
   }
 
   // Order creation - now handled internally
-  async createSellOrders() {
+  async createSellOrders(): Promise<void> {
     const selectedAssets = this.selectedOrders;
     for (const asset of selectedAssets) {
       await this._createSellOrder(asset, this.limitOrder).catch(error => {
