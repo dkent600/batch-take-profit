@@ -3,12 +3,11 @@ import { IAsset, IAssetsConfigService, AssetsConfigServiceToken } from "../asset
 import { IAssetExchangeService } from '../exchange-service.js';
 import axios from 'axios';
 
-export const AssetExchangeApiServiceToken = DI.createInterface<IAssetExchangeService>('AssetExchangeApiService');
+export const AssetExchangeApiServiceToken = DI.createInterface<IAssetExchangeService>('IAssetExchangeApiService');
 
 @inject(AssetsConfigServiceToken)
 export class AssetExchangeApiService implements IAssetExchangeService {
   constructor(private readonly configService: IAssetsConfigService) { }
-
   /**
    * Fetch from the exchange API an exchange rate of an asset.
    * @param asset 
@@ -65,7 +64,7 @@ export class AssetExchangeApiService implements IAssetExchangeService {
     }
   }
 
-  async fetchOpenOrders(exchange: string): Promise<[]> {
+  async fetchOpenedOrders(exchange: string): Promise<[]> {
     try {
       const response = await axios.get(`${this.configService.serviceUrl}/api/v1/${exchange.toLocaleLowerCase()}/orders/opened`);
       return response.data.orders;

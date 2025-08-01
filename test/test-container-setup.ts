@@ -26,7 +26,7 @@ export function createTestContainer(mocks: TestMocks = {}): IContainer {
       createSellOrder: vi.fn(),
       fetchPrice: vi.fn(),
       fetchBalance: vi.fn(),
-      fetchOpenOrders: vi.fn().mockResolvedValue([]),
+      fetchOpenedOrders: vi.fn().mockResolvedValue([]),
       fetchClosedOrders: vi.fn().mockResolvedValue([]),
       cancelOrder: vi.fn().mockResolvedValue(undefined)
     },

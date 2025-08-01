@@ -10,6 +10,8 @@ import {
   AssetExchangeApiService,
   AssetExchangeApiServiceToken
 } from './services/index.js';
+import { AssetsStore, AssetsStoreToken } from './stores/asset-store.js';
+import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 
 async function startApp() {
   // First, create a minimal container just for EnvService
@@ -27,6 +29,8 @@ async function startApp() {
     Registration.singleton(TelegramServiceToken, TelegramService),
     Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
     Registration.singleton(AssetExchangeApiServiceToken, AssetExchangeApiService),
+    Registration.singleton(AssetsStoreToken, AssetsStore),
+    Registration.singleton(OrdersStoreToken, OrdersStore),
     AssetList
   )
     .app(App);

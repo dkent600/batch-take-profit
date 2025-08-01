@@ -1,0 +1,87 @@
+<template>
+  <!-- ***** OPEN ORDERS SECTION ***** -->
+  <div>
+    <h2 class="text-2xl font-bold text-center">Open Orders</h2>
+    <div if.bind="openOrders.size === 0" class="text-center text-gray-500 mt-2">
+      No open orders found
+    </div>
+    <table else class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+      <thead>
+        <tr>
+          <th class="text-left text-sm px-2">Pair</th>
+          <th class="text-left text-sm px-2">Price</th>
+          <th class="text-left text-sm px-2">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr repeat.for="order of ordersStore.openOrders">
+          <td class="text-left text-sm px-2">
+            ${order.pair}
+          </td>
+          <td class="text-left text-sm px-2">
+            ${order.price}
+          </td>
+          <td class="text-left text-sm px-2">
+            ${order.amount}
+          </td>
+          <td class="text-left text-sm px-2">
+            <div
+              click.trigger="cancelOrder(order.orderId)"
+              class="justify-center daisy-link daisy-link-primary text-sm no-underline">
+              Cancel
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- ***** CLOSED ORDERS SECTION ***** -->
+  <div class="daisy-collapse daisy-collapse-arrow bg-base-200 my-4 max-w-fit mx-auto">
+    <input type="checkbox" class="daisy-peer" />
+    <div class="daisy-collapse-title text-2xl font-bold text-center">
+      Closed Orders
+    </div>
+    <div class="daisy-collapse-content">
+      <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+        <thead>
+          <tr>
+            <th class="text-left text-sm px-2">Pair</th>
+            <th class="text-left text-sm px-2">Type</th>
+            <th class="text-left text-sm px-2">Status</th>
+            <th class="text-left text-sm px-2">Coins</th>
+            <th class="text-left text-sm px-2">Executed Price</th>
+            <th class="text-left text-sm px-2">Limit price</th>
+            <th class="text-left text-sm px-2">Total Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr repeat.for="order of ordersStore.closedOrders">
+            <td class="text-left text-sm px-2">
+              ${order.pair}
+            </td>
+            <td class="text-left text-sm px-2">
+              ${order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)')}
+            </td>
+            <td class="text-left text-sm px-2">
+               ${order.status }
+            </td>
+            <td class="text-left text-sm px-2">
+               ${order.status === 'executed' ? order.amountExecuted : order.amount }
+            </td>
+            <td class="text-left text-sm px-2">
+              <!-- 'closed' means executed. order.price will be the executed price -->
+               ${order.status === 'executed' ? order.price : '' }
+            </td>
+            <td class="text-left text-sm px-2">
+               ${order.type === 'limit' ? order.limitPrice : '' }
+            </td>
+            <td class="text-left text-sm px-2">
+               ${order.status === 'executed' ? order.cost : '' }
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>

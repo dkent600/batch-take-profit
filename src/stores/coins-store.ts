@@ -8,5 +8,5 @@ export class Coin {
   }
 }
 
-export class CoinsService {
+export class CoinsStore {
 }
