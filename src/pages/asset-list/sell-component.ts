@@ -1,5 +1,5 @@
 import { bindable } from '@aurelia/runtime-html';
-import './trading-grid.css';
+import './sell-component.css';
 import { AssetsConfigServiceToken, IAsset, IAssetsConfigService } from '../../services/assets-config-service.js';
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { AssetsStoreToken } from '../../stores/asset-store.js';
@@ -46,7 +46,7 @@ interface IClosedOrderListItem {
   RequestQueueServiceToken,
   AssetsStoreToken
 )
-export class TradingGrid {
+export class SellComponent {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly logService: ILogService,
