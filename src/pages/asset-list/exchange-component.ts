@@ -1,5 +1,5 @@
 import { bindable } from '@aurelia/runtime-html';
-import './sell-component.css';
+import './exchange-component.css';
 import { IAsset } from '../../services/assets-config-service.js';
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { AssetsStoreToken } from '../../stores/asset-store.js';
@@ -26,7 +26,7 @@ interface IAssetEx extends IAsset {
   RequestQueueServiceToken,
   AssetsStoreToken
 )
-export class SellComponent {
+export class ExchangeComponent {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly logService: ILogService,

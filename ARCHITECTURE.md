@@ -22,7 +22,7 @@ The batch-take-profit frontend is built using the Aurelia framework with TypeScr
 
 ```typescript
 @inject(AssetStore, OrdersStore, RequestQueueService)
-export class SellComponent {
+export class ExchangeComponent {
   public assets: IAsset[] = [];
   
   public async attached() {
@@ -119,11 +119,11 @@ const balance = await this.queueService.enqueue(() =>
 
 ## Component Architecture
 
-### SellComponent
+### ExchangeComponent
 The main trading interface implementing the complete order creation workflow:
 
 ```typescript
-class SellComponent {
+class ExchangeComponent {
   // Data binding properties
   public assets: IAsset[] = [];
   public selectedOrders: IAsset[] = [];
