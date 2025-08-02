@@ -10,10 +10,6 @@ import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
 import { OrdersStoreToken } from '../../stores/orders-store.js';
 import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
 
-interface IAssetEx extends IAsset {
-  exchange: string;
-}
-
 @inject(
   AssetExchangeApiServiceToken,
   LogServiceToken,
@@ -30,7 +26,7 @@ export class OrdersDisplay {
   ) {
 
   }
-  @bindable assets: IAssetEx[];
+  @bindable assets: IAsset[];
 
   async attached(): Promise<void> {
     this.queueService.enqueue(() => this.ordersStore.fetchOpenedOrders());

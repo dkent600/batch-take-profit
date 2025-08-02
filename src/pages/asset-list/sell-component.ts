@@ -15,6 +15,8 @@ interface IAssetEx extends IAsset {
   amountInvalid?: boolean;
   limitOrderPriceInvalid?: boolean;
   selected?: boolean;
+  direction: 'buy' | 'sell';
+  limit: boolean;
 }
 
 @inject(
@@ -42,6 +44,10 @@ export class SellComponent {
   isUpdating = false; // Flag to prevent infinite loops
 
   async attached(): Promise<void> {
+    for (const asset of this.assets) {
+      asset.direction = "sell";
+      asset.limit = false;
+    }
     /**
      * At this point these requests need to be made one-by-one or the 
      * butterfly service will fail due to invalid nonce.

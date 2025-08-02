@@ -5,25 +5,35 @@
     <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
       <thead>
         <tr>
-          <th class="text-left text-sm px-2">Select</th>
-          <th class="text-left text-sm px-2">Coins to Sell</th>
+          <th class="text-center text-sm px-2">Select</th>
           <th class="text-left text-sm px-2">Exchange</th>
-          <th class="text-left text-sm px-2">Coin Total Balance</th>
+          <th class="text-left text-sm px-2">Coin</th>
+          <th class="text-left text-sm px-2">Balance</th>
+          <th class="text-left text-sm px-2">Buy/Sell</th>
           <th class="text-left text-sm px-2">Percent</th>
-          <th class="text-left text-sm px-2">Sell This Many Coins</th>
+          <th class="text-left text-sm px-2">Coins to Buy/Sell</th>
           <th class="text-left text-sm px-2">$USD/Coin</th>
-          <th if.bind="limitOrder" class="text-left text-sm px-2">Limit Price</th>
+          <th class="text-center text-sm px-2">Limit</th>
+          <th class="text-left text-sm px-2">Limit Price</th>
           <th class="text-left text-sm px-2">Total Sale in $USD</th>
         </tr>
       </thead>
       <tbody>
         <tr repeat.for="asset of assets">
-          <td class="text-left text-sm px-2">
+          <td class="text-center text-sm px-2">
             <input type="checkbox" checked.bind="asset.selected" />
           </td>
-          <td class="text-left text-sm px-2">${asset.name}</td>
           <td class="text-left text-sm px-2">${asset.exchange}</td>
+          <td class="text-left text-sm px-2">${asset.name}</td>
           <td class="text-left text-sm px-2">${asset.balance}</td>
+          <td class="text-left text-sm px-2">
+            <select
+              class="daisy-select daisy-select-xs w-24"
+              value.two-way="asset.direction">
+              <option value="buy">Buy</option>
+              <option value="sell">Sell</option>
+            </select>
+          </td>
           <td class="text-left text-sm px-2">
               <input
               if.bind="!useAmount"
@@ -52,8 +62,10 @@
               <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
           </td>
           <td class="text-left text-sm px-2">${asset.currentPrice}</td>
-          <td class="text-left text-sm px-2" if.bind="limitOrder">
+          <td class="text-center text-sm px-2"><input type="checkbox" checked.bind="asset.limit" /></td>
+          <td class="text-left text-sm px-2">
               <input
+              if.bind="asset.limit"
               type="number"
               min="0"
               value.two-way="asset.limitOrderPrice"
@@ -61,11 +73,12 @@
               class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.limitOrderPriceInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
               input.trigger="validateLimitOrderPrice(asset)"
               />
+              <div else>---</div>
               <div if.bind="asset.limitOrderPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
           </td>
           <td class="text-left text-sm px-2">
               <div>
-                ${(limitOrder ? asset.limitOrderPrice : asset.currentPrice) * asset.amount}
+                ${(asset.limit ? asset.limitOrderPrice : asset.currentPrice) * asset.amount}
               </div>
           </td>
         </tr>
@@ -90,14 +103,7 @@
         <div
           click.trigger="toggleUseAmount()"
           class="justify-center daisy-link daisy-link-primary text-sm no-underline">
-          <div>${useAmount ? 'Edit Percentage' : 'Sell This Many'}</div>
-        </div>
-      </div>
-      <div class="flex flex-row gap-4">
-        <div
-          click.trigger="toggleLimitOrder()"
-          class="flex justify-center whitespace-nowrap daisy-link daisy-link-primary text-sm no-underline w-36">
-          <div>${limitOrder ? 'Switch to a Market Order' : 'Switch to a Limit Order'}</div>
+          <div>${useAmount ? 'Edit Percentage' : 'Edit How Many'}</div>
         </div>
       </div>
       <div class="flex flex-row gap-4">
@@ -118,12 +124,12 @@
           click.trigger="createSellOrders()"
           class.bind="'flex daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
           disabled.bind="!hasSelection || hasInvalidSelection">
-          Place the ${selectedOrders.length} selected ${limitOrder ? 'limit' : 'market'} sell order<template if.bind="selectedOrders.length != 1">s</template>
+          Place the ${selectedOrders.length} selected order<template if.bind="selectedOrders.length != 1">s</template>
         </div>
       </div>
       <!-- ***** HELP MESSAGES SECTION ***** -->
-      <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of "Sell This Many Coins". Is best to round it, by editing it (click "Sell This Many").</div>
-      <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Sell This Many Coins".</div>
+      <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it (click "Sell This Many").</div>
+      <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Coins to Buy/Sell".</div>
       <div class="text-yellow-500 text-xs mt-1">Order history in Kraken can be found in KrakenPro => Trade => Open Orders, not in Kraken regular.</div>
     </div>
   </div>
