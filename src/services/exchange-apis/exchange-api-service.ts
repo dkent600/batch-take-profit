@@ -60,9 +60,34 @@ export class AssetExchangeApiService implements IAssetExchangeService {
       return response.data;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } }; message?: string };
-      throw new Error(err?.response?.data?.message || err.message || 'Failed to create market sell order');
+      throw new Error(err?.response?.data?.message || err.message || 'Failed to create sell order');
     }
   }
+
+  async createBuyOrder(asset: IAsset, from: string, limit: boolean): Promise<unknown> {
+    try {
+      asset.amount = +asset.amount || 0; // Ensure amount is a number
+      asset.limitOrderPrice = +asset.limitOrderPrice || 0;
+
+      if (!asset.amount) {
+        throw new Error('Amount is required to create a market buy order');
+      }
+      if (limit && !asset.limitOrderPrice) {
+        throw new Error('Limit price is required to create a limit buy order');
+      }
+      const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/buy/${limit ? "limit" : "market"}`, {
+        name: asset.name,
+        amount: asset.amount,
+        price: asset.limitOrderPrice, // will be ignored for market orders
+        from,
+      });
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      throw new Error(err?.response?.data?.message || err.message || 'Failed to create buy order');
+    }
+  }
+
 
   async fetchOpenedOrders(exchange: string): Promise<[]> {
     try {
