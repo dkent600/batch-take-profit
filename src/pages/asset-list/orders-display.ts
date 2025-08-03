@@ -29,8 +29,8 @@ export class OrdersDisplay {
   @bindable assets: IAsset[];
 
   async attached(): Promise<void> {
-    this.queueService.enqueue(() => this.ordersStore.fetchOpenedOrders());
-    this.queueService.enqueue(() => this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets));
+    this.ordersStore.fetchOpenedOrders();
+    this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets);
   }
 
   // detached() {

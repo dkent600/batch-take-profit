@@ -13,7 +13,7 @@ import { RequestQueueServiceToken } from '../../services/request-queue-service.j
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
   amountInvalid?: boolean;
-  limitOrderPriceInvalid?: boolean;
+  LimitPriceInvalid?: boolean;
   selected?: boolean;
 }
 
@@ -46,8 +46,10 @@ export class BuyComponent {
      * At this point these requests need to be made one-by-one or the 
      * butterfly service will fail due to invalid nonce.
     */
-    this.queueService.enqueue(() => this.updateAllCurrentPrices());
-    this.queueService.enqueue(() => this.updateAllBalances());
+    // this.queueService.enqueue(() => this.updateAllCurrentPrices());
+    // this.queueService.enqueue(() => this.updateAllBalances());
+    this.updateAllCurrentPrices();
+    this.updateAllBalances();
   }
 
   get hasSelection(): boolean {
@@ -188,7 +190,7 @@ export class BuyComponent {
 
   // Validation methods
   isInvalid(asset: IAssetEx): boolean {
-    return asset.percentageInvalid || asset.amountInvalid || (this.limitOrder && asset.limitOrderPriceInvalid);
+    return asset.percentageInvalid || asset.amountInvalid || (this.limitOrder && asset.LimitPriceInvalid);
   }
 
   async _createBuyOrder(asset: IAssetEx, limitOrder: boolean): Promise<void> {
@@ -205,7 +207,7 @@ export class BuyComponent {
       this.validatePercentage(asset);
       this.validateAmount(asset);
       if (limitOrder) {
-        this.validateLimitOrderPrice(asset);
+        this.validateLimitPrice(asset);
       }
 
       if (this.isInvalid(asset)) {
@@ -288,8 +290,8 @@ export class BuyComponent {
     }
   }
 
-  async validateLimitOrderPrice(asset: IAssetEx): Promise<void> {
-    const originalValue = String(asset.limitOrderPrice);
+  async validateLimitPrice(asset: IAssetEx): Promise<void> {
+    const originalValue = String(asset.LimitPrice);
 
     // Check if the string is a valid number format
     // Allows: whole numbers (4, 100), full decimals (.5, 4.5, 50.555), numbers with commas (1,000.50)
@@ -297,13 +299,13 @@ export class BuyComponent {
     const isValidNumberFormat = /^(?!.*-)(\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?|\.\d+)$/.test(originalValue.trim());
 
     if (!isValidNumberFormat) {
-      asset.limitOrderPriceInvalid = true;
-      console.log('Invalid format:', originalValue, 'limitOrderPriceInvalid:', asset.limitOrderPriceInvalid);
+      asset.LimitPriceInvalid = true;
+      console.log('Invalid format:', originalValue, 'LimitPriceInvalid:', asset.LimitPriceInvalid);
       return;
     }
 
     const parsedValue = Number.parseFloat(originalValue);
-    asset.limitOrderPriceInvalid = isNaN(parsedValue) || parsedValue <= 0;
+    asset.LimitPriceInvalid = isNaN(parsedValue) || parsedValue <= 0;
   }
 
   private amountFromPercentage(asset: IAsset): number {

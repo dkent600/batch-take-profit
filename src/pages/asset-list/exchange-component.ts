@@ -13,7 +13,7 @@ import { RequestQueueServiceToken } from '../../services/request-queue-service.j
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
   amountInvalid?: boolean;
-  limitOrderPriceInvalid?: boolean;
+  LimitPriceInvalid?: boolean;
   selected?: boolean;
   direction: 'buy' | 'sell';
   limit: boolean;
@@ -39,7 +39,6 @@ export class ExchangeComponent {
 
   // Internal state - no longer bound to parent
   useAmount: boolean = false;
-  limitOrder: boolean = false;
   isRefreshing: boolean = false;
   isUpdating = false; // Flag to prevent infinite loops
 
@@ -52,8 +51,10 @@ export class ExchangeComponent {
      * At this point these requests need to be made one-by-one or the 
      * butterfly service will fail due to invalid nonce.
     */
-    this.queueService.enqueue(() => this.updateAllCurrentPrices());
-    this.queueService.enqueue(() => this.updateAllBalances());
+    // this.queueService.enqueue(() => this.updateAllCurrentPrices());
+    // this.queueService.enqueue(() => this.updateAllBalances());
+    this.updateAllCurrentPrices();
+    this.updateAllBalances();
   }
 
   get hasSelection(): boolean {
@@ -84,10 +85,6 @@ export class ExchangeComponent {
   // Toggle methods
   toggleUseAmount() {
     this.useAmount = !this.useAmount;
-  }
-
-  toggleLimitOrder() {
-    this.limitOrder = !this.limitOrder;
   }
 
   private async updateAllCurrentPrices(): Promise<void> {
@@ -182,10 +179,10 @@ export class ExchangeComponent {
   }
 
   // Order creation - now handled internally
-  async createSellOrders(): Promise<void> {
+  async createOrders(): Promise<void> {
     const selectedAssets = this.selectedOrders;
     for (const asset of selectedAssets) {
-      await this._createSellOrder(asset, this.limitOrder).catch(error => {
+      await this._createOrder(asset).catch(error => {
         console.error('Error creating sell orders:', error);
       });
     }
@@ -194,10 +191,10 @@ export class ExchangeComponent {
 
   // Validation methods
   isInvalid(asset: IAssetEx): boolean {
-    return asset.percentageInvalid || asset.amountInvalid || (this.limitOrder && asset.limitOrderPriceInvalid);
+    return asset.percentageInvalid || asset.amountInvalid || (asset.limit && asset.LimitPriceInvalid);
   }
 
-  async _createSellOrder(asset: IAssetEx, limitOrder: boolean): Promise<void> {
+  async _createOrder(asset: IAssetEx): Promise<void> {
     const nullPromise = Promise.resolve();
     try {
       if (this.isInvalid(asset)) {
@@ -210,13 +207,8 @@ export class ExchangeComponent {
       const balanceChanged = balance !== asset.balance;
       this.validatePercentage(asset);
       this.validateAmount(asset);
-      if (limitOrder) {
-        this.validateLimitOrderPrice(asset);
-      }
-
-      if (this.isInvalid(asset)) {
-        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
-        return nullPromise;
+      if (asset.limit) {
+        this.validateLimitPrice(asset);
       }
 
       if (balanceChanged) {
@@ -224,19 +216,31 @@ export class ExchangeComponent {
         return nullPromise;
       }
 
-      return this.assetExchangeService.createSellOrder(asset, this.assetsStore.getQuoteCoin(asset), limitOrder)
-        .then(() => {
-          alert(`✅ ${limitOrder ? 'Limit' : 'Market'} Order placed for ${asset.name}.`);
-        });
+      if (this.isInvalid(asset)) {
+        alert(`❌ Invalid input for ${asset.name}. Please check your entries.`);
+        return nullPromise;
+      }
+
+      if (asset.direction === "sell") {
+        return this.assetExchangeService.createSellOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit)
+          .then(() => {
+            alert(`✅ ${asset.limit ? 'Limit' : 'Market'} sell order placed for ${asset.name}.`);
+          });
+      } else {
+        return this.assetExchangeService.createBuyOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit)
+          .then(() => {
+            alert(`✅ ${asset.limit ? 'Limit' : 'Market'} buy order placed for ${asset.name}.`);
+          });
+      }
     } catch (error) {
       this.logService.logError(error);
-      alert(`❌ Error creating sell order for ${asset.name}. Check console for details.`);
+      alert(`❌ Error creating order for ${asset.name}. Check console for details.`);
       return nullPromise;
     }
   }
 
-  async createSellOrder(asset: IAssetEx, limitOrder: boolean) {
-    await this._createSellOrder(asset, limitOrder);
+  async createSellOrder(asset: IAssetEx) {
+    await this._createOrder(asset);
     this.ordersStore.fetchOpenedOrders();
   }
 
@@ -294,8 +298,8 @@ export class ExchangeComponent {
     }
   }
 
-  async validateLimitOrderPrice(asset: IAssetEx): Promise<void> {
-    const originalValue = String(asset.limitOrderPrice);
+  async validateLimitPrice(asset: IAssetEx): Promise<void> {
+    const originalValue = String(asset.LimitPrice);
 
     // Check if the string is a valid number format
     // Allows: whole numbers (4, 100), full decimals (.5, 4.5, 50.555), numbers with commas (1,000.50)
@@ -303,13 +307,13 @@ export class ExchangeComponent {
     const isValidNumberFormat = /^(?!.*-)(\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?|\.\d+)$/.test(originalValue.trim());
 
     if (!isValidNumberFormat) {
-      asset.limitOrderPriceInvalid = true;
-      console.log('Invalid format:', originalValue, 'limitOrderPriceInvalid:', asset.limitOrderPriceInvalid);
+      asset.LimitPriceInvalid = true;
+      console.log('Invalid format:', originalValue, 'LimitPriceInvalid:', asset.LimitPriceInvalid);
       return;
     }
 
     const parsedValue = Number.parseFloat(originalValue);
-    asset.limitOrderPriceInvalid = isNaN(parsedValue) || parsedValue <= 0;
+    asset.LimitPriceInvalid = isNaN(parsedValue) || parsedValue <= 0;
   }
 
   private amountFromPercentage(asset: IAsset): number {

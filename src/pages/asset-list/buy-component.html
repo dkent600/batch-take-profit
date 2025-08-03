@@ -56,16 +56,16 @@
               <input
               type="number"
               min="0"
-              value.two-way="asset.limitOrderPrice"
+              value.two-way="asset.LimitPrice"
               required
-              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.limitOrderPriceInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validateLimitOrderPrice(asset)"
+              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.LimitPriceInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
+              input.trigger="validateLimitPrice(asset)"
               />
-              <div if.bind="asset.limitOrderPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
+              <div if.bind="asset.LimitPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
           </td>
           <td class="text-left text-sm px-2">
               <div>
-                ${asset.amount / (limitOrder ? asset.limitOrderPrice : asset.currentPrice)}
+                ${asset.amount / (limitOrder ? asset.LimitPrice : asset.currentPrice)}
               </div>
           </td>
         </tr>

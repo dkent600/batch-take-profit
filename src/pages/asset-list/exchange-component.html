@@ -68,17 +68,17 @@
               if.bind="asset.limit"
               type="number"
               min="0"
-              value.two-way="asset.limitOrderPrice"
+              value.two-way="asset.LimitPrice"
               required
-              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.limitOrderPriceInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validateLimitOrderPrice(asset)"
+              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.LimitPriceInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
+              input.trigger="validateLimitPrice(asset)"
               />
               <div else>---</div>
-              <div if.bind="asset.limitOrderPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
+              <div if.bind="asset.LimitPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
           </td>
           <td class="text-left text-sm px-2">
               <div>
-                ${(asset.limit ? asset.limitOrderPrice : asset.currentPrice) * asset.amount}
+                ${(asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount}
               </div>
           </td>
         </tr>
@@ -121,14 +121,14 @@
       </div>
       <div class="flex flex-row gap-4 py-2">
         <div
-          click.trigger="createSellOrders()"
+          click.trigger="createOrders()"
           class.bind="'flex daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
           disabled.bind="!hasSelection || hasInvalidSelection">
           Place the ${selectedOrders.length} selected order<template if.bind="selectedOrders.length != 1">s</template>
         </div>
       </div>
       <!-- ***** HELP MESSAGES SECTION ***** -->
-      <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it (click "Sell This Many").</div>
+      <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it (click "Edit This Many").</div>
       <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Coins to Buy/Sell".</div>
       <div class="text-yellow-500 text-xs mt-1">Order history in Kraken can be found in KrakenPro => Trade => Open Orders, not in Kraken regular.</div>
     </div>
