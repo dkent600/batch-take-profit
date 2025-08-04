@@ -1,0 +1,22 @@
+/* Order Confirmation Modal Styles - Minimal custom CSS, leveraging DaisyUI/Tailwind */
+/* Custom modal animation - DaisyUI doesn't have this specific animation */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.modal-box {
+  animation: modalSlideIn 0.3s ease-out;
+}
+/* Custom safety input success state - more specific than DaisyUI defaults */
+.safety-input-success {
+  @apply border-success bg-success/10 text-success;
+}
+.safety-input-error {
+  @apply border-error bg-error/10 text-error;
+}

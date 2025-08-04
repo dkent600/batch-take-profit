@@ -1,5 +1,6 @@
 import { bindable } from '@aurelia/runtime-html';
 import './exchange-component.css';
+import { OrderConfirmationModal } from './order-confirmation-modal';
 import { IAsset } from '../../services/assets-config-service.js';
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { AssetsStoreToken } from '../../stores/asset-store.js';
@@ -41,6 +42,10 @@ export class ExchangeComponent {
   useAmount: boolean = false;
   isRefreshing: boolean = false;
   isUpdating = false; // Flag to prevent infinite loops
+
+  // Modal confirmation system properties
+  pendingOrder: IAssetEx | null = null;
+  highValueConfirmed: boolean = false;
 
   async attached(): Promise<void> {
     for (const asset of this.assets) {
@@ -212,7 +217,7 @@ export class ExchangeComponent {
       }
 
       if (balanceChanged) {
-        alert(`❌ The asset balance has changed.  Make sure the numbers are still what you want.`);
+        alert(`❌ The asset balance has changed. Make sure the numbers are still what you want.`);
         return nullPromise;
       }
 
@@ -221,17 +226,32 @@ export class ExchangeComponent {
         return nullPromise;
       }
 
-      if (asset.direction === "sell") {
-        return this.assetExchangeService.createSellOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit)
-          .then(() => {
-            alert(`✅ ${asset.limit ? 'Limit' : 'Market'} sell order placed for ${asset.name}.`);
-          });
-      } else {
-        return this.assetExchangeService.createBuyOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit)
-          .then(() => {
-            alert(`✅ ${asset.limit ? 'Limit' : 'Market'} buy order placed for ${asset.name}.`);
-          });
+      // Calculate estimated value for confirmation logic
+      const estimatedValue = this.calculateEstimatedValue(asset);
+
+      // Reset the high value confirmation flag for each new order
+      this.highValueConfirmed = false;
+
+      // Approach #3: Two-step confirmation for high-value orders (> $1000)
+      if (estimatedValue > 1000) {
+        // First confirmation for high-value orders
+        const firstConfirm = confirm(
+          `⚠️ HIGH VALUE ORDER DETECTED ⚠️\n\n` +
+          `Estimated value: $${estimatedValue.toFixed(2)}\n\n` +
+          `This is a significant transaction. Are you sure you want to proceed?`
+        );
+
+        if (!firstConfirm) return nullPromise;
+        this.highValueConfirmed = true;
       }
+
+      // Approach #2: Show enhanced modal dialog for detailed confirmation
+      // This replaces the basic browser confirm() with a proper modal
+      this.pendingOrder = asset;
+
+      // The modal will handle the execution via the executeConfirmedOrder callback
+      // No need to continue execution here as the modal takes over
+
     } catch (error) {
       this.logService.logError(error);
       alert(`❌ Error creating order for ${asset.name}. Check console for details.`);
@@ -322,6 +342,41 @@ export class ExchangeComponent {
 
   private percentageFromAmount(asset: IAsset): number {
     return (asset.amount * 100) / asset.balance;
+  }
+
+  // Helper methods for the enhanced confirmation system
+  private calculateEstimatedValue(asset: IAssetEx): number {
+    const price = asset.limit ? asset.LimitPrice : asset.currentPrice;
+    return asset.amount * price;
+  }
+
+  // Modal callback methods
+  async executeConfirmedOrder(asset: IAssetEx): Promise<void> {
+    try {
+      if (asset.direction === "sell") {
+        await this.assetExchangeService.createSellOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit);
+        alert(`✅ ${asset.limit ? 'Limit' : 'Market'} sell order placed for ${asset.name}.`);
+      } else {
+        await this.assetExchangeService.createBuyOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit);
+        alert(`✅ ${asset.limit ? 'Limit' : 'Market'} buy order placed for ${asset.name}.`);
+      }
+
+      // Refresh orders after successful execution
+      this.ordersStore.fetchOpenedOrders();
+    } catch (error) {
+      this.logService.logError(error);
+      alert(`❌ Error creating order for ${asset.name}. Check console for details.`);
+      throw error;
+    }
+  }
+
+  cancelOrder(): void {
+    this.pendingOrder = null;
+    this.highValueConfirmed = false;
+  }
+
+  get quoteCoin(): string {
+    return this.pendingOrder ? this.assetsStore.getQuoteCoin(this.pendingOrder) : '';
   }
 
 }

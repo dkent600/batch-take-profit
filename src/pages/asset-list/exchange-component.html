@@ -120,5 +120,13 @@
       <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Coins to Buy/Sell".</div>
       <div class="text-yellow-500 text-xs mt-1">Order history in Kraken can be found in KrakenPro => Trade => Open Orders, not in Kraken regular.</div>
     </div>
+
+    <!-- Order Confirmation Modal -->
+    <order-confirmation-modal
+      pending-order.bind="pendingOrder"
+      quote-coin.bind="quoteCoin"
+      on-execute.bind="executeConfirmedOrder"
+      on-cancel.bind="cancelOrder">
+    </order-confirmation-modal>
   </div>
 </template>
