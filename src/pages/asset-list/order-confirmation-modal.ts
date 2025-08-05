@@ -1,4 +1,4 @@
-import { bindable } from '@aurelia/runtime-html';
+import { bindable, watch } from '@aurelia/runtime-html';
 import './order-confirmation-modal.css';
 import { IAsset } from '../../services/assets-config-service.js';
 
@@ -14,7 +14,7 @@ interface IAssetEx extends IAsset {
 export class OrderConfirmationModal {
   @bindable pendingOrder: IAssetEx | null = null;
   @bindable quoteCoin: string = '';
-  @bindable onExecute: (asset: IAssetEx) => Promise<void>;
+  @bindable onExecute: () => Promise<void>;
   @bindable onCancel: () => void;
 
   safetyConfirmationInput: string = '';
@@ -55,7 +55,7 @@ export class OrderConfirmationModal {
     }
 
     try {
-      await this.onExecute(this.pendingOrder);
+      await this.onExecute();
     } catch (error) {
       console.error('Error executing order:', error);
     } finally {
@@ -76,7 +76,8 @@ export class OrderConfirmationModal {
   }
 
   // Reset safety input when order changes
-  pendingOrderChanged(): void {
+  @watch("pendingOrder")
+  pendingOrderChanged(_newVal: IAssetEx | null, _oldVal: IAssetEx | null): void {
     this.safetyConfirmationInput = '';
   }
 }

@@ -1,13 +1,14 @@
+<template>
 <!-- Order Confirmation Modal Component -->
-<div class="modal transition-opacity duration-200 ease-in-out" class.bind="isOpen ? 'modal-open' : ''" id="confirm-order-modal">
-  <div class="modal-box max-w-2xl shadow-2xl">
+<div-- class="daisy-modal transition-opacity duration-200 ease-in-out" class.bind="isOpen ? 'daisy-modal-open' : ''" id="confirm-order-modal">
+  <div class="daisy-modal-box max-w-2xl shadow-2xl">
     <h3 class="font-bold text-lg text-warning mb-4 flex items-center gap-2" if.bind="pendingOrder">
       <span class="text-2xl">🚨</span>
       Confirm ${pendingOrder.direction.toUpperCase()} Order
     </h3>
     
     <!-- High Value Warning -->
-    <div class="alert alert-error mb-4 border-l-4 border-error shadow-lg" if.bind="pendingOrder && estimatedValue > 1000">
+    <div class="daisy-alert daisy-alert-error mb-4 border-l-4 border-error shadow-lg" if.bind="pendingOrder && estimatedValue > 1000">
       <svg class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.728-.833-2.498 0L4.346 15.5c-.77.833.192 2.5 1.732 2.5z" />
       </svg>
@@ -18,7 +19,7 @@
     </div>
 
     <!-- Test Mode Warning -->
-    <div class="alert alert-info mb-4 shadow-md" if.bind="pendingOrder && isTestMode">
+    <div class="daisy-alert daisy-alert-info mb-4 shadow-md" if.bind="pendingOrder && isTestMode">
       <svg class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
@@ -39,7 +40,7 @@
         
         <div class="font-semibold text-base-content/70">Order Type:</div>
         <div>
-          <span class="badge" class.bind="pendingOrder.limit ? 'badge-secondary' : 'badge-primary'">${pendingOrder.limit ? 'LIMIT' : 'MARKET'}</span>
+          <span class="daisy-badge" class.bind="pendingOrder.limit ? 'daisy-badge-secondary' : 'daisy-badge-primary'">${pendingOrder.limit ? 'LIMIT' : 'MARKET'}</span>
         </div>
         
         <div class="font-semibold text-base-content/70">Amount:</div>
@@ -63,8 +64,8 @@
       </div>
 
       <!-- Safety Check Input for Large Orders (Approach #4) -->
-      <div class="form-control space-y-2" if.bind="pendingOrder && estimatedValue > 5000">
-        <div class="alert alert-warning shadow-md">
+      <div class="daisy-form-control space-y-2" if.bind="pendingOrder && estimatedValue > 5000">
+        <div class="daisy-alert daisy-alert-warning shadow-md">
           <svg class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.728-.833-2.498 0L4.346 15.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
@@ -77,7 +78,7 @@
         <input 
           type="text" 
           placeholder="Type the confirmation text exactly..." 
-          class="input input-bordered input-lg font-mono text-center" 
+          class="daisy-input daisy-input-bordered daisy-input-lg font-mono text-center" 
           value.bind="safetyConfirmationInput"
           class.bind="safetyConfirmationInput === confirmationText ? 'safety-input-success' : 'safety-input-error'"
         />
@@ -91,7 +92,7 @@
         </div>
       </div>
       
-      <div class="alert alert-warning shadow-md">
+      <div class="daisy-alert daisy-alert-warning shadow-md">
         <svg class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.728-.833-2.498 0L4.346 15.5c-.77.833.192 2.5 1.732 2.5z" />
         </svg>
@@ -102,19 +103,20 @@
       </div>
     </div>
     
-    <div class="modal-action pt-6 gap-4">
+    <div class="daisy-modal-action pt-6 gap-4">
       <button 
-        class="btn btn-error btn-lg flex-1 transition-all duration-200 hover:scale-105 hover:shadow-lg disabled:hover:scale-100 disabled:hover:shadow-none" 
-        click.delegate="executeOrder()"
+        class="daisy-btn daisy-btn-error daisy-btn-lg flex-1 transition-all duration-200 hover:scale-105 hover:shadow-lg disabled:hover:scale-100 disabled:hover:shadow-none" 
+        click.trigger="executeOrder()"
         disabled.bind="pendingOrder && estimatedValue > 5000 && safetyConfirmationInput !== confirmationText"
       >
         <span class="text-xl">🚀</span>
         Execute ${pendingOrder ? pendingOrder.direction.toUpperCase() : ''} Order
       </button>
-      <button class="btn btn-ghost btn-lg flex-1 transition-all duration-200 hover:scale-105" click.delegate="cancel()">
+      <button class="daisy-btn daisy-btn-ghost daisy-btn-lg flex-1 transition-all duration-200 hover:scale-105" click.trigger="cancel()">
         <span class="text-xl">❌</span>
         Cancel
       </button>
     </div>
   </div>
 </div>
+</template>

@@ -1,6 +1,5 @@
 import { bindable } from '@aurelia/runtime-html';
 import './exchange-component.css';
-import { OrderConfirmationModal } from './order-confirmation-modal';
 import { IAsset } from '../../services/assets-config-service.js';
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { AssetsStoreToken } from '../../stores/asset-store.js';
@@ -351,7 +350,10 @@ export class ExchangeComponent {
   }
 
   // Modal callback methods
-  async executeConfirmedOrder(asset: IAssetEx): Promise<void> {
+  async executeConfirmedOrder(): Promise<void> {
+    if (!this.pendingOrder) return;
+
+    const asset = this.pendingOrder;
     try {
       if (asset.direction === "sell") {
         await this.assetExchangeService.createSellOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit);
@@ -367,12 +369,13 @@ export class ExchangeComponent {
       this.logService.logError(error);
       alert(`❌ Error creating order for ${asset.name}. Check console for details.`);
       throw error;
+    } finally {
+      this.pendingOrder = null;
     }
   }
 
   cancelOrder(): void {
     this.pendingOrder = null;
-    this.highValueConfirmed = false;
   }
 
   get quoteCoin(): string {

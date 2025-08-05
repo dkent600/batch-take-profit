@@ -10,13 +10,17 @@
     transform: scale(1) translateY(0);
   }
 }
-.modal-box {
+.daisy-modal-box {
   animation: modalSlideIn 0.3s ease-out;
 }
-/* Custom safety input success state - more specific than DaisyUI defaults */
+/* Custom safety input success state - using standard Tailwind classes */
 .safety-input-success {
-  @apply border-success bg-success/10 text-success;
+  border-color: #10b981;
+  background-color: #f0fdf4;
+  color: #065f46;
 }
 .safety-input-error {
-  @apply border-error bg-error/10 text-error;
+  border-color: #ef4444;
+  background-color: #fef2f2;
+  color: #dc2626;
 }

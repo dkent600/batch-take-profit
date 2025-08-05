@@ -13,6 +13,7 @@ import {
 import { AssetsStore, AssetsStoreToken } from './stores/asset-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
+import { OrderConfirmationModal } from './pages/asset-list/order-confirmation-modal.js';
 
 async function startApp() {
   // First, create a minimal container just for EnvService
@@ -33,6 +34,7 @@ async function startApp() {
     Registration.singleton(AssetsStoreToken, AssetsStore),
     Registration.singleton(OrdersStoreToken, OrdersStore),
     Registration.singleton(RequestQueueServiceToken, RequestQueueService),
+    OrderConfirmationModal,
     AssetList
   )
     .app(App);
