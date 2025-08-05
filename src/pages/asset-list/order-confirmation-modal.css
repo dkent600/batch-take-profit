@@ -14,13 +14,20 @@
   animation: modalSlideIn 0.3s ease-out;
 }
 /* Custom safety input success state - using standard Tailwind classes */
+.safety-input-error {
+  border-color: #f87171;
+  /* light red */
+  background-color: #1f1f1f;
+  /* darker background for dark mode */
+  color: #f87171;
+  /* matching visible red text */
+}
 .safety-input-success {
   border-color: #10b981;
-  background-color: #f0fdf4;
-  color: #065f46;
+  background-color: #1e293b;
+  /* slate-800 for dark mode */
+  color: #6ee7b7;
 }
-.safety-input-error {
-  border-color: #ef4444;
-  background-color: #fef2f2;
-  color: #dc2626;
+.daisy-modal-box {
+  border-radius: 1rem;
 }
