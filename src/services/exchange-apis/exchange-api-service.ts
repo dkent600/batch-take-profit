@@ -150,4 +150,21 @@ export class AssetExchangeApiService implements IAssetExchangeService {
       );
     }
   }
+
+  /**
+   * Determines if the application is running in production mode by calling
+   * the butterfly-services API production mode endpoint.
+   * 
+   * @returns Promise<boolean> - True if running in production mode, false otherwise
+   */
+  async isProduction(): Promise<boolean> {
+    try {
+      const response = await axios.get(`${this.configService.serviceUrl}/api/v1/production-mode`);
+      return response.data.isProduction ?? false;
+    } catch (error) {
+      console.warn('Failed to check production mode from API, defaulting to false:', error);
+      // Safety-first: default to false (test mode) if API call fails
+      return false;
+    }
+  }
 }

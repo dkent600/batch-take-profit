@@ -8,6 +8,7 @@ export interface IAssetExchangeService {
   fetchOpenedOrders(exchange: string): Promise<[]>;
   fetchClosedOrders(baseCoins: string[], quoteCoins: string[]): Promise<[]>;
   cancelOrder(exchange: string, txId: string): Promise<unknown>;
+  isProduction(): Promise<boolean>;
 }
 
 export interface QueueItem<T> {
