@@ -19,11 +19,15 @@
       </div>
 
       <!-- Test Mode -->
-      <div class="daisy-alert daisy-alert-info" if.bind="isTestMode">
-        <span class="font-bold flex items-center gap-2">🧪 Test Mode Active</span>
+      <div class="daisy-alert daisy-alert-info" if.bind="isProduction">
+        <span class="font-bold flex items-center gap-2">🚨 Production Mode 🚨</span>
+        <span class="opacity-80">This order WILL be executed</span>
+      </div>
+      <div else class="daisy-alert daisy-alert-info" if.bind="!isProduction">
+        <span class="font-bold flex items-center gap-2">🧪 Test Mode 🧪</span>
         <span class="opacity-80">This order will be validated but NOT executed.</span>
       </div>
-    </div>
+        </div>
 
     <!-- Order Details -->
     <div class="grid grid-cols-2 gap-4 bg-base-200 rounded-lg p-5 text-sm text-base-content shadow-inner">
@@ -91,7 +95,7 @@
       <button 
         class="daisy-btn daisy-btn-error daisy-btn-lg flex-1 hover:scale-105 transition-transform disabled:opacity-50"
         click.trigger="executeOrder()"
-        disabled.bind="estimatedValue > 5000 && safetyConfirmationInput !== confirmationText"
+        disabled.bind="estimatedValue > 200 && safetyConfirmationInput !== confirmationText"
       >
         🚀 Execute ${pendingOrder ? pendingOrder.direction.toUpperCase() : ''} Order
       </button>
