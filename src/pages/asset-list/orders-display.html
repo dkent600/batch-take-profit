@@ -8,6 +8,8 @@
     <table else class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
       <thead>
         <tr>
+          <th class="text-left text-sm px-2">Created</th>
+          <th class="text-left text-sm px-2">Exchange</th>
           <th class="text-left text-sm px-2">Direction</th>
           <th class="text-left text-sm px-2">Pair</th>
           <th class="text-left text-sm px-2">Price</th>
@@ -16,6 +18,12 @@
       </thead>
       <tbody>
         <tr repeat.for="order of ordersStore.openOrders">
+          <td class="text-left text-sm px-2">
+            ${ new Date(order.createdAt).toLocaleString() }
+          </td>
+          <td class="text-left text-sm px-2">
+            ${order.exchange}
+          </td>
           <td class="text-left text-sm px-2">
             ${order.direction}
           </td>
