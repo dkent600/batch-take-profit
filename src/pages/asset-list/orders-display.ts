@@ -5,7 +5,7 @@ import { IAssetExchangeService, IRequestQueueService } from '../../services/inte
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { inject } from 'aurelia';
 import { AssetExchangeApiServiceToken } from '../../services/index.js';
-import { AssetsStoreToken } from '../../stores/asset-store.js';
+import { AssetsStoreToken } from '../../stores/assets-store.js';
 import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
 import { OrdersStoreToken } from '../../stores/orders-store.js';
 import { RequestQueueServiceToken } from '../../services/request-queue-service.js';

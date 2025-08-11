@@ -2,7 +2,7 @@ import { bindable } from '@aurelia/runtime-html';
 import './exchange-component.css';
 import { IAsset } from '../../services/assets-config-service.js';
 import { ILogService, LogServiceToken } from '../../services/log-service.js';
-import { AssetsStoreToken } from '../../stores/asset-store.js';
+import { AssetsStoreToken } from '../../stores/assets-store.js';
 import { inject } from 'aurelia';
 import { IAssetExchangeService, IRequestQueueService } from '../../services/interfaces.js';
 import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/exchange-api-service.js';

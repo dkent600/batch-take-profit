@@ -10,7 +10,7 @@ import {
   AssetExchangeApiService,
   AssetExchangeApiServiceToken
 } from './services/index.js';
-import { AssetsStore, AssetsStoreToken } from './stores/asset-store.js';
+import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
 import { OrderConfirmationModal } from './pages/asset-list/order-confirmation-modal.js';
