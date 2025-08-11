@@ -59,6 +59,7 @@
         <thead>
           <tr>
             <th class="text-left text-sm px-2">Created</th>
+            <th class="text-left text-sm px-2">Closed</th>
             <th class="text-left text-sm px-2">Exchange</th>
             <th class="text-left text-sm px-2">Pair</th>
             <th class="text-left text-sm px-2">Type</th>
@@ -73,6 +74,9 @@
           <tr repeat.for="order of ordersStore.closedOrders">
             <td class="text-left text-sm px-2">
               ${ new Date(order.createdAt).toLocaleString() }
+            </td>
+            <td class="text-left text-sm px-2">
+              ${ new Date(order.closedAt).toLocaleString() }
             </td>
             <td class="text-left text-sm px-2">
               ${order.exchange}
