@@ -1,4 +1,4 @@
-import { DI } from 'aurelia';
+import { DI, ILogger, resolve } from 'aurelia';
 
 export interface IEnvService {
   init(): Promise<void>;
@@ -11,6 +11,7 @@ export const EnvServiceToken = DI.createInterface<IEnvService>('IEnvService');
 
 export class EnvService implements IEnvService {
   private config: Record<string, unknown> = {};
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('EnvService');
 
   constructor() {
     // No async loading in constructor

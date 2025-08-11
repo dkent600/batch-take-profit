@@ -3,7 +3,7 @@ import './order-confirmation-modal.css';
 import { IAsset } from '../../services/assets-config-service.js';
 import { IAssetExchangeService } from '../../services/interfaces.js';
 import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/exchange-api-service.js';
-import { inject } from '@aurelia/kernel';
+import { ILogger, inject, resolve } from '@aurelia/kernel';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
@@ -23,6 +23,7 @@ export class OrderConfirmationModal {
   @bindable quoteCoin: string = '';
   @bindable onExecute: () => Promise<void>;
   @bindable onCancel: () => void;
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('OrderConfirmationModal');
 
   private safetyConfirmationInput: string = '';
   private wasProduction: boolean;

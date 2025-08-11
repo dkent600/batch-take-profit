@@ -1,6 +1,6 @@
 import { IAssetsConfigService, AssetsConfigServiceToken } from './assets-config-service.js';
 import axios from 'axios';
-import { DI, inject } from 'aurelia';
+import { DI, ILogger, inject, resolve } from 'aurelia';
 
 export interface ITelegramService {
   sendTelegramMessage(message: string): Promise<void>;
@@ -14,9 +14,11 @@ export class TelegramService implements ITelegramService {
 
   constructor(
     private readonly assetsConfigService: IAssetsConfigService
-  ) {
+  ) { }
 
-  } async sendTelegramMessage(message: string): Promise<void> {
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('EnvService');
+
+  async sendTelegramMessage(message: string): Promise<void> {
 
     const token = this.assetsConfigService.telegramBotToken;
     const chatId = this.assetsConfigService.telegramChatId;
