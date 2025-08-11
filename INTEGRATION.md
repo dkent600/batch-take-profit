@@ -362,7 +362,7 @@ private readonly enableLogging = true;
 Monitor backend health:
 ```typescript
 const health = await this.apiService.checkHealth();
-console.log('Backend status:', health);
+this.logger.trace('Backend status:', health);
 ```
 
 ### Log Analysis

@@ -24,7 +24,7 @@ export class TelegramService implements ITelegramService {
     const path = `/bot${token}/sendMessage`;
     const url = `${baseUrl}${path}`;
 
-    // console.log('Telegram API debug:', {
+    // this.logger.trace('Telegram API debug:', {
     //   token: token ? token.substring(0, 10) + '...' : 'missing',
     //   chatId,
     //   url,
@@ -38,12 +38,12 @@ export class TelegramService implements ITelegramService {
         parse_mode: "HTML"
       });
 
-      // console.log('Telegram API success:', response.status);
+      // this.logger.trace('Telegram API success:', response.status);
       return;
     } catch (error) {
-      console.error('Telegram API error:', error);
-      console.error('Telegram error response:', error.response?.data);
-      console.error('Telegram error status:', error.response?.status);
+      this.logger.error('Telegram API error:', error);
+      this.logger.error('Telegram error response:', error.response?.data);
+      this.logger.error('Telegram error status:', error.response?.status);
       throw error;
     }
   }

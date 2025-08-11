@@ -1,9 +1,8 @@
 import { bindable } from '@aurelia/runtime-html';
 import './exchange-component.css';
 import { IAsset } from '../../services/assets-config-service.js';
-import { ILogService, LogServiceToken } from '../../services/log-service.js';
 import { AssetsStoreToken } from '../../stores/assets-store.js';
-import { inject } from 'aurelia';
+import { ILogger, inject, resolve } from 'aurelia';
 import { IAssetExchangeService, IRequestQueueService } from '../../services/interfaces.js';
 import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/exchange-api-service.js';
 import { OrdersStoreToken } from '../../stores/orders-store.js';
@@ -21,7 +20,6 @@ interface IAssetEx extends IAsset {
 
 @inject(
   AssetExchangeApiServiceToken,
-  LogServiceToken,
   OrdersStoreToken,
   RequestQueueServiceToken,
   AssetsStoreToken
@@ -29,13 +27,13 @@ interface IAssetEx extends IAsset {
 export class ExchangeComponent {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
-    private readonly logService: ILogService,
     private readonly ordersStore: IOrdersStore,
     private readonly queueService: IRequestQueueService,
     private readonly assetsStore: IAssetsStore) {
   }
 
   @bindable assets: IAssetEx[] = [];
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('ExchangeComponent');
 
   // Internal state - no longer bound to parent
   useAmount: boolean = false;
@@ -107,7 +105,7 @@ export class ExchangeComponent {
             }
           })
           .catch(error => {
-            this.logService.logError(`Failed to fetch current price for ${asset.name}: ${error}`);
+            this.logger.error(`Failed to fetch current price for ${asset.name}: ${error}`);
           });
       }
     });
@@ -155,7 +153,7 @@ export class ExchangeComponent {
       .catch(error => {
         // Check for invalid nonce error and retry once
         if (error.message && error.message.includes('EAPI:Invalid nonce')) {
-          this.logService.log(`Invalid nonce error for ${asset.name}, retrying...`);
+          this.logger.error(`Invalid nonce error for ${asset.name}, retrying...`);
           /**
            * we receive intermittent invalid nonce errors due to being unable to avoid
            * requests to the exchange arriving out of order.  So we do the retry.
@@ -163,7 +161,7 @@ export class ExchangeComponent {
            */
           return this.updateAssetBalance(asset);
         } else {
-          this.logService.logError(`Failed to fetch balance for ${asset.name}: ${error}`);
+          this.logger.error(`Failed to fetch balance for ${asset.name}: ${error}`);
         }
       });
   }
@@ -189,7 +187,7 @@ export class ExchangeComponent {
     const selectedAssets = this.selectedOrders;
     for (const asset of selectedAssets) {
       await this._createOrder(asset).catch(error => {
-        console.error('Error creating sell orders:', error);
+        this.logger.error('Error creating sell orders:', error);
       });
     }
     this.ordersStore.fetchOpenedOrders();
@@ -254,7 +252,7 @@ export class ExchangeComponent {
       // No need to continue execution here as the modal takes over
 
     } catch (error) {
-      this.logService.logError(error);
+      this.logger.error(error);
       alert(`❌ Error creating order for ${asset.name}. Check console for details.`);
       return nullPromise;
     }
@@ -277,7 +275,7 @@ export class ExchangeComponent {
 
     if (!isValidNumberFormat) {
       asset.percentageInvalid = true;
-      console.log('Invalid format:', originalValue, 'percentageInvalid:', asset.percentageInvalid);
+      this.logger.error('Invalid format:', originalValue, 'percentageInvalid:', asset.percentageInvalid);
       return;
     }
 
@@ -304,7 +302,7 @@ export class ExchangeComponent {
 
     if (!isValidNumberFormat) {
       asset.amountInvalid = true;
-      console.log('Invalid format:', originalValue, 'amountInvalid:', asset.amountInvalid);
+      this.logger.error('Invalid format:', originalValue, 'amountInvalid:', asset.amountInvalid);
       return;
     }
 
@@ -329,7 +327,7 @@ export class ExchangeComponent {
 
     if (!isValidNumberFormat) {
       asset.LimitPriceInvalid = true;
-      console.log('Invalid format:', originalValue, 'LimitPriceInvalid:', asset.LimitPriceInvalid);
+      this.logger.error('Invalid format:', originalValue, 'LimitPriceInvalid:', asset.LimitPriceInvalid);
       return;
     }
 
@@ -368,7 +366,7 @@ export class ExchangeComponent {
       // Refresh orders after successful execution
       this.ordersStore.fetchOpenedOrders();
     } catch (error) {
-      this.logService.logError(error);
+      this.logger.error(error);
       alert(`❌ Error creating order for ${asset.name}. Check console for details.`);
       throw error;
     } finally {

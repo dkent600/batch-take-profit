@@ -40,7 +40,7 @@ export class OrderConfirmationModal {
         return this.isProduction = mode;
       })
       .catch((error) => {
-        console.error('Failed to determine production mode: ', error);
+        this.logger.error('Failed to determine production mode: ', error);
         alert(`❌ Failed to determine production mode for ${this.pendingOrder.name}. Check console for details.`);
         throw new Error('Failed to determine production mode');
       });
@@ -101,7 +101,7 @@ export class OrderConfirmationModal {
     try {
       await this.onExecute();
     } catch (error) {
-      console.error('Error executing order: ', error);
+      this.logger.error('Error executing order: ', error);
       // alert(`❌ Error executing order for ${this.pendingOrder.name}. Check console for details.`);
     }
   }

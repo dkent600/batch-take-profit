@@ -1,9 +1,8 @@
-import { Aurelia, Registration } from 'aurelia';
+import { Aurelia, ILogger, Registration } from 'aurelia';
 import { App } from './pages/app/app.js';
 import './pages/app/app.css';
 import { AssetList } from './pages/asset-list/asset-list.js';
 import {
-  LogService, LogServiceToken,
   TelegramService, TelegramServiceToken,
   AssetsConfigService, AssetsConfigServiceToken,
   EnvService, EnvServiceToken,
@@ -15,6 +14,8 @@ import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
 import { OrderConfirmationModal } from './pages/asset-list/order-confirmation-modal.js';
 
+let logger: ILogger;
+
 async function startApp() {
   // First, create a minimal container just for EnvService
   const app = Aurelia.register(
@@ -24,10 +25,10 @@ async function startApp() {
   // Initialize environment service first
   const envService = app.container.get(EnvServiceToken);
   await envService.init();
+  logger = app.container.get(ILogger).scopeTo('Main');
 
   // Register other services with proper interface-to-implementation mapping
   app.register(
-    Registration.singleton(LogServiceToken, LogService),
     Registration.singleton(TelegramServiceToken, TelegramService),
     Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
     Registration.singleton(AssetExchangeApiServiceToken, AssetExchangeApiService),
@@ -42,5 +43,5 @@ async function startApp() {
   return app.start();
 }
 
-startApp().catch(console.error);
+startApp().catch(logger.error);
 

@@ -1,6 +1,5 @@
-import { DI, inject } from 'aurelia';
+import { DI, ILogger, inject, resolve } from 'aurelia';
 import { IEnvService, EnvServiceToken } from "./env-service.js";
-import { ILogService, LogServiceToken } from "./log-service.js";
 
 export interface IAsset {
   name: string;
@@ -49,17 +48,17 @@ export interface IAssetsConfigService {
 // Create DI token for the interface - using a different name to avoid conflict
 export const AssetsConfigServiceToken = DI.createInterface<IAssetsConfigService>('IAssetsConfigService');
 
-@inject(EnvServiceToken, LogServiceToken)
+@inject(EnvServiceToken)
 export class AssetsConfigService implements IAssetsConfigService {
 
   private _telegramBotToken: string;
   private _telegramChatId: string;
   private _assets: IAsset[];
   private _serviceUrl: string;
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('AssetsConfigService');
 
   constructor(
-    private envService: IEnvService,
-    private logService: ILogService) {
+    private envService: IEnvService) {
 
     this._telegramBotToken = this.envService.get('telegram.botToken');
     this._telegramChatId = this.envService.get('telegram.chatId');
@@ -145,11 +144,11 @@ export class AssetsConfigService implements IAssetsConfigService {
       }
       else {
         const err = `Error fetching config: ${String(error)}`;
-        this.logService.logError(err);
+        this.logger.error(err);
         return this._assets = [];
       }
 
-      this.logService.logError(error);
+      this.logger.error(error);
       return this._assets = [];
     }
   }

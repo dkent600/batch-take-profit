@@ -29,7 +29,7 @@ export class EnvService implements IEnvService {
         return;
       }
     } catch {
-      console.warn('Local config not found, falling back to public config');
+      this.logger.warn('Local config not found, falling back to public config');
     }
   }
 

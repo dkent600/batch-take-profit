@@ -1,19 +1,15 @@
-import { LogServiceToken } from './../../services/log-service.js';
-import { inject } from 'aurelia';
+import { ILogger, inject, resolve } from 'aurelia';
 import "./asset-list.css";
 import { AssetsConfigServiceToken, IAssetsConfigService, IAsset } from '../../services/assets-config-service.js';
-import { ILogService } from '../../services/log-service.js';
 
 
-@inject(AssetsConfigServiceToken, LogServiceToken)
+@inject(AssetsConfigServiceToken)
 export class AssetList {
   assets: IAsset[];
 
   constructor(
-    private readonly exchangeConfigService: IAssetsConfigService,
-    private readonly logService: ILogService,
+    private readonly exchangeConfigService: IAssetsConfigService
   ) {
-
   }
 
   async binding() {

@@ -1,4 +1,4 @@
-import { DI, inject } from 'aurelia';
+import { DI, ILogger, inject, resolve } from 'aurelia';
 import { IAsset, IAssetsConfigService, AssetsConfigServiceToken } from "../assets-config-service.js";
 import { IAssetExchangeService } from '../interfaces.js';
 import axios from 'axios';
@@ -8,6 +8,9 @@ export const AssetExchangeApiServiceToken = DI.createInterface<IAssetExchangeSer
 @inject(AssetsConfigServiceToken)
 export class AssetExchangeApiService implements IAssetExchangeService {
   constructor(private readonly configService: IAssetsConfigService) { }
+
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('AssetExchangeApiService');
+
   /**
    * Fetch from the exchange API an exchange rate of an asset.
    * @param asset 
@@ -134,7 +137,7 @@ export class AssetExchangeApiService implements IAssetExchangeService {
         request?: unknown;
       };
 
-      console.log('Cancel order error:', {
+      this.logger.error('Cancel order error:', {
         message: err.message,
         response: err.response ? {
           status: err.response.status,
@@ -162,7 +165,7 @@ export class AssetExchangeApiService implements IAssetExchangeService {
       const response = await axios.get(`${this.configService.serviceUrl}/api/v1/production-mode`);
       return response.data.isProduction ?? false;
     } catch (error) {
-      console.warn('Failed to check production mode from API, defaulting to false:', error);
+      this.logger.warn('Failed to check production mode from API, defaulting to false:', error);
       // Safety-first: default to false (test mode) if API call fails
       return false;
     }

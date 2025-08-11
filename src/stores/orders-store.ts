@@ -1,23 +1,22 @@
-import { DI, inject } from "aurelia";
+import { DI, ILogger, inject, resolve } from "aurelia";
 import { IAssetExchangeService } from "../services/interfaces.js";
 import { AssetExchangeApiServiceToken } from "../services/index.js";
-import { LogServiceToken, ILogService } from "../services/log-service.js";
 import { IClosedOrderListItem, IOpenedOrderListItem, IOrdersStore } from "./interfaces.js";
 
 export const OrdersStoreToken = DI.createInterface<IOrdersStore>('IOrdersStore');
 
 @inject(
-  AssetExchangeApiServiceToken,
-  LogServiceToken
+  AssetExchangeApiServiceToken
 )
 export class OrdersStore implements IOrdersStore {
 
   constructor(
-    private readonly assetExchangeService: IAssetExchangeService,
-    private readonly logService: ILogService
+    private readonly assetExchangeService: IAssetExchangeService
   ) {
 
   }
+
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('OrdersStores');
 
   public closedOrders: IClosedOrderListItem[];
   public openOrders: IOpenedOrderListItem[];
@@ -29,7 +28,7 @@ export class OrdersStore implements IOrdersStore {
         return this.openOrders = openOrders;
       })
       .catch(error => {
-        console.error('Error fetching open orders:', error);
+        this.logger.error('Error fetching open orders:', error);
         return [] as IOpenedOrderListItem[];
       });
   }
@@ -41,7 +40,7 @@ export class OrdersStore implements IOrdersStore {
         return this.closedOrders = closedOrders;
       })
       .catch(error => {
-        console.error('Error fetching closed orders:', error);
+        this.logger.error('Error fetching closed orders:', error);
         return [] as IClosedOrderListItem[];
       });
   }

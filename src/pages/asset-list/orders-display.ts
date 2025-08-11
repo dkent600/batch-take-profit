@@ -2,8 +2,7 @@ import { bindable } from '@aurelia/runtime-html';
 import './orders-display.css';
 import { AssetsConfigServiceToken, IAsset } from '../../services/assets-config-service.js';
 import { IAssetExchangeService, IRequestQueueService } from '../../services/interfaces.js';
-import { ILogService, LogServiceToken } from '../../services/log-service.js';
-import { inject } from 'aurelia';
+import { ILogger, inject, resolve } from 'aurelia';
 import { AssetExchangeApiServiceToken } from '../../services/index.js';
 import { AssetsStoreToken } from '../../stores/assets-store.js';
 import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
@@ -12,14 +11,12 @@ import { RequestQueueServiceToken } from '../../services/request-queue-service.j
 
 @inject(
   AssetExchangeApiServiceToken,
-  LogServiceToken,
   OrdersStoreToken,
   RequestQueueServiceToken,
   AssetsStoreToken,)
 export class OrdersDisplay {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
-    private readonly logService: ILogService,
     private readonly ordersStore: IOrdersStore,
     private readonly queueService: IRequestQueueService,
     private readonly assetsStore: IAssetsStore
@@ -27,6 +24,7 @@ export class OrdersDisplay {
 
   }
   @bindable assets: IAsset[];
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('OrdersDisplay');
 
   async attached(): Promise<void> {
     this.ordersStore.fetchOpenedOrders();
@@ -56,7 +54,7 @@ export class OrdersDisplay {
         this.ordersStore.fetchOpenedOrders();
       })
       .catch(error => {
-        console.error('Error cancelling order:', error);
+        this.logger.error('Error cancelling order:', error);
         alert(`❌ Error cancelling order ${txId}. Check console for details.`);
       });
   }

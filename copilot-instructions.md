@@ -125,7 +125,7 @@ export class DateFormatValueConverter {
 
 ## Logging
 
-Use Aurelia's logger system (ILogger) instead of console.log.
+Use Aurelia's logger system (ILogger) instead of console.
 
 Refer to router package for logging implementation patterns.
 

@@ -1,4 +1,4 @@
-import { DI } from 'aurelia';
+import { DI, ILogger, resolve } from 'aurelia';
 import { IRequestQueueService, QueueItem } from './interfaces.js';
 
 export const RequestQueueServiceToken = DI.createInterface<IRequestQueueService>('IRequestQueueService');
@@ -76,6 +76,7 @@ export class RequestQueueService implements IRequestQueueService {
   private requestCounter = 0;
   private readonly defaultDelay = 100; // 100ms between requests
   private readonly enableLogging = false; // Disable verbose logging for performance
+  private readonly logger: ILogger = resolve(ILogger).scopeTo('RequestQueueService');
 
   /**
    * Adds a request function to the queue and returns a promise that resolves
@@ -96,7 +97,7 @@ export class RequestQueueService implements IRequestQueueService {
 
       this.queue.push(queueItem);
       if (this.enableLogging) {
-        console.log(`[RequestQueue] Enqueued request ${queueItem.id}, queue size: ${this.queue.length}`);
+        this.logger.trace(`[RequestQueue] Enqueued request ${queueItem.id}, queue size: ${this.queue.length}`);
       }
 
       // Start processing if not already processing
@@ -114,9 +115,8 @@ export class RequestQueueService implements IRequestQueueService {
       return;
     }
 
-    this.processing = true;
     if (this.enableLogging) {
-      console.log(`[RequestQueue] Starting to process queue with ${this.queue.length} items`);
+      this.logger.trace(`[RequestQueue] Starting to process queue with ${this.queue.length} items`);
     }
 
     while (this.queue.length > 0) {
@@ -124,26 +124,26 @@ export class RequestQueueService implements IRequestQueueService {
 
       try {
         if (this.enableLogging) {
-          console.log(`[RequestQueue] Processing request ${queueItem.id}`);
+          this.logger.trace(`[RequestQueue] Processing request ${queueItem.id}`);
         }
         const result = await queueItem.requestFn();
         queueItem.resolve(result);
         if (this.enableLogging) {
-          console.log(`[RequestQueue] Completed request ${queueItem.id}`);
+          this.logger.trace(`[RequestQueue] Completed request ${queueItem.id}`);
         }
 
         // Small delay between requests to ensure proper nonce ordering
         await this.delay(this.defaultDelay);
 
       } catch (error) {
-        console.error(`[RequestQueue] Failed request ${queueItem.id}:`, error);
+        this.logger.error(`[RequestQueue] Failed request ${queueItem.id}:`, error);
         queueItem.reject(error);
       }
     }
 
     this.processing = false;
     if (this.enableLogging) {
-      console.log(`[RequestQueue] Finished processing queue`);
+      this.logger.trace(`[RequestQueue] Finished processing queue`);
     }
   }
 
@@ -160,7 +160,7 @@ export class RequestQueueService implements IRequestQueueService {
 
     this.queue = [];
     if (this.enableLogging) {
-      console.log(`[RequestQueue] Cleared ${clearedCount} pending requests`);
+      this.logger.trace(`[RequestQueue] Cleared ${clearedCount} pending requests`);
     }
   }
 
