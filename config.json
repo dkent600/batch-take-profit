@@ -7,6 +7,9 @@
       },
       {
         "name": "Kraken"
+      },
+      {
+        "name": "CoinEx"
       }
     ],
     "assets": [
@@ -39,6 +42,26 @@
         "name": "XLM",
         "percentage": 20,
         "exchange": "Kraken"
+      },
+      {
+        "name": "Virtual",
+        "percentage": 50,
+        "exchange": "CoinEx"
+      },
+      {
+        "name": "AI16Z",
+        "percentage": 50,
+        "exchange": "CoinEx"
+      },
+      {
+        "name": "SOL",
+        "percentage": 100,
+        "exchange": "CoinEx"
+      },
+      {
+        "name": "UFD",
+        "percentage": 50,
+        "exchange": "CoinEx"
       }
     ]
   }
