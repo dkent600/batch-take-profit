@@ -232,7 +232,7 @@ export class ExchangeComponent {
       this.highValueConfirmed = false;
 
       // Approach #3: Two-step confirmation for high-value orders (> $1000)
-      if (estimatedValue > 200) {
+      if (estimatedValue > 500) {
         // First confirmation for high-value orders
         const firstConfirm = confirm(
           `⚠️ HIGH VALUE ORDER DETECTED ⚠️\n\n` +

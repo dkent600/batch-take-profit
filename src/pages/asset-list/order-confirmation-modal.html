@@ -13,7 +13,7 @@
     <!-- Alerts -->
     <div class="space-y-4">
       <!-- High Value -->
-      <div class="daisy-alert daisy-alert-error shadow-md" if.bind="estimatedValue > 1000">
+      <div class="daisy-alert daisy-alert-error shadow-md" if.bind="needsSafetyCheck">
         <span class="font-bold">HIGH VALUE ORDER DETECTED</span>
         <span class="opacity-80">Estimated value: $${estimatedValue.toFixed(2)}</span>
       </div>
@@ -54,13 +54,13 @@
       <div class="font-mono">${pendingOrder.percentage.toFixed(2)}%</div>
 
       <div class="font-semibold">${pendingOrder.direction === 'sell' ? 'Estimated Revenue:' : 'Estimated Cost:'}</div>
-      <div class="font-mono font-bold text-lg" class.bind="estimatedValue > 1000 ? 'text-error' : 'text-accent'">
+      <div class="font-mono font-bold text-lg" class.bind="needsSafetyCheck ? 'text-error' : 'text-accent'">
         $${estimatedValue.toFixed(2)} ${quoteCoin}
       </div>
     </div>
 
     <!-- Safety Confirmation (if needed) -->
-    <div class="space-y-2" if.bind="estimatedValue > 5000">
+    <div class="space-y-2" if.bind="needsSafetyCheck">
       <div class="daisy-alert daisy-alert-warning text-sm">
         <span class="font-bold">Final Safety Check</span>
         <span>Type: 
@@ -95,7 +95,7 @@
       <button 
         class="daisy-btn daisy-btn-error daisy-btn-lg flex-1 hover:scale-105 transition-transform disabled:opacity-50"
         click.trigger="executeOrder()"
-        disabled.bind="estimatedValue > 200 && safetyConfirmationInput !== confirmationText"
+        disabled.bind="needsSafetyCheck && safetyConfirmationInput !== confirmationText"
       >
         🚀 Execute ${pendingOrder ? pendingOrder.direction.toUpperCase() : ''} Order
       </button>

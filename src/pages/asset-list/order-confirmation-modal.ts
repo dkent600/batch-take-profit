@@ -62,6 +62,7 @@ export class OrderConfirmationModal {
     return `EXECUTE ${this.pendingOrder.direction.toUpperCase()}`;
   }
 
+
   /***
    * user clicks Submit
    */
@@ -91,7 +92,7 @@ export class OrderConfirmationModal {
     }
 
     // Approach #4: Final safety check for very high-value orders
-    if (this.estimatedValue > 200) {
+    if (this.needsSafetyCheck) {
       if (this.safetyConfirmationInput !== this.confirmationText) {
         alert('❌ Safety check failed. Order submission cancelled.');
         this.closeModal();
