@@ -17,6 +17,17 @@ export default defineConfig({
       useDev: true,
     }),
     nodePolyfills(),
-    tailwindcss()
+    tailwindcss() // TODO: Remove after Phase 2 migration
   ],
+  define: {
+    // Ensure FAST components work in production builds
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+  },
+  optimizeDeps: {
+    include: [
+      '@microsoft/fast-components',
+      '@microsoft/fast-element',
+      '@microsoft/fast-foundation'
+    ]
+  }
 });

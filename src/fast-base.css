@@ -1,0 +1,202 @@
+/**
+ * MS FAST Base Styles
+ * 
+ * Base styles that work alongside FAST components and design tokens.
+ * This will eventually replace Tailwind base styles.
+ */
+/* CSS Custom Properties from Design Tokens */
+:root {
+  /* Colors - These will be overridden by design tokens but provide fallbacks */
+  --brand-color: #1eb854;
+  --accent-color: #1fd65f;
+  --neutral-color: #19362d;
+  --base-color: #171212;
+  --background-color: #171212;
+  --surface-color: #19362d;
+  --primary-text-color: #ffffff;
+  --secondary-text-color: #a6adbb;
+  --success-color: #36d399;
+  --warning-color: #fbbd23;
+  --error-color: #f87272;
+  --info-color: #3abff8;
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  /* Border radius */
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  /* Typography */
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  /* Z-index */
+  --z-index-modal: 1000;
+  --z-index-tooltip: 1010;
+  --z-index-dropdown: 1020;
+}
+/* Base reset and typography */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--primary-text-color);
+  background-color: var(--background-color);
+}
+/* Utility classes for common patterns */
+.fast-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+.fast-flex {
+  display: flex;
+}
+.fast-flex-col {
+  flex-direction: column;
+}
+.fast-items-center {
+  align-items: center;
+}
+.fast-justify-center {
+  justify-content: center;
+}
+.fast-justify-between {
+  justify-content: space-between;
+}
+.fast-gap-sm {
+  gap: var(--space-sm);
+}
+.fast-gap-md {
+  gap: var(--space-md);
+}
+.fast-gap-lg {
+  gap: var(--space-lg);
+}
+.fast-p-sm {
+  padding: var(--space-sm);
+}
+.fast-p-md {
+  padding: var(--space-md);
+}
+.fast-p-lg {
+  padding: var(--space-lg);
+}
+.fast-m-sm {
+  margin: var(--space-sm);
+}
+.fast-m-md {
+  margin: var(--space-md);
+}
+.fast-m-lg {
+  margin: var(--space-lg);
+}
+.fast-mt-sm {
+  margin-top: var(--space-sm);
+}
+.fast-mt-md {
+  margin-top: var(--space-md);
+}
+.fast-mt-lg {
+  margin-top: var(--space-lg);
+}
+.fast-mb-sm {
+  margin-bottom: var(--space-sm);
+}
+.fast-mb-md {
+  margin-bottom: var(--space-md);
+}
+.fast-mb-lg {
+  margin-bottom: var(--space-lg);
+}
+.fast-text-sm {
+  font-size: var(--font-size-sm);
+}
+.fast-text-base {
+  font-size: var(--font-size-base);
+}
+.fast-text-lg {
+  font-size: var(--font-size-lg);
+}
+.fast-text-xl {
+  font-size: var(--font-size-xl);
+}
+.fast-text-2xl {
+  font-size: var(--font-size-2xl);
+}
+.fast-text-primary {
+  color: var(--primary-text-color);
+}
+.fast-text-secondary {
+  color: var(--secondary-text-color);
+}
+.fast-text-success {
+  color: var(--success-color);
+}
+.fast-text-warning {
+  color: var(--warning-color);
+}
+.fast-text-error {
+  color: var(--error-color);
+}
+.fast-text-info {
+  color: var(--info-color);
+}
+.fast-bg-surface {
+  background-color: var(--surface-color);
+}
+.fast-bg-base {
+  background-color: var(--base-color);
+}
+.fast-rounded-sm {
+  border-radius: var(--border-radius-sm);
+}
+.fast-rounded-md {
+  border-radius: var(--border-radius-md);
+}
+.fast-rounded-lg {
+  border-radius: var(--border-radius-lg);
+}
+/* FAST component customizations */
+fast-button {
+  --accent-foreground-rest: var(--primary-text-color);
+  --accent-fill-rest: var(--brand-color);
+  --accent-fill-hover: var(--accent-color);
+  --neutral-fill-rest: var(--surface-color);
+  --neutral-foreground-rest: var(--primary-text-color);
+}
+fast-text-field {
+  --neutral-fill-rest: var(--surface-color);
+  --neutral-foreground-rest: var(--primary-text-color);
+  --accent-fill-rest: var(--brand-color);
+}
+fast-dialog {
+  --dialog-fill: var(--surface-color);
+  --neutral-foreground-rest: var(--primary-text-color);
+}
+/* Hide elements utility */
+.fast-hidden {
+  display: none !important;
+}
+.fast-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

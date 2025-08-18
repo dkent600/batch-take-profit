@@ -1,6 +1,8 @@
+/* Import Tailwind CSS (TODO: Remove in Phase 2) */
 @import "tailwindcss";
-
 @plugin "daisyui" {
   themes: forest --default, forest --preferred;
   prefix: "daisy-";
 }
+/* Import MS FAST base styles */
+@import "../../fast-base.css";
