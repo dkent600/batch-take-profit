@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@aurelia/router": "latest",
+    "@microsoft/fast-element": "^2.6.0",
     "@tailwindcss/vite": "^4.1.11",
     "aurelia": "latest",
     "axios": "^1.10.0",
