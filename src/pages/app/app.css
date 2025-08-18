@@ -4,5 +4,11 @@
   themes: forest --default, forest --preferred;
   prefix: "daisy-";
 }
-/* Import MS FAST base styles */
-@import "../../fast-base.css";
+/* MS FAST styles are now loaded dynamically based on configuration */
+/* See src/design-system/config.ts to toggle between default and custom theming */
+/* App-specific styles that are always needed */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

@@ -8,8 +8,10 @@ import {
   allComponents,
   provideFASTDesignSystem
 } from '@microsoft/fast-components';
-import { applyDesignTokens } from './design-tokens.js';
+// Replace old design-tokens import with new modular system
+import { initializeDesignSystem, getDesignSystemStatus } from './design-system/index.js';
 import { testFASTComponents } from './fast-test.js';
+import { installGlobalThemeSwitcher } from './theme-switcher.js';
 import {
   TelegramService, TelegramServiceToken,
   AssetsConfigService, AssetsConfigServiceToken,
@@ -29,11 +31,17 @@ async function startApp() {
   provideFASTDesignSystem()
     .register(allComponents);
 
-  // Apply design tokens to the document
-  applyDesignTokens();
+  // Initialize design system (default or custom based on config)
+  await initializeDesignSystem();
+
+  // Log design system status
+  console.log('🎯 Design System Status:', getDesignSystemStatus());
 
   // Test FAST components setup (remove this after Phase 1)
   await testFASTComponents();
+
+  // Install global theme switcher for development (remove in production)
+  installGlobalThemeSwitcher();
 
   // First, create a minimal container just for EnvService
   const app = Aurelia.register(

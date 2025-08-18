@@ -1,0 +1,264 @@
+/**
+ * Custom FAST styles (Tailwind/DaisyUI inspired)
+ * This file contains all customizations that override FAST defaults
+ */
+/* Custom CSS properties that override FAST defaults */
+:root {
+  /* Override FAST color tokens with custom values */
+  --accent-base-color: var(--brand-color, #1eb854);
+  --neutral-base-color: var(--neutral-color, #19362d);
+  /* Custom background system */
+  --neutral-layer-1: var(--background-color, #171212);
+  --neutral-layer-2: var(--surface-color, #19362d);
+  --neutral-layer-3: var(--surface-color, #19362d);
+  --neutral-layer-4: var(--base-color, #171212);
+  /* Custom text colors */
+  --neutral-foreground-rest: var(--primary-text-color, #ffffff);
+  --neutral-foreground-hint: var(--secondary-text-color, #a6adbb);
+  /* Custom state colors */
+  --neutral-fill-success: var(--success-color, #36d399);
+  --neutral-fill-warning: var(--warning-color, #fbbd23);
+  --neutral-fill-error: var(--error-color, #f87272);
+  --neutral-fill-info: var(--info-color, #3abff8);
+}
+/* Custom utility classes for spacing */
+.custom-p-xs {
+  padding: var(--space-xs, 0.25rem) !important;
+}
+.custom-p-sm {
+  padding: var(--space-sm, 0.5rem) !important;
+}
+.custom-p-md {
+  padding: var(--space-md, 1rem) !important;
+}
+.custom-p-lg {
+  padding: var(--space-lg, 1.5rem) !important;
+}
+.custom-p-xl {
+  padding: var(--space-xl, 2rem) !important;
+}
+.custom-p-2xl {
+  padding: var(--space-2xl, 3rem) !important;
+}
+.custom-m-xs {
+  margin: var(--space-xs, 0.25rem) !important;
+}
+.custom-m-sm {
+  margin: var(--space-sm, 0.5rem) !important;
+}
+.custom-m-md {
+  margin: var(--space-md, 1rem) !important;
+}
+.custom-m-lg {
+  margin: var(--space-lg, 1.5rem) !important;
+}
+.custom-m-xl {
+  margin: var(--space-xl, 2rem) !important;
+}
+.custom-m-2xl {
+  margin: var(--space-2xl, 3rem) !important;
+}
+.custom-mt-xs {
+  margin-top: var(--space-xs, 0.25rem) !important;
+}
+.custom-mt-sm {
+  margin-top: var(--space-sm, 0.5rem) !important;
+}
+.custom-mt-md {
+  margin-top: var(--space-md, 1rem) !important;
+}
+.custom-mt-lg {
+  margin-top: var(--space-lg, 1.5rem) !important;
+}
+.custom-mt-xl {
+  margin-top: var(--space-xl, 2rem) !important;
+}
+.custom-mb-xs {
+  margin-bottom: var(--space-xs, 0.25rem) !important;
+}
+.custom-mb-sm {
+  margin-bottom: var(--space-sm, 0.5rem) !important;
+}
+.custom-mb-md {
+  margin-bottom: var(--space-md, 1rem) !important;
+}
+.custom-mb-lg {
+  margin-bottom: var(--space-lg, 1.5rem) !important;
+}
+.custom-mb-xl {
+  margin-bottom: var(--space-xl, 2rem) !important;
+}
+.custom-ml-xs {
+  margin-left: var(--space-xs, 0.25rem) !important;
+}
+.custom-ml-sm {
+  margin-left: var(--space-sm, 0.5rem) !important;
+}
+.custom-ml-md {
+  margin-left: var(--space-md, 1rem) !important;
+}
+.custom-ml-lg {
+  margin-left: var(--space-lg, 1.5rem) !important;
+}
+.custom-mr-xs {
+  margin-right: var(--space-xs, 0.25rem) !important;
+}
+.custom-mr-sm {
+  margin-right: var(--space-sm, 0.5rem) !important;
+}
+.custom-mr-md {
+  margin-right: var(--space-md, 1rem) !important;
+}
+.custom-mr-lg {
+  margin-right: var(--space-lg, 1.5rem) !important;
+}
+/* Custom gap utilities */
+.custom-gap-xs {
+  gap: var(--space-xs, 0.25rem) !important;
+}
+.custom-gap-sm {
+  gap: var(--space-sm, 0.5rem) !important;
+}
+.custom-gap-md {
+  gap: var(--space-md, 1rem) !important;
+}
+.custom-gap-lg {
+  gap: var(--space-lg, 1.5rem) !important;
+}
+.custom-gap-xl {
+  gap: var(--space-xl, 2rem) !important;
+}
+/* Custom typography utilities */
+.custom-text-xs {
+  font-size: var(--font-size-sm, 0.875rem) !important;
+}
+.custom-text-sm {
+  font-size: var(--font-size-sm, 0.875rem) !important;
+}
+.custom-text-base {
+  font-size: var(--font-size-base, 1rem) !important;
+}
+.custom-text-lg {
+  font-size: var(--font-size-lg, 1.125rem) !important;
+}
+.custom-text-xl {
+  font-size: var(--font-size-xl, 1.25rem) !important;
+}
+.custom-text-2xl {
+  font-size: var(--font-size-2xl, 1.5rem) !important;
+}
+/* Custom color utilities */
+.custom-text-primary {
+  color: var(--primary-text-color, #ffffff) !important;
+}
+.custom-text-secondary {
+  color: var(--secondary-text-color, #a6adbb) !important;
+}
+.custom-text-success {
+  color: var(--success-color, #36d399) !important;
+}
+.custom-text-warning {
+  color: var(--warning-color, #fbbd23) !important;
+}
+.custom-text-error {
+  color: var(--error-color, #f87272) !important;
+}
+.custom-text-info {
+  color: var(--info-color, #3abff8) !important;
+}
+/* Custom background utilities */
+.custom-bg-surface {
+  background-color: var(--surface-color, #19362d) !important;
+}
+.custom-bg-base {
+  background-color: var(--base-color, #171212) !important;
+}
+.custom-bg-brand {
+  background-color: var(--brand-color, #1eb854) !important;
+}
+.custom-bg-accent {
+  background-color: var(--accent-color, #1fd65f) !important;
+}
+/* Custom border radius utilities */
+.custom-rounded-sm {
+  border-radius: var(--border-radius-sm, 0.25rem) !important;
+}
+.custom-rounded-md {
+  border-radius: var(--border-radius-md, 0.5rem) !important;
+}
+.custom-rounded-lg {
+  border-radius: var(--border-radius-lg, 0.75rem) !important;
+}
+/* FAST component customizations */
+fast-button {
+  --accent-foreground-rest: var(--primary-text-color, #ffffff);
+  --accent-fill-rest: var(--brand-color, #1eb854);
+  --accent-fill-hover: var(--accent-color, #1fd65f);
+  --neutral-fill-rest: var(--surface-color, #19362d);
+  --neutral-foreground-rest: var(--primary-text-color, #ffffff);
+  --corner-radius: var(--border-radius-md, 0.5rem);
+}
+fast-text-field {
+  --neutral-fill-input-rest: var(--surface-color, #19362d);
+  --neutral-foreground-rest: var(--primary-text-color, #ffffff);
+  --accent-fill-rest: var(--brand-color, #1eb854);
+  --corner-radius: var(--border-radius-sm, 0.25rem);
+}
+fast-dialog {
+  --dialog-fill: var(--surface-color, #19362d);
+  --neutral-foreground-rest: var(--primary-text-color, #ffffff);
+  --corner-radius: var(--border-radius-lg, 0.75rem);
+}
+fast-checkbox {
+  --accent-fill-rest: var(--brand-color, #1eb854);
+  --accent-fill-hover: var(--accent-color, #1fd65f);
+  --neutral-foreground-rest: var(--primary-text-color, #ffffff);
+}
+fast-tabs {
+  --accent-fill-rest: var(--brand-color, #1eb854);
+  --neutral-foreground-rest: var(--primary-text-color, #ffffff);
+}
+/* Layout utilities */
+.custom-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md, 1rem);
+}
+.custom-flex {
+  display: flex;
+}
+.custom-flex-col {
+  flex-direction: column;
+}
+.custom-items-center {
+  align-items: center;
+}
+.custom-justify-center {
+  justify-content: center;
+}
+.custom-justify-between {
+  justify-content: space-between;
+}
+.custom-justify-end {
+  justify-content: flex-end;
+}
+.custom-flex-wrap {
+  flex-wrap: wrap;
+}
+.custom-flex-1 {
+  flex: 1;
+}
+/* Custom responsive utilities */
+@media (max-width: 768px) {
+  .custom-container {
+    padding: 0 var(--space-sm, 0.5rem);
+  }
+  .custom-text-responsive {
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+}
+@media (min-width: 769px) {
+  .custom-text-responsive {
+    font-size: var(--font-size-base, 1rem);
+  }
+}

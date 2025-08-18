@@ -1,0 +1,64 @@
+/**
+ * Default MS FAST styles
+ * Pure FAST design system without customization
+ */
+/* Minimal reset for FAST compatibility */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--body-font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
+  background: var(--neutral-layer-1, #ffffff);
+  color: var(--neutral-foreground-rest, #000000);
+  line-height: 1.5;
+}
+/* Basic layout utilities that work with FAST defaults */
+.fast-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 calc(var(--design-unit, 4) * 1px * 4);
+}
+.fast-flex {
+  display: flex;
+}
+.fast-flex-col {
+  flex-direction: column;
+}
+.fast-items-center {
+  align-items: center;
+}
+.fast-justify-center {
+  justify-content: center;
+}
+.fast-justify-between {
+  justify-content: space-between;
+}
+/* Simple gap utilities using FAST design units */
+.fast-gap {
+  gap: calc(var(--design-unit, 4) * 1px * 2);
+}
+.fast-gap-sm {
+  gap: calc(var(--design-unit, 4) * 1px);
+}
+.fast-gap-lg {
+  gap: calc(var(--design-unit, 4) * 1px * 4);
+}
+/* Hide elements utility */
+.fast-hidden {
+  display: none !important;
+}
+.fast-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
