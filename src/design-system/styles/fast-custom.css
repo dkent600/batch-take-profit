@@ -21,6 +21,49 @@
   --neutral-fill-error: var(--error-color, #f87272);
   --neutral-fill-info: var(--info-color, #3abff8);
 }
+}
+/* Modal-specific utilities */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-index-modal, 1000);
+}
+.custom-modal-hidden {
+  display: none !important;
+}
+.custom-modal-box {
+  background-color: var(--surface-color, #19362d);
+  border-radius: var(--border-radius-lg, 0.75rem);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--neutral-color, #19362d);
+  max-width: 42rem;
+  width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+/* Grid utilities */
+.custom-grid {
+  display: grid !important;
+}
+.custom-grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+.custom-space-y-2>*+* {
+  margin-top: calc(var(--space-xs, 0.25rem) * 2) !important;
+}
+.custom-space-y-4>*+* {
+  margin-top: var(--space-md, 1rem) !important;
+}
+.custom-space-y-6>*+* {
+  margin-top: var(--space-lg, 1.5rem) !important;
+}
 /* Custom utility classes for spacing */
 .custom-p-xs {
   padding: var(--space-xs, 0.25rem) !important;
@@ -128,7 +171,41 @@
 .custom-gap-xl {
   gap: var(--space-xl, 2rem) !important;
 }
-/* Custom typography utilities */
+/* Typography utilities */
+.custom-font-bold {
+  font-weight: bold !important;
+}
+.custom-font-semibold {
+  font-weight: 600 !important;
+}
+.custom-font-medium {
+  font-weight: 500 !important;
+}
+.custom-font-mono {
+  font-family: 'Courier New', Courier, monospace !important;
+}
+.custom-text-center {
+  text-align: center !important;
+}
+.custom-text-left {
+  text-align: left !important;
+}
+.custom-px-sm {
+  padding-left: var(--space-sm, 0.5rem) !important;
+  padding-right: var(--space-sm, 0.5rem) !important;
+}
+.custom-py-xs {
+  padding-top: var(--space-xs, 0.25rem) !important;
+  padding-bottom: var(--space-xs, 0.25rem) !important;
+}
+.custom-pt-md {
+  padding-top: var(--space-md, 1rem) !important;
+}
+/* Additional text color utilities */
+.custom-text-warning {
+  color: var(--warning-color, #fbbd23) !important;
+}
+/* Typography utilities */
 .custom-text-xs {
   font-size: var(--font-size-sm, 0.875rem) !important;
 }

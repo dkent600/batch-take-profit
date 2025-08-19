@@ -1,110 +1,120 @@
-<div 
-  class="daisy-modal" 
-  class.bind="isOpen ? 'daisy-modal-open' : ''" 
+<fast-dialog 
+  modal
+  hidden.bind="!isOpen"
   id="confirm-order-modal"
+  aria-labelledby="modal-title"
+  aria-describedby="modal-description"
 >
-  <div class="daisy-modal-box max-w-2xl rounded-2xl shadow-2xl bg-base-100 border border-base-300 px-8 py-6 space-y-6">
+  <div class="custom-modal-box custom-p-xl custom-space-y-6">
 
     <!-- Header -->
-    <h3 class="text-2xl font-semibold text-warning flex items-center gap-2">
+    <h3 id="modal-title" class="custom-text-2xl custom-font-semibold custom-text-warning custom-flex custom-items-center custom-gap-sm">
       🚨 Confirm ${pendingOrder.direction.toUpperCase()} Order
     </h3>
 
     <!-- Alerts -->
-    <div class="space-y-4">
+    <div class="custom-space-y-4">
       <!-- High Value -->
-      <div class="daisy-alert daisy-alert-error shadow-md" if.bind="needsSafetyCheck">
-        <span class="font-bold">HIGH VALUE ORDER DETECTED</span>
-        <span class="opacity-80">Estimated value: $${estimatedValue.toFixed(2)}</span>
-      </div>
+      <fast-alert variant="error" if.bind="needsSafetyCheck">
+        <span class="custom-font-bold">HIGH VALUE ORDER DETECTED</span>
+        <span style="opacity: 0.8;">Estimated value: $${estimatedValue.toFixed(2)}</span>
+      </fast-alert>
 
       <!-- Test Mode -->
-      <div class="daisy-alert daisy-alert-info" if.bind="isProduction">
-        <span class="font-bold flex items-center gap-2">🚨 Production Mode 🚨</span>
-        <span class="opacity-80">This order WILL be executed</span>
-      </div>
-      <div else class="daisy-alert daisy-alert-info" if.bind="!isProduction">
-        <span class="font-bold flex items-center gap-2">🧪 Test Mode 🧪</span>
-        <span class="opacity-80">This order will be validated but NOT executed.</span>
-      </div>
-        </div>
+      <fast-alert variant="info" if.bind="isProduction">
+        <span class="custom-font-bold custom-flex custom-items-center custom-gap-sm">🚨 Production Mode 🚨</span>
+        <span style="opacity: 0.8;">This order WILL be executed</span>
+      </fast-alert>
+      <fast-alert variant="info" if.bind="!isProduction">
+        <span class="custom-font-bold custom-flex custom-items-center custom-gap-sm">🧪 Test Mode 🧪</span>
+        <span style="opacity: 0.8;">This order will be validated but NOT executed.</span>
+      </fast-alert>
+    </div>
 
     <!-- Order Details -->
-    <div class="grid grid-cols-2 gap-4 bg-base-200 rounded-lg p-5 text-sm text-base-content shadow-inner">
-      <div class="font-semibold">Asset:</div>
-      <div class="font-mono text-primary">${pendingOrder.name}</div>
+    <div class="custom-grid custom-grid-cols-2 custom-gap-md custom-bg-surface custom-rounded-lg custom-p-lg custom-text-sm custom-text-primary" style="box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+      <div class="custom-font-semibold">Asset:</div>
+      <div class="custom-font-mono custom-text-primary">${pendingOrder.name}</div>
 
-      <div class="font-semibold">Type:</div>
+      <div class="custom-font-semibold">Type:</div>
       <div>
-        <span class="daisy-badge" class.bind="pendingOrder.limit ? 'daisy-badge-secondary' : 'daisy-badge-primary'">
+        <fast-badge variant.bind="pendingOrder.limit ? 'secondary' : 'primary'">
           ${pendingOrder.limit ? 'LIMIT' : 'MARKET'}
-        </span>
+        </fast-badge>
       </div>
 
-      <div class="font-semibold">Amount:</div>
-      <div class="font-mono">${pendingOrder.amount.toFixed(8)} ${pendingOrder.name}</div>
+      <div class="custom-font-semibold">Amount:</div>
+      <div class="custom-font-mono">${pendingOrder.amount.toFixed(8)} ${pendingOrder.name}</div>
 
-      <div class="font-semibold" if.bind="pendingOrder.limit">Price:</div>
-      <div class="font-mono" if.bind="pendingOrder.limit">${pendingOrder.LimitPrice} ${quoteCoin}</div>
+      <div class="custom-font-semibold" if.bind="pendingOrder.limit">Price:</div>
+      <div class="custom-font-mono" if.bind="pendingOrder.limit">${pendingOrder.LimitPrice} ${quoteCoin}</div>
 
-      <div class="font-semibold">Balance:</div>
-      <div class="font-mono">${pendingOrder.balance.toFixed(8)} ${pendingOrder.name}</div>
+      <div class="custom-font-semibold">Balance:</div>
+      <div class="custom-font-mono">${pendingOrder.balance.toFixed(8)} ${pendingOrder.name}</div>
 
-      <div class="font-semibold">Percentage:</div>
-      <div class="font-mono">${pendingOrder.percentage.toFixed(2)}%</div>
+      <div class="custom-font-semibold">Percentage:</div>
+      <div class="custom-font-mono">${pendingOrder.percentage.toFixed(2)}%</div>
 
-      <div class="font-semibold">${pendingOrder.direction === 'sell' ? 'Estimated Revenue:' : 'Estimated Cost:'}</div>
-      <div class="font-mono font-bold text-lg" class.bind="needsSafetyCheck ? 'text-error' : 'text-accent'">
+      <div class="custom-font-semibold">${pendingOrder.direction === 'sell' ? 'Estimated Revenue:' : 'Estimated Cost:'}</div>
+      <div class="custom-font-mono custom-font-bold custom-text-lg" class.bind="needsSafetyCheck ? 'custom-text-error' : 'custom-text-success'">
         $${estimatedValue.toFixed(2)} ${quoteCoin}
       </div>
     </div>
 
     <!-- Safety Confirmation (if needed) -->
-    <div class="space-y-2" if.bind="needsSafetyCheck">
-      <div class="daisy-alert daisy-alert-warning text-sm">
-        <span class="font-bold">Final Safety Check</span>
+    <div class="custom-space-y-2" if.bind="needsSafetyCheck">
+      <fast-alert variant="warning">
+        <span class="custom-font-bold">Final Safety Check</span>
         <span>Type: 
-          <code class="bg-neutral text-neutral-content px-2 py-1 rounded font-mono text-sm tracking-wider">
+          <code class="custom-bg-base custom-text-primary custom-px-sm custom-py-xs custom-rounded custom-font-mono custom-text-sm" style="letter-spacing: 0.05em;">
             ${confirmationText}
           </code>
         </span>
-      </div>
+      </fast-alert>
 
-      <input 
+      <fast-text-field 
         type="text" 
         placeholder="Type the confirmation text..." 
-        class="daisy-input daisy-input-lg daisy-input-bordered w-full text-center font-mono"
+        class="custom-text-center custom-font-mono"
         value.bind="safetyConfirmationInput"
-        class.bind="safetyConfirmationInput === confirmationText ? 'safety-input-success' : 'safety-input-error'"
-      />
+        style="width: 100%; font-size: 1.125rem; padding: 0.75rem;"
+      ></fast-text-field>
 
-      <p class="text-center text-sm font-medium" 
-         class.bind="safetyConfirmationInput === confirmationText ? 'text-success' : 'text-error'">
+      <p class="custom-text-center custom-text-sm custom-font-medium" 
+         class.bind="safetyConfirmationInput === confirmationText ? 'custom-text-success' : 'custom-text-error'">
         ${safetyConfirmationInput === confirmationText ? '✅ Safety check passed!' : '⚠️ Text does not match.'}
       </p>
     </div>
 
     <!-- Warning Footer -->
-    <div class="daisy-alert daisy-alert-warning text-sm">
-      <span class="font-bold">This action cannot be undone.</span>
+    <fast-alert variant="warning">
+      <span class="custom-font-bold">This action cannot be undone.</span>
       <span>Please review all details before continuing.</span>
-    </div>
+    </fast-alert>
 
     <!-- Actions -->
-    <div class="flex gap-4 justify-end pt-4">
-      <button 
-        class="daisy-btn daisy-btn-error daisy-btn-lg flex-1 hover:scale-105 transition-transform disabled:opacity-50"
+    <div class="custom-flex custom-gap-md custom-justify-end custom-pt-md">
+      <fast-button 
+        appearance="accent" 
+        class="custom-flex-1"
+        style="background-color: var(--error-color, #f87272); transform: scale(1); transition: transform 0.2s ease;"
         click.trigger="executeOrder()"
         disabled.bind="needsSafetyCheck && safetyConfirmationInput !== confirmationText"
+        onmouseenter="this.style.transform='scale(1.05)'"
+        onmouseleave="this.style.transform='scale(1)'"
       >
         🚀 Execute ${pendingOrder ? pendingOrder.direction.toUpperCase() : ''} Order
-      </button>
-      <button 
-        class="daisy-btn daisy-btn-outline daisy-btn-lg flex-1 hover:scale-105"
+      </fast-button>
+      <fast-button 
+        appearance="outline" 
+        class="custom-flex-1"
+        style="transform: scale(1); transition: transform 0.2s ease;"
         click.trigger="cancel()"
+        onmouseenter="this.style.transform='scale(1.05)'"
+        onmouseleave="this.style.transform='scale(1)'"
       >
         ❌ Cancel
-      </button>
+      </fast-button>
     </div>
   </div>
-</div>
+</fast-dialog>

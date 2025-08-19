@@ -12,6 +12,8 @@ import {
 import { initializeDesignSystem, getDesignSystemStatus } from './design-system/index.js';
 import { testFASTComponents } from './fast-test.js';
 import { installGlobalThemeSwitcher } from './theme-switcher.js';
+// Import custom FAST components
+import { registerCustomComponents } from './components/index.js';
 import {
   TelegramService, TelegramServiceToken,
   AssetsConfigService, AssetsConfigServiceToken,
@@ -30,6 +32,9 @@ async function startApp() {
   // Initialize MS FAST Design System
   provideFASTDesignSystem()
     .register(allComponents);
+
+  // Register custom FAST components
+  registerCustomComponents();
 
   // Initialize design system (default or custom based on config)
   await initializeDesignSystem();
