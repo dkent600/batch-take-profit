@@ -62,6 +62,12 @@ export class OrderConfirmationModal {
     return `EXECUTE ${this.pendingOrder.direction.toUpperCase()}`;
   }
 
+  get needsSafetyCheck(): boolean {
+    if (!this.pendingOrder) return false;
+    // Require safety check for high-value orders (>$1000)
+    return this.estimatedValue > 1000;
+  }
+
 
   /***
    * user clicks Submit

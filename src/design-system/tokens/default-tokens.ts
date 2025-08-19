@@ -19,14 +19,14 @@ export const neutralBaseColor = DesignToken.create<string>('neutral-base-color')
  * This sets up the minimal configuration for FAST components to work properly
  */
 export function applyDefaultTokens(element: HTMLElement = document.body): void {
-  // Apply core design tokens
-  designUnit.setValueFor(element, designUnit.default);
-  baseHeightMultiplier.setValueFor(element, baseHeightMultiplier.default);
-  density.setValueFor(element, density.default);
+  // Apply core design tokens - use specific values instead of .default
+  designUnit.setValueFor(element, 4);
+  baseHeightMultiplier.setValueFor(element, 10);
+  density.setValueFor(element, 0);
 
   // Apply default colors (FAST will handle the rest)
-  accentBaseColor.setValueFor(element, accentBaseColor.default);
-  neutralBaseColor.setValueFor(element, neutralBaseColor.default);
+  accentBaseColor.setValueFor(element, '#0078d4');
+  neutralBaseColor.setValueFor(element, '#808080');
 }
 
 /**

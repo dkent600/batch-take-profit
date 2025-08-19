@@ -1,1 +1,69 @@
 /* exchange-component styles */
+/* FAST Table Styling (replacing DaisyUI table styles) */
+.fast-table {
+  border-collapse: collapse;
+  width: 100%;
+  background: var(--neutral-layer-1, #ffffff);
+  border: 1px solid var(--neutral-stroke-rest, #e5e5e5);
+  border-radius: var(--border-radius-md, 0.5rem);
+  overflow: hidden;
+}
+.fast-table th {
+  background: var(--neutral-layer-2, #f8f9fa);
+  color: var(--neutral-foreground-rest, #212529);
+  font-weight: 600;
+  padding: var(--space-sm, 0.5rem);
+  border-bottom: 1px solid var(--neutral-stroke-rest, #e5e5e5);
+}
+.fast-table td {
+  padding: var(--space-sm, 0.5rem);
+  border-bottom: 1px solid var(--neutral-stroke-rest, #e5e5e5);
+}
+/* Zebra striping */
+.fast-table-zebra tbody tr:nth-child(even) {
+  background: var(--neutral-layer-2, #f8f9fa);
+}
+.fast-table-zebra tbody tr:nth-child(odd) {
+  background: var(--neutral-layer-1, #ffffff);
+}
+.fast-table-zebra tbody tr:hover {
+  background: var(--neutral-layer-3, #e9ecef);
+}
+/* FAST Form Input Error/Success States */
+.error-state {
+  --accent-base-color: #ef4444;
+  border-color: #ef4444 !important;
+}
+.secondary-state {
+  --accent-base-color: var(--accent-fill-rest);
+}
+.error-text {
+  color: #ef4444;
+}
+/* FAST Link Styling (replacing DaisyUI links) */
+.fast-link {
+  color: var(--accent-fill-rest, #0066cc);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.fast-link:hover {
+  color: var(--accent-fill-hover, #0052a3);
+  text-decoration: underline;
+}
+.fast-link-primary {
+  color: var(--accent-fill-rest, #0066cc);
+}
+/* FAST Button Styling */
+.fast-btn-primary {
+  --accent-base-color: var(--accent-fill-rest);
+}
+.fast-btn-sm {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+}
+.fast-btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

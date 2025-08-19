@@ -21,7 +21,6 @@
   --neutral-fill-error: var(--error-color, #f87272);
   --neutral-fill-info: var(--info-color, #3abff8);
 }
-}
 /* Modal-specific utilities */
 .custom-modal-overlay {
   position: fixed;

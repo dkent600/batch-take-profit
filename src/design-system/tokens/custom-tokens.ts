@@ -55,45 +55,45 @@ export const zIndexDropdown = DesignToken.create<number>('z-index-dropdown').wit
  * This applies the DaisyUI Forest-inspired theme to FAST components
  */
 export function applyCustomTokens(element: HTMLElement = document.body): void {
-  // Apply color tokens
-  brandColor.setValueFor(element, brandColor.default);
-  accentColor.setValueFor(element, accentColor.default);
-  neutralColor.setValueFor(element, neutralColor.default);
-  baseColor.setValueFor(element, baseColor.default);
+  // Apply color tokens - use specific values instead of .default
+  brandColor.setValueFor(element, '#0ea5e9');  // sky-500
+  accentColor.setValueFor(element, '#0ea5e9');
+  neutralColor.setValueFor(element, '#64748b'); // slate-500
+  baseColor.setValueFor(element, '#171212');
 
-  backgroundColor.setValueFor(element, backgroundColor.default);
-  surfaceColor.setValueFor(element, surfaceColor.default);
+  backgroundColor.setValueFor(element, '#171212');
+  surfaceColor.setValueFor(element, '#1f2937');
 
-  primaryTextColor.setValueFor(element, primaryTextColor.default);
-  secondaryTextColor.setValueFor(element, secondaryTextColor.default);
+  primaryTextColor.setValueFor(element, '#f8fafc');
+  secondaryTextColor.setValueFor(element, '#94a3b8');
 
-  successColor.setValueFor(element, successColor.default);
-  warningColor.setValueFor(element, warningColor.default);
-  errorColor.setValueFor(element, errorColor.default);
-  infoColor.setValueFor(element, infoColor.default);
+  successColor.setValueFor(element, '#10b981');
+  warningColor.setValueFor(element, '#f59e0b');
+  errorColor.setValueFor(element, '#ef4444');
+  infoColor.setValueFor(element, '#3b82f6');
 
   // Apply spacing tokens
-  spaceXs.setValueFor(element, spaceXs.default);
-  spaceSm.setValueFor(element, spaceSm.default);
-  spaceMd.setValueFor(element, spaceMd.default);
-  spaceLg.setValueFor(element, spaceLg.default);
-  spaceXl.setValueFor(element, spaceXl.default);
-  space2xl.setValueFor(element, space2xl.default);
+  spaceXs.setValueFor(element, '0.25rem');
+  spaceSm.setValueFor(element, '0.5rem');
+  spaceMd.setValueFor(element, '1rem');
+  spaceLg.setValueFor(element, '1.5rem');
+  spaceXl.setValueFor(element, '2rem');
+  space2xl.setValueFor(element, '3rem');
 
   // Apply other tokens
-  borderRadiusSm.setValueFor(element, borderRadiusSm.default);
-  borderRadiusMd.setValueFor(element, borderRadiusMd.default);
-  borderRadiusLg.setValueFor(element, borderRadiusLg.default);
+  borderRadiusSm.setValueFor(element, '0.25rem');
+  borderRadiusMd.setValueFor(element, '0.5rem');
+  borderRadiusLg.setValueFor(element, '0.75rem');
 
-  fontSizeSm.setValueFor(element, fontSizeSm.default);
-  fontSizeBase.setValueFor(element, fontSizeBase.default);
-  fontSizeLg.setValueFor(element, fontSizeLg.default);
-  fontSizeXl.setValueFor(element, fontSizeXl.default);
-  fontSize2xl.setValueFor(element, fontSize2xl.default);
+  fontSizeSm.setValueFor(element, '0.875rem');
+  fontSizeBase.setValueFor(element, '1rem');
+  fontSizeLg.setValueFor(element, '1.125rem');
+  fontSizeXl.setValueFor(element, '1.25rem');
+  fontSize2xl.setValueFor(element, '1.5rem');
 
-  zIndexModal.setValueFor(element, zIndexModal.default);
-  zIndexTooltip.setValueFor(element, zIndexTooltip.default);
-  zIndexDropdown.setValueFor(element, zIndexDropdown.default);
+  zIndexModal.setValueFor(element, 1000);
+  zIndexTooltip.setValueFor(element, 1010);
+  zIndexDropdown.setValueFor(element, 1020);
 }
 
 /**

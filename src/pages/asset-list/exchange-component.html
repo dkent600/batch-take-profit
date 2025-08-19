@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center p-6">
     <h1 class="text-2xl font-bold text-center mb-6">Buy and Sell by Percentage</h1>
     <!-- ***** GRID SECTION ***** -->
-    <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+    <table class="fast-table fast-table-zebra fast-table-auto w-fit mx-auto">
       <thead>
         <tr>
           <th class="text-center text-sm px-2">Select</th>
@@ -21,58 +21,58 @@
       <tbody>
         <tr repeat.for="asset of assets">
           <td class="text-center text-sm px-2">
-            <input type="checkbox" checked.bind="asset.selected" />
+            <fast-checkbox checked.bind="asset.selected"></fast-checkbox>
           </td>
           <td class="text-left text-sm px-2">${asset.exchange}</td>
           <td class="text-left text-sm px-2">${asset.name}</td>
           <td class="text-left text-sm px-2">${asset.balance}</td>
           <td class="text-left text-sm px-2">
-            <select
-              class="daisy-select daisy-select-xs w-24"
+            <fast-select
+              class="w-24 text-xs"
               value.two-way="asset.direction">
-              <option value="buy">Buy</option>
-              <option value="sell">Sell</option>
-            </select>
+              <fast-option value="buy">Buy</fast-option>
+              <fast-option value="sell">Sell</fast-option>
+            </fast-select>
           </td>
           <td class="text-left text-sm px-2">
-              <input
+              <fast-text-field
               if.bind="!useAmount"
               type="number"
               min="1"
               max="100"
               value.two-way="asset.percentage"
               required
-              class.bind="'daisy-input daisy-input-xs w-16 text-center' + (asset.percentageInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validatePercentage(asset)"
-              />
+              class.bind="'w-16 text-center text-xs' + (asset.percentageInvalid ? ' error-state' : ' secondary-state')"
+              input.trigger="validatePercentage(asset)">
+              </fast-text-field>
               <div else>${asset.percentage}</div>
-              <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
+              <div if.bind="asset.percentageInvalid" class="error-text text-xs mt-1">Invalid percentage</div>
           </td>
           <td class="text-left text-sm px-2">
-              <input
+              <fast-text-field
               type="number"
               min="0"
               value.two-way="asset.amount"
               required
-              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.amountInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validateAmount(asset)"
-              />
-              <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
+              class.bind="'w-32 text-center text-xs' + (asset.amountInvalid ? ' error-state' : ' secondary-state')"
+              input.trigger="validateAmount(asset)">
+              </fast-text-field>
+              <div if.bind="asset.amountInvalid" class="error-text text-xs mt-1">Invalid amount</div>
           </td>
           <td class="text-left text-sm px-2">${asset.currentPrice}</td>
-          <td class="text-center text-sm px-2"><input type="checkbox" checked.bind="asset.limit" /></td>
+          <td class="text-center text-sm px-2"><fast-checkbox checked.bind="asset.limit"></fast-checkbox></td>
           <td class="text-left text-sm px-2">
-              <input
+              <fast-text-field
               if.bind="asset.limit"
               type="number"
               min="0"
               value.two-way="asset.LimitPrice"
               required
-              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.LimitPriceInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validateLimitPrice(asset)"
-              />
+              class.bind="'w-32 text-center text-xs' + (asset.LimitPriceInvalid ? ' error-state' : ' secondary-state')"
+              input.trigger="validateLimitPrice(asset)">
+              </fast-text-field>
               <div else>---</div>
-              <div if.bind="asset.LimitPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
+              <div if.bind="asset.LimitPriceInvalid" class="error-text text-xs mt-1">Invalid limit order price</div>
           </td>
           <td class="text-left text-sm px-2">
               <div>
@@ -87,17 +87,17 @@
     <div class="flex flex-col items-center justify-center mt-4 gap-2">
       <div class="flex flex-row gap-4">
         <div class="text-sm">Select 
-          <span class="daisy-link daisy-link-primary hover:cursor-pointer"
-            click.trigger="selectAll()">All</span>
+          <fast-anchor class="fast-link fast-link-primary hover:cursor-pointer"
+            click.trigger="selectAll()">All</fast-anchor>
           |
-          <span class="daisy-link daisy-link-primary hover:cursor-pointer"
-            click.trigger="selectNone()">None</span>
+          <fast-anchor class="fast-link fast-link-primary hover:cursor-pointer"
+            click.trigger="selectNone()">None</fast-anchor>
         </div>
       </div>
       <div class="flex flex-row gap-4">
-        <div
+        <fast-anchor
           click.trigger="refresh()"
-          class="flex daisy-link justify-center daisy-link-primary text-sm hover:cursor-pointer">
+          class="flex fast-link justify-center fast-link-primary text-sm hover:cursor-pointer">
             <span class="whitespace-nowrap">Refresh Prices and Balances</span>
             <span if.bind="isRefreshing" class="flex items-center justify-center h-full ml-1" style="margin-left: 4px;">
               <svg class="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -105,15 +105,16 @@
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
               </svg>
             </span>
-        </div>
+        </fast-anchor>
       </div>
       <div class="flex flex-row gap-4 py-2">
-        <div
+        <fast-button
           click.trigger="createOrders()"
-          class.bind="'flex daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
+          appearance="outline"
+          class.bind="'fast-btn-primary fast-btn-sm' + (!hasSelection || hasInvalidSelection ? ' fast-btn-disabled opacity-50 cursor-not-allowed' : '')"
           disabled.bind="!hasSelection || hasInvalidSelection">
           Place the ${selectedOrders.length} selected order<template if.bind="selectedOrders.length != 1">s</template>
-        </div>
+        </fast-button>
       </div>
       <!-- ***** HELP MESSAGES SECTION ***** -->
       <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it.</div>

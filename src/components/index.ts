@@ -1,16 +1,14 @@
 /**
- * Custom FAST Components
- * Export all custom components for easy registration
+ * Custom Components (Disabled - Using Aurelia 2 + MS FAST Integration)
+ * Previous custom FAST components moved to *.bak files
+ * Now using proper Aurelia 2 integration with standard FAST components
  */
 
-import './fast-alert.js';
-import './fast-badge.js';
+// Custom components have been replaced with standard FAST components
+// using proper Aurelia 2 integration patterns
 
-export { FastAlert } from './fast-alert.js';
-export { FastBadge } from './fast-badge.js';
-
-// Register all custom components
+// Register function kept for backward compatibility but no longer needed
 export function registerCustomComponents() {
-  // Components are auto-registered when their modules are imported
-  console.log('✅ Custom FAST components registered');
+  // Components now handled by Aurelia 2 + MS FAST integration
+  console.log('✅ Using Aurelia 2 + MS FAST standard integration');
 }

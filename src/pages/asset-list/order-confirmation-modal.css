@@ -1,5 +1,5 @@
-/* Order Confirmation Modal Styles - Minimal custom CSS, leveraging DaisyUI/Tailwind */
-/* Custom modal animation - DaisyUI doesn't have this specific animation */
+/* Order Confirmation Modal Styles - Using FAST-compatible styling */
+/* Custom modal animation */
 @keyframes modalSlideIn {
   from {
     opacity: 0;
@@ -10,24 +10,82 @@
     transform: scale(1) translateY(0);
   }
 }
-.daisy-modal-box {
+.modal-box {
   animation: modalSlideIn 0.3s ease-out;
+  border-radius: 1rem;
 }
-/* Custom safety input success state - using standard Tailwind classes */
+/* Alert components (replacing fast-alert custom component) */
+.error-alert {
+  background-color: var(--error-color, #ef4444);
+  border: 1px solid var(--error-color, #ef4444);
+  color: white;
+  border-radius: var(--border-radius-md, 0.5rem);
+}
+.info-alert {
+  background-color: var(--info-color, #3b82f6);
+  border: 1px solid var(--info-color, #3b82f6);
+  color: white;
+  border-radius: var(--border-radius-md, 0.5rem);
+}
+.warning-alert {
+  background-color: var(--warning-color, #f59e0b);
+  border: 1px solid var(--warning-color, #f59e0b);
+  color: var(--base-color, #171212);
+  border-radius: var(--border-radius-md, 0.5rem);
+}
+.success-alert {
+  background-color: var(--success-color, #10b981);
+  border: 1px solid var(--success-color, #10b981);
+  color: var(--base-color, #171212);
+  border-radius: var(--border-radius-md, 0.5rem);
+}
+/* Badge components (replacing fast-badge custom component) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm, 0.25rem);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  min-height: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.badge-primary {
+  background-color: var(--accent-fill-rest, #0066cc);
+  color: var(--foreground-on-accent-rest, white);
+  border: 1px solid var(--accent-fill-rest, #0066cc);
+}
+.badge-secondary {
+  background-color: var(--neutral-layer-3, #e9ecef);
+  color: var(--neutral-foreground-rest, #212529);
+  border: 1px solid var(--neutral-stroke-rest, #e5e5e5);
+}
+.badge-success {
+  background-color: #10b981;
+  color: white;
+  border: 1px solid #10b981;
+}
+.badge-warning {
+  background-color: #f59e0b;
+  color: white;
+  border: 1px solid #f59e0b;
+}
+.badge-error {
+  background-color: #ef4444;
+  color: white;
+  border: 1px solid #ef4444;
+}
+/* Custom safety input states */
 .safety-input-error {
   border-color: #f87171;
-  /* light red */
   background-color: #1f1f1f;
-  /* darker background for dark mode */
   color: #f87171;
-  /* matching visible red text */
 }
 .safety-input-success {
   border-color: #10b981;
   background-color: #1e293b;
-  /* slate-800 for dark mode */
   color: #6ee7b7;
-}
-.daisy-modal-box {
-  border-radius: 1rem;
 }

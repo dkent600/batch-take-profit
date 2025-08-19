@@ -1,4 +1,4 @@
-import { Aurelia, ILogger, Registration } from 'aurelia';
+import { Aurelia, ILogger, Registration, AppTask, IContainer, IAttrMapper, NodeObserverLocator } from 'aurelia';
 import { App } from './pages/app/app.js';
 import './pages/app/app.css';
 import { AssetList } from './pages/asset-list/asset-list.js';
@@ -10,10 +10,9 @@ import {
 } from '@microsoft/fast-components';
 // Replace old design-tokens import with new modular system
 import { initializeDesignSystem, getDesignSystemStatus } from './design-system/index.js';
-import { testFASTComponents } from './fast-test.js';
 import { installGlobalThemeSwitcher } from './theme-switcher.js';
-// Import custom FAST components
-import { registerCustomComponents } from './components/index.js';
+// Remove custom FAST components - using standard FAST components with Aurelia integration
+// import { registerCustomComponents } from './components/index.js';
 import {
   TelegramService, TelegramServiceToken,
   AssetsConfigService, AssetsConfigServiceToken,
@@ -33,8 +32,8 @@ async function startApp() {
   provideFASTDesignSystem()
     .register(allComponents);
 
-  // Register custom FAST components
-  registerCustomComponents();
+  // Remove custom FAST components - using standard FAST components with Aurelia integration
+  // registerCustomComponents();
 
   // Initialize design system (default or custom based on config)
   await initializeDesignSystem();
@@ -42,15 +41,70 @@ async function startApp() {
   // Log design system status
   console.log('🎯 Design System Status:', getDesignSystemStatus());
 
-  // Test FAST components setup (remove this after Phase 1)
-  await testFASTComponents();
-
   // Install global theme switcher for development (remove in production)
   installGlobalThemeSwitcher();
 
   // First, create a minimal container just for EnvService
   const app = Aurelia.register(
-    Registration.singleton(EnvServiceToken, EnvService)
+    Registration.singleton(EnvServiceToken, EnvService),
+    // Configure Aurelia to work with MS FAST components
+    AppTask.creating(IContainer, container => {
+      const attrMapper = container.get(IAttrMapper);
+      const nodeObserverLocator = container.get(NodeObserverLocator);
+
+      // Teach Aurelia how to handle two-way binding for FAST components
+      attrMapper.useTwoWay((el, property) => {
+        switch (el.tagName) {
+          case 'FAST-SLIDER':
+          case 'FAST-TEXT-FIELD':
+          case 'FAST-TEXT-AREA':
+            return property === 'value';
+          case 'FAST-CHECKBOX':
+          case 'FAST-RADIO':
+          case 'FAST-RADIO-GROUP':
+          case 'FAST-SWITCH':
+            return property === 'checked';
+          case 'FAST-TABS':
+            return property === 'activeid';
+          case 'FAST-SELECT':
+            return property === 'value';
+          default:
+            return false;
+        }
+      });
+
+      // Teach Aurelia what events to use to observe properties of elements
+      const valuePropertyConfig = { events: ['input', 'change'] };
+      nodeObserverLocator.useConfig({
+        'FAST-CHECKBOX': {
+          checked: valuePropertyConfig
+        },
+        'FAST-RADIO': {
+          checked: valuePropertyConfig
+        },
+        'FAST-RADIO-GROUP': {
+          value: valuePropertyConfig
+        },
+        'FAST-SLIDER': {
+          value: valuePropertyConfig
+        },
+        'FAST-SWITCH': {
+          checked: valuePropertyConfig
+        },
+        'FAST-TABS': {
+          activeid: valuePropertyConfig
+        },
+        'FAST-TEXT-FIELD': {
+          value: valuePropertyConfig
+        },
+        'FAST-TEXT-AREA': {
+          value: valuePropertyConfig
+        },
+        'FAST-SELECT': {
+          value: valuePropertyConfig
+        }
+      });
+    })
   );
 
   // Initialize environment service first

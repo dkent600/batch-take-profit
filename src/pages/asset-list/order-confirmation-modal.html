@@ -15,20 +15,20 @@
     <!-- Alerts -->
     <div class="custom-space-y-4">
       <!-- High Value -->
-      <fast-alert variant="error" if.bind="needsSafetyCheck">
-        <span class="custom-font-bold">HIGH VALUE ORDER DETECTED</span>
-        <span style="opacity: 0.8;">Estimated value: $${estimatedValue.toFixed(2)}</span>
-      </fast-alert>
+      <div class="error-alert custom-p-4 custom-rounded-md" if.bind="needsSafetyCheck">
+        <div class="custom-font-bold">HIGH VALUE ORDER DETECTED</div>
+        <div style="opacity: 0.8;">Estimated value: $${estimatedValue.toFixed(2)}</div>
+      </div>
 
       <!-- Test Mode -->
-      <fast-alert variant="info" if.bind="isProduction">
-        <span class="custom-font-bold custom-flex custom-items-center custom-gap-sm">🚨 Production Mode 🚨</span>
-        <span style="opacity: 0.8;">This order WILL be executed</span>
-      </fast-alert>
-      <fast-alert variant="info" if.bind="!isProduction">
-        <span class="custom-font-bold custom-flex custom-items-center custom-gap-sm">🧪 Test Mode 🧪</span>
-        <span style="opacity: 0.8;">This order will be validated but NOT executed.</span>
-      </fast-alert>
+      <div class="info-alert custom-p-4 custom-rounded-md" if.bind="isProduction">
+        <div class="custom-font-bold custom-flex custom-items-center custom-gap-sm">🚨 Production Mode 🚨</div>
+        <div style="opacity: 0.8;">This order WILL be executed</div>
+      </div>
+      <div class="info-alert custom-p-4 custom-rounded-md" if.bind="!isProduction">
+        <div class="custom-font-bold custom-flex custom-items-center custom-gap-sm">🧪 Test Mode 🧪</div>
+        <div style="opacity: 0.8;">This order will be validated but NOT executed.</div>
+      </div>
     </div>
 
     <!-- Order Details -->
@@ -38,9 +38,9 @@
 
       <div class="custom-font-semibold">Type:</div>
       <div>
-        <fast-badge variant.bind="pendingOrder.limit ? 'secondary' : 'primary'">
+        <span class.bind="pendingOrder.limit ? 'badge badge-secondary' : 'badge badge-primary'">
           ${pendingOrder.limit ? 'LIMIT' : 'MARKET'}
-        </fast-badge>
+        </span>
       </div>
 
       <div class="custom-font-semibold">Amount:</div>
@@ -63,14 +63,14 @@
 
     <!-- Safety Confirmation (if needed) -->
     <div class="custom-space-y-2" if.bind="needsSafetyCheck">
-      <fast-alert variant="warning">
-        <span class="custom-font-bold">Final Safety Check</span>
-        <span>Type: 
+      <div class="warning-alert custom-p-4 custom-space-y-2">
+        <div class="custom-font-bold">Final Safety Check</div>
+        <div>Type: 
           <code class="custom-bg-base custom-text-primary custom-px-sm custom-py-xs custom-rounded custom-font-mono custom-text-sm" style="letter-spacing: 0.05em;">
             ${confirmationText}
           </code>
-        </span>
-      </fast-alert>
+        </div>
+      </div>
 
       <fast-text-field 
         type="text" 
@@ -87,10 +87,10 @@
     </div>
 
     <!-- Warning Footer -->
-    <fast-alert variant="warning">
-      <span class="custom-font-bold">This action cannot be undone.</span>
-      <span>Please review all details before continuing.</span>
-    </fast-alert>
+    <div class="warning-alert custom-p-4 custom-space-y-2">
+      <div class="custom-font-bold">This action cannot be undone.</div>
+      <div>Please review all details before continuing.</div>
+    </div>
 
     <!-- Actions -->
     <div class="custom-flex custom-gap-md custom-justify-end custom-pt-md">
