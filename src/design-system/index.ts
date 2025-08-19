@@ -46,6 +46,7 @@ async function loadDefaultStyles(): Promise<void> {
     // Import default styles
     await import('./styles/fast-default.css');
     currentStyleMode = 'default';
+    stylesLoaded = true;
     console.log('📄 Default FAST styles loaded');
   } catch (error) {
     console.error('❌ Failed to load default styles:', error);
@@ -62,6 +63,7 @@ async function loadCustomStyles(): Promise<void> {
     // Import custom styles
     await import('./styles/fast-custom.css');
     currentStyleMode = 'custom';
+    stylesLoaded = true;
     console.log('🎨 Custom styles loaded');
   } catch (error) {
     console.error('❌ Failed to load custom styles:', error);

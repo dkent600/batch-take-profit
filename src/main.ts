@@ -32,6 +32,8 @@ async function startApp() {
   provideFASTDesignSystem()
     .register(allComponents);
 
+  console.log('✅ MS FAST components registered successfully');
+
   // Remove custom FAST components - using standard FAST components with Aurelia integration
   // registerCustomComponents();
 
@@ -104,6 +106,8 @@ async function startApp() {
           value: valuePropertyConfig
         }
       });
+
+      console.log('✅ Using Aurelia 2 + MS FAST standard integration');
     })
   );
 
@@ -128,5 +132,5 @@ async function startApp() {
   return app.start();
 }
 
-startApp().catch(logger.error);
+startApp().catch(console.error);
 
