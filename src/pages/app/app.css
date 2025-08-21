@@ -1,6 +1,1 @@
-@import "tailwindcss";
-
-@plugin "daisyui" {
-  themes: forest --default, forest --preferred;
-  prefix: "daisy-";
-}
+/* App styles - now using Fluent UI components */
