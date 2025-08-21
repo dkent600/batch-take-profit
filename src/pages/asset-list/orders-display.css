@@ -1,1 +1,29 @@
 /* Orders Display Component Styles */
+/* Fluent Data Grid Styling */
+fluent-data-grid {
+  --design-unit: 4px;
+  --density: 0;
+  --focus-stroke-width: 2px;
+  --focus-stroke-outer: transparent;
+  border: 1px solid var(--neutral-stroke-rest);
+  border-radius: calc(var(--corner-radius) * 1px);
+  overflow: auto;
+  max-width: 100%;
+}
+fluent-data-grid-cell {
+  padding: 8px 12px;
+  border-right: 1px solid var(--neutral-stroke-divider-rest);
+  font-size: 14px;
+  text-align: left;
+}
+fluent-data-grid-cell[cell-type="columnheader"] {
+  background-color: var(--neutral-fill-secondary-rest);
+  font-weight: 600;
+  border-bottom: 2px solid var(--neutral-stroke-rest);
+}
+fluent-data-grid-row:nth-child(even) fluent-data-grid-cell:not([cell-type="columnheader"]) {
+  background-color: var(--neutral-fill-secondary-rest);
+}
+fluent-data-grid-row:hover fluent-data-grid-cell:not([cell-type="columnheader"]) {
+  background-color: var(--neutral-fill-secondary-hover);
+}

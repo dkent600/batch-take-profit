@@ -11,7 +11,10 @@ import {
   fluentTextField,
   fluentSelect,
   fluentOption,
-  fluentAnchor
+  fluentAnchor,
+  fluentDataGrid,
+  fluentDataGridRow,
+  fluentDataGridCell
 } from '@fluentui/web-components';
 
 import {
@@ -37,7 +40,10 @@ async function startApp() {
       fluentTextField(),
       fluentSelect(),
       fluentOption(),
-      fluentAnchor()
+      fluentAnchor(),
+      fluentDataGrid(),
+      fluentDataGridRow(),
+      fluentDataGridCell()
     );
 
   console.log('✅ Fluent UI components registered successfully');

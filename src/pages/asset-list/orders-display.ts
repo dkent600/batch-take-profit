@@ -5,7 +5,7 @@ import { IAssetExchangeService, IRequestQueueService } from '../../services/inte
 import { ILogger, inject, resolve } from 'aurelia';
 import { AssetExchangeApiServiceToken } from '../../services/index.js';
 import { AssetsStoreToken } from '../../stores/assets-store.js';
-import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
+import { IAssetsStore, IOrdersStore, IOpenedOrderListItem, IClosedOrderListItem } from '../../stores/interfaces.js';
 import { OrdersStoreToken } from '../../stores/orders-store.js';
 import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
 
@@ -57,5 +57,37 @@ export class OrdersDisplay {
         this.logger.error('Error cancelling order:', error);
         alert(`❌ Error cancelling order ${txId}. Check console for details.`);
       });
+  }
+
+  // Data preparation methods for fluent-data-grid
+  get openOrdersData(): any[] {
+    if (!this.ordersStore.openOrders) return [];
+
+    return this.ordersStore.openOrders.map(order => ({
+      created: new Date(order.createdAt).toLocaleString(),
+      exchange: order.exchange,
+      direction: order.direction,
+      pair: order.pair,
+      price: order.price,
+      amount: order.amount,
+      orderId: order.orderId
+    }));
+  }
+
+  get closedOrdersData(): any[] {
+    if (!this.ordersStore.closedOrders) return [];
+
+    return this.ordersStore.closedOrders.map(order => ({
+      created: new Date(order.createdAt).toLocaleString(),
+      closed: new Date(order.closedAt).toLocaleString(),
+      exchange: order.exchange,
+      pair: order.pair,
+      type: order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)'),
+      status: order.status,
+      coins: order.status === 'executed' ? order.amountExecuted : order.amount,
+      executedPrice: order.status === 'executed' ? order.price : '',
+      limitPrice: order.type === 'limit' ? order.limitPrice : '',
+      totalCost: order.status === 'executed' ? order.cost : ''
+    }));
   }
 }

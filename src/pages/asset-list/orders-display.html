@@ -2,50 +2,37 @@
   <!-- ***** OPEN ORDERS SECTION ***** -->
   <div>
     <h2 class="text-2xl font-bold text-center">Open Orders</h2>
-    <div if.bind="openOrders.size === 0" class="text-center text-gray-500 mt-2">
+    <div if.bind="ordersStore.openOrders.length === 0" class="text-center text-gray-500 mt-2">
       No open orders found
     </div>
-    <table else class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
-      <thead>
-        <tr>
-          <th class="text-left text-sm px-2">Created</th>
-          <th class="text-left text-sm px-2">Exchange</th>
-          <th class="text-left text-sm px-2">Direction</th>
-          <th class="text-left text-sm px-2">Pair</th>
-          <th class="text-left text-sm px-2">Price</th>
-          <th class="text-left text-sm px-2">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr repeat.for="order of ordersStore.openOrders">
-          <td class="text-left text-sm px-2">
-            ${ new Date(order.createdAt).toLocaleString() }
-          </td>
-          <td class="text-left text-sm px-2">
-            ${order.exchange}
-          </td>
-          <td class="text-left text-sm px-2">
-            ${order.direction}
-          </td>
-          <td class="text-left text-sm px-2">
-            ${order.pair}
-          </td>
-          <td class="text-left text-sm px-2">
-            ${order.price}
-          </td>
-          <td class="text-left text-sm px-2">
-            ${order.amount}
-          </td>
-          <td class="text-left text-sm px-2">
-            <div
-              click.trigger="cancelOrder(order.orderId)"
-              class="justify-center daisy-link daisy-link-primary text-sm no-underline">
-              Cancel
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <fluent-data-grid else rows-data.bind="openOrdersData" class="w-fit mx-auto">
+      <fluent-data-grid-row type="header">
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Direction</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Price</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Amount</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Actions</fluent-data-grid-cell>
+      </fluent-data-grid-row>
+      
+      <fluent-data-grid-row repeat.for="order of ordersStore.openOrders">
+        <fluent-data-grid-cell grid-column="1">${ new Date(order.createdAt).toLocaleString() }</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="2">${order.exchange}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="3">${order.direction}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="5">${order.price}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="6">${order.amount}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="7">
+          <fluent-button 
+            appearance="stealth" 
+            size="small"
+            click.trigger="cancelOrder(order.orderId)">
+            Cancel
+          </fluent-button>
+        </fluent-data-grid-cell>
+      </fluent-data-grid-row>
+    </fluent-data-grid>
   </div>
   
   <!-- ***** CLOSED ORDERS SECTION ***** -->
@@ -55,57 +42,33 @@
       Closed Orders
     </div>
     <div class="daisy-collapse-content">
-      <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
-        <thead>
-          <tr>
-            <th class="text-left text-sm px-2">Created</th>
-            <th class="text-left text-sm px-2">Closed</th>
-            <th class="text-left text-sm px-2">Exchange</th>
-            <th class="text-left text-sm px-2">Pair</th>
-            <th class="text-left text-sm px-2">Type</th>
-            <th class="text-left text-sm px-2">Status</th>
-            <th class="text-left text-sm px-2">Coins</th>
-            <th class="text-left text-sm px-2">Executed Price</th>
-            <th class="text-left text-sm px-2">Limit price</th>
-            <th class="text-left text-sm px-2">Total Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr repeat.for="order of ordersStore.closedOrders">
-            <td class="text-left text-sm px-2">
-              ${ new Date(order.createdAt).toLocaleString() }
-            </td>
-            <td class="text-left text-sm px-2">
-              ${ new Date(order.closedAt).toLocaleString() }
-            </td>
-            <td class="text-left text-sm px-2">
-              ${order.exchange}
-            </td>
-            <td class="text-left text-sm px-2">
-              ${order.pair}
-            </td>
-            <td class="text-left text-sm px-2">
-              ${order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)')}
-            </td>
-            <td class="text-left text-sm px-2">
-               ${order.status }
-            </td>
-            <td class="text-left text-sm px-2">
-               ${order.status === 'executed' ? order.amountExecuted : order.amount }
-            </td>
-            <td class="text-left text-sm px-2">
-              <!-- 'closed' means executed. order.price will be the executed price -->
-               ${order.status === 'executed' ? order.price : '' }
-            </td>
-            <td class="text-left text-sm px-2">
-               ${order.type === 'limit' ? order.limitPrice : '' }
-            </td>
-            <td class="text-left text-sm px-2">
-               ${order.status === 'executed' ? order.cost : '' }
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <fluent-data-grid rows-data.bind="closedOrdersData" class="w-fit mx-auto">
+        <fluent-data-grid-row type="header">
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Closed</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Exchange</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Type</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Status</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Coins</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="8">Executed Price</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="9">Limit Price</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="10">Total Cost</fluent-data-grid-cell>
+        </fluent-data-grid-row>
+        
+        <fluent-data-grid-row repeat.for="order of ordersStore.closedOrders">
+          <fluent-data-grid-cell grid-column="1">${ new Date(order.createdAt).toLocaleString() }</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="2">${ new Date(order.closedAt).toLocaleString() }</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="3">${order.exchange}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="5">${order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)')}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="6">${order.status}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="7">${order.status === 'executed' ? order.amountExecuted : order.amount}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="8">${order.status === 'executed' ? order.price : ''}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="9">${order.type === 'limit' ? order.limitPrice : ''}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="10">${order.status === 'executed' ? order.cost : ''}</fluent-data-grid-cell>
+        </fluent-data-grid-row>
+      </fluent-data-grid>
     </div>
   </div>
 </template>

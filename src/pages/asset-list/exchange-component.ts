@@ -349,6 +349,29 @@ export class ExchangeComponent {
     return asset.amount * price;
   }
 
+  // Data preparation method for fluent-data-grid
+  get assetsData(): any[] {
+    if (!this.assets) return [];
+
+    return this.assets.map(asset => ({
+      selected: asset.selected,
+      exchange: asset.exchange,
+      coin: asset.name,
+      balance: asset.balance,
+      direction: asset.direction,
+      percentage: asset.percentage,
+      amount: asset.amount,
+      currentPrice: asset.currentPrice,
+      limit: asset.limit,
+      limitPrice: asset.LimitPrice,
+      totalValue: (asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount,
+      percentageInvalid: asset.percentageInvalid,
+      amountInvalid: asset.amountInvalid,
+      LimitPriceInvalid: asset.LimitPriceInvalid,
+      asset: asset // Keep reference to original asset for event handlers
+    }));
+  }
+
   // Modal callback methods
   async executeConfirmedOrder(): Promise<void> {
     if (!this.pendingOrder) return;

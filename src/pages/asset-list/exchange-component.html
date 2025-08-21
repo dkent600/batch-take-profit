@@ -2,105 +2,88 @@
   <div class="flex flex-col items-center p-6">
     <h1 class="text-2xl font-bold text-center mb-6">Buy and Sell by Percentage</h1>
     <!-- ***** GRID SECTION ***** -->
-    <table style="width: fit-content; margin: 0 auto; border-collapse: collapse; font-family: var(--body-font); border: 1px solid var(--neutral-stroke-rest);">
-      <style>
-        table tr:nth-child(even) {
-          background-color: var(--neutral-fill-subtle-rest);
-        }
-        table tr:nth-child(odd) {
-          background-color: var(--neutral-fill-rest);
-        }
-        table th, table td {
-          border: 1px solid var(--neutral-stroke-rest);
-          padding: 8px;
-        }
-        table th {
-          background-color: var(--neutral-fill-secondary-rest);
-          font-weight: 600;
-        }
-      </style>
-      <thead>
-        <tr>
-          <th class="text-center text-sm px-2">Select</th>
-          <th class="text-left text-sm px-2">Exchange</th>
-          <th class="text-left text-sm px-2">Coin</th>
-          <th class="text-left text-sm px-2">Balance</th>
-          <th class="text-left text-sm px-2">Buy/Sell</th>
-          <th class="text-left text-sm px-2">Percent</th>
-          <th class="text-left text-sm px-2">Coins to Buy/Sell</th>
-          <th class="text-left text-sm px-2">$USD/Coin</th>
-          <th class="text-center text-sm px-2">Limit</th>
-          <th class="text-left text-sm px-2">Limit Price</th>
-          <th class="text-left text-sm px-2">Total Buy/Sell in $USD</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr repeat.for="asset of assets">
-          <td class="text-center text-sm px-2">
-            <fluent-checkbox checked.bind="asset.selected"></fluent-checkbox>
-          </td>
-          <td class="text-left text-sm px-2">${asset.exchange}</td>
-          <td class="text-left text-sm px-2">${asset.name}</td>
-          <td class="text-left text-sm px-2">${asset.balance}</td>
-          <td class="text-left text-sm px-2">
-            <fluent-select
-              value.two-way="asset.direction"
-              style="width: 6rem;">
-              <fluent-option value="buy">Buy</fluent-option>
-              <fluent-option value="sell">Sell</fluent-option>
-            </fluent-select>
-          </td>
-          <td class="text-left text-sm px-2">
-              <fluent-text-field
-              if.bind="!useAmount"
-              type="number"
-              min="1"
-              max="100"
-              value.two-way="asset.percentage"
-              required
-              appearance.bind="asset.percentageInvalid ? 'error' : 'outline'"
-              style="width: 4rem; text-align: center; font-size: 12px;"
-              input.trigger="validatePercentage(asset)">
-              </fluent-text-field>
-              <div else>${asset.percentage}</div>
-              <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
-          </td>
-          <td class="text-left text-sm px-2">
-              <fluent-text-field
-              type="number"
-              min="0"
-              value.two-way="asset.amount"
-              required
-              appearance.bind="asset.amountInvalid ? 'error' : 'outline'"
-              style="width: 8rem; text-align: center; font-size: 12px;"
-              input.trigger="validateAmount(asset)">
-              </fluent-text-field>
-              <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
-          </td>
-          <td class="text-left text-sm px-2">${asset.currentPrice}</td>
-          <td class="text-center text-sm px-2"><fluent-checkbox checked.bind="asset.limit"></fluent-checkbox></td>
-          <td class="text-left text-sm px-2">
-              <fluent-text-field
-              if.bind="asset.limit"
-              type="number"
-              min="0"
-              value.two-way="asset.LimitPrice"
-              required
-              appearance.bind="asset.LimitPriceInvalid ? 'error' : 'outline'"
-              style="width: 8rem; text-align: center; font-size: 12px;"
-              input.trigger="validateLimitPrice(asset)">
-              </fluent-text-field>
-              <div else>---</div>
-              <div if.bind="asset.LimitPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
-          </td>
-          <td class="text-left text-sm px-2">
-              <div>
-                ${(asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount}
-              </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <fluent-data-grid rows-data.bind="assetsData" class="w-fit mx-auto">
+      <fluent-data-grid-row type="header">
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Select</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Coin</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Balance</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Buy/Sell</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Percent</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Coins to Buy/Sell</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="8">$USD/Coin</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="9">Limit</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="10">Limit Price</fluent-data-grid-cell>
+        <fluent-data-grid-cell cell-type="columnheader" grid-column="11">Total Buy/Sell in $USD</fluent-data-grid-cell>
+      </fluent-data-grid-row>
+      
+      <fluent-data-grid-row repeat.for="asset of assets">
+        <fluent-data-grid-cell grid-column="1" style="text-align: center;">
+          <fluent-checkbox checked.bind="asset.selected"></fluent-checkbox>
+        </fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="2">${asset.exchange}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="3">${asset.name}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="4">${asset.balance}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="5">
+          <fluent-select
+            value.two-way="asset.direction"
+            style="width: 6rem;">
+            <fluent-option value="buy">Buy</fluent-option>
+            <fluent-option value="sell">Sell</fluent-option>
+          </fluent-select>
+        </fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="6">
+          <fluent-text-field
+            if.bind="!useAmount"
+            type="number"
+            min="1"
+            max="100"
+            value.two-way="asset.percentage"
+            required
+            appearance.bind="asset.percentageInvalid ? 'error' : 'outline'"
+            style="width: 4rem; text-align: center; font-size: 12px;"
+            input.trigger="validatePercentage(asset)">
+          </fluent-text-field>
+          <div else>${asset.percentage}</div>
+          <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
+        </fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="7">
+          <fluent-text-field
+            type="number"
+            min="0"
+            value.two-way="asset.amount"
+            required
+            appearance.bind="asset.amountInvalid ? 'error' : 'outline'"
+            style="width: 8rem; text-align: center; font-size: 12px;"
+            input.trigger="validateAmount(asset)">
+          </fluent-text-field>
+          <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
+        </fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="8">${asset.currentPrice}</fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="9" style="text-align: center;">
+          <fluent-checkbox checked.bind="asset.limit"></fluent-checkbox>
+        </fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="10">
+          <fluent-text-field
+            if.bind="asset.limit"
+            type="number"
+            min="0"
+            value.two-way="asset.LimitPrice"
+            required
+            appearance.bind="asset.LimitPriceInvalid ? 'error' : 'outline'"
+            style="width: 8rem; text-align: center; font-size: 12px;"
+            input.trigger="validateLimitPrice(asset)">
+          </fluent-text-field>
+          <div else>---</div>
+          <div if.bind="asset.LimitPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
+        </fluent-data-grid-cell>
+        <fluent-data-grid-cell grid-column="11">
+          <div>
+            ${(asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount}
+          </div>
+        </fluent-data-grid-cell>
+      </fluent-data-grid-row>
+    </fluent-data-grid>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
     <div class="flex flex-col items-center justify-center mt-4 gap-2">
