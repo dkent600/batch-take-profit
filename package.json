@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@aurelia/router": "latest",
+    "@fluentui/web-components": "^2.6.1",
     "@tailwindcss/vite": "^4.1.11",
     "aurelia": "latest",
     "axios": "^1.10.0",

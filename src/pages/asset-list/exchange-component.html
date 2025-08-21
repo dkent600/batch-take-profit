@@ -21,7 +21,7 @@
       <tbody>
         <tr repeat.for="asset of assets">
           <td class="text-center text-sm px-2">
-            <input type="checkbox" checked.bind="asset.selected" />
+            <fluent-checkbox checked.bind="asset.selected"></fluent-checkbox>
           </td>
           <td class="text-left text-sm px-2">${asset.exchange}</td>
           <td class="text-left text-sm px-2">${asset.name}</td>
@@ -60,7 +60,7 @@
               <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
           </td>
           <td class="text-left text-sm px-2">${asset.currentPrice}</td>
-          <td class="text-center text-sm px-2"><input type="checkbox" checked.bind="asset.limit" /></td>
+          <td class="text-center text-sm px-2"><fluent-checkbox checked.bind="asset.limit"></fluent-checkbox></td>
           <td class="text-left text-sm px-2">
               <input
               if.bind="asset.limit"
