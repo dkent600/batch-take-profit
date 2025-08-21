@@ -2,7 +2,23 @@
   <div class="flex flex-col items-center p-6">
     <h1 class="text-2xl font-bold text-center mb-6">Buy and Sell by Percentage</h1>
     <!-- ***** GRID SECTION ***** -->
-    <table class="daisy-table daisy-table-zebra daisy-table-auto w-fit mx-auto">
+    <table style="width: fit-content; margin: 0 auto; border-collapse: collapse; font-family: var(--body-font); border: 1px solid var(--neutral-stroke-rest);">
+      <style>
+        table tr:nth-child(even) {
+          background-color: var(--neutral-fill-subtle-rest);
+        }
+        table tr:nth-child(odd) {
+          background-color: var(--neutral-fill-rest);
+        }
+        table th, table td {
+          border: 1px solid var(--neutral-stroke-rest);
+          padding: 8px;
+        }
+        table th {
+          background-color: var(--neutral-fill-secondary-rest);
+          font-weight: 600;
+        }
+      </style>
       <thead>
         <tr>
           <th class="text-center text-sm px-2">Select</th>
@@ -35,42 +51,45 @@
             </fluent-select>
           </td>
           <td class="text-left text-sm px-2">
-              <input
+              <fluent-text-field
               if.bind="!useAmount"
               type="number"
               min="1"
               max="100"
               value.two-way="asset.percentage"
               required
-              class.bind="'daisy-input daisy-input-xs w-16 text-center' + (asset.percentageInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validatePercentage(asset)"
-              />
+              appearance.bind="asset.percentageInvalid ? 'error' : 'outline'"
+              style="width: 4rem; text-align: center; font-size: 12px;"
+              input.trigger="validatePercentage(asset)">
+              </fluent-text-field>
               <div else>${asset.percentage}</div>
               <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
           </td>
           <td class="text-left text-sm px-2">
-              <input
+              <fluent-text-field
               type="number"
               min="0"
               value.two-way="asset.amount"
               required
-              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.amountInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validateAmount(asset)"
-              />
+              appearance.bind="asset.amountInvalid ? 'error' : 'outline'"
+              style="width: 8rem; text-align: center; font-size: 12px;"
+              input.trigger="validateAmount(asset)">
+              </fluent-text-field>
               <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
           </td>
           <td class="text-left text-sm px-2">${asset.currentPrice}</td>
           <td class="text-center text-sm px-2"><fluent-checkbox checked.bind="asset.limit"></fluent-checkbox></td>
           <td class="text-left text-sm px-2">
-              <input
+              <fluent-text-field
               if.bind="asset.limit"
               type="number"
               min="0"
               value.two-way="asset.LimitPrice"
               required
-              class.bind="'daisy-input daisy-input-xs w-32 text-center' + (asset.LimitPriceInvalid ? ' daisy-input-error' : ' daisy-input-secondary')"
-              input.trigger="validateLimitPrice(asset)"
-              />
+              appearance.bind="asset.LimitPriceInvalid ? 'error' : 'outline'"
+              style="width: 8rem; text-align: center; font-size: 12px;"
+              input.trigger="validateLimitPrice(asset)">
+              </fluent-text-field>
               <div else>---</div>
               <div if.bind="asset.LimitPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
           </td>
@@ -87,17 +106,22 @@
     <div class="flex flex-col items-center justify-center mt-4 gap-2">
       <div class="flex flex-row gap-4">
         <div class="text-sm">Select 
-          <span class="daisy-link daisy-link-primary hover:cursor-pointer"
-            click.trigger="selectAll()">All</span>
+          <fluent-button
+            appearance="subtle"
+            click.trigger="selectAll()"
+            style="padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">All</fluent-button>
           |
-          <span class="daisy-link daisy-link-primary hover:cursor-pointer"
-            click.trigger="selectNone()">None</span>
+          <fluent-button
+            appearance="subtle"
+            click.trigger="selectNone()"
+            style="padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">None</fluent-button>
         </div>
       </div>
       <div class="flex flex-row gap-4">
-        <div
+        <fluent-button
+          appearance="subtle"
           click.trigger="refresh()"
-          class="flex daisy-link justify-center daisy-link-primary text-sm hover:cursor-pointer">
+          style="display: flex; justify-content: center; align-items: center; padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">
             <span class="whitespace-nowrap">Refresh Prices and Balances</span>
             <span if.bind="isRefreshing" class="flex items-center justify-center h-full ml-1" style="margin-left: 4px;">
               <svg class="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -105,15 +129,17 @@
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
               </svg>
             </span>
+        </fluent-button>
         </div>
       </div>
       <div class="flex flex-row gap-4 py-2">
-        <div
+        <fluent-button
           click.trigger="createOrders()"
-          class.bind="'flex daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-sm' + (!hasSelection || hasInvalidSelection ? ' daisy-btn-disabled opacity-50 cursor-not-allowed' : '')"
-          disabled.bind="!hasSelection || hasInvalidSelection">
+          appearance="outline"
+          disabled.bind="!hasSelection || hasInvalidSelection"
+          style="display: flex; align-items: center; font-size: 14px;">
           Place the ${selectedOrders.length} selected order<template if.bind="selectedOrders.length != 1">s</template>
-        </div>
+        </fluent-button>
       </div>
       <!-- ***** HELP MESSAGES SECTION ***** -->
       <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it.</div>

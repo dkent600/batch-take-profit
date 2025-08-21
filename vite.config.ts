@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import aurelia from '@aurelia/vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   server: {
@@ -15,5 +16,6 @@ export default defineConfig({
       useDev: true,
     }),
     nodePolyfills(),
+    tailwindcss(),
   ],
 });
