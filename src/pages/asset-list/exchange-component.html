@@ -27,12 +27,12 @@
           <td class="text-left text-sm px-2">${asset.name}</td>
           <td class="text-left text-sm px-2">${asset.balance}</td>
           <td class="text-left text-sm px-2">
-            <select
-              class="daisy-select daisy-select-xs w-24"
-              value.two-way="asset.direction">
-              <option value="buy">Buy</option>
-              <option value="sell">Sell</option>
-            </select>
+            <fluent-select
+              value.two-way="asset.direction"
+              style="width: 6rem;">
+              <fluent-option value="buy">Buy</fluent-option>
+              <fluent-option value="sell">Sell</fluent-option>
+            </fluent-select>
           </td>
           <td class="text-left text-sm px-2">
               <input
