@@ -62,6 +62,9 @@ export class OrderConfirmationModal {
     return `EXECUTE ${this.pendingOrder.direction.toUpperCase()}`;
   }
 
+  get needsSafetyCheck() {
+    return this.estimatedValue > 200;
+  }
 
   /***
    * user clicks Submit
