@@ -28,6 +28,7 @@ export class OrderConfirmationModal {
   private safetyConfirmationInput: string = '';
   private wasProduction: boolean;
   private isProduction: boolean;
+  private dialogRef: HTMLElement;
 
   constructor(
     private exchangeService: IAssetExchangeService
@@ -49,6 +50,18 @@ export class OrderConfirmationModal {
 
   get isOpen(): boolean {
     return this.pendingOrder !== null;
+  }
+
+  private openDialog() {
+    if (this.dialogRef) {
+      this.dialogRef.setAttribute('open', '');
+    }
+  }
+
+  private closeDialog() {
+    if (this.dialogRef) {
+      this.dialogRef.removeAttribute('open');
+    }
   }
 
   get estimatedValue(): number {
@@ -121,6 +134,7 @@ export class OrderConfirmationModal {
   private closeModal(): void {
     this.pendingOrder = null;
     this.safetyConfirmationInput = '';
+    this.closeDialog();
   }
 
   // Update state when pendingOrder changes
@@ -131,6 +145,9 @@ export class OrderConfirmationModal {
     if (_newVal !== null) {
       this.fetchTestModeStatus()
         .then((mode) => this.wasProduction = mode); // Store initial state when modal opens
+      this.openDialog();
+    } else {
+      this.closeDialog();
     }
   }
 }

@@ -1,42 +1,44 @@
-<div 
-  class="daisy-modal" 
-  class.bind="isOpen ? 'daisy-modal-open' : ''" 
-  id="confirm-order-modal"
+<fluent-dialog 
+  ref="dialogRef"
+  hidden.bind="!isOpen"
+  modal="true"
+  class="order-confirmation-dialog"
 >
-  <div class="daisy-modal-box max-w-2xl rounded-2xl shadow-2xl bg-base-100 border border-base-300 px-8 py-6 space-y-6">
+  <div class="dialog-content max-w-2xl rounded-2xl shadow-2xl bg-white border border-gray-300 px-8 py-6 space-y-6">
 
     <!-- Header -->
-    <h3 class="text-2xl font-semibold text-warning flex items-center gap-2">
+    <h3 class="text-2xl font-semibold text-orange-600 flex items-center gap-2">
       🚨 Confirm ${pendingOrder.direction.toUpperCase()} Order
     </h3>
 
     <!-- Alerts -->
     <div class="space-y-4">
       <!-- High Value -->
-      <div class="daisy-alert daisy-alert-error shadow-md" if.bind="needsSafetyCheck">
-        <span class="font-bold">HIGH VALUE ORDER DETECTED</span>
-        <span class="opacity-80">Estimated value: $${estimatedValue.toFixed(2)}</span>
+      <div class="alert alert-error p-4 bg-red-50 border border-red-200 rounded-lg shadow-md" if.bind="needsSafetyCheck">
+        <span class="font-bold text-red-800">HIGH VALUE ORDER DETECTED</span>
+        <span class="text-red-700">Estimated value: $${estimatedValue.toFixed(2)}</span>
       </div>
 
       <!-- Test Mode -->
-      <div class="daisy-alert daisy-alert-info" if.bind="isProduction">
-        <span class="font-bold flex items-center gap-2">🚨 Production Mode 🚨</span>
-        <span class="opacity-80">This order WILL be executed</span>
+      <div class="alert alert-info p-4 bg-blue-50 border border-blue-200 rounded-lg" if.bind="isProduction">
+        <span class="font-bold flex items-center gap-2 text-blue-800">🚨 Production Mode 🚨</span>
+        <span class="text-blue-700">This order WILL be executed</span>
       </div>
-      <div else class="daisy-alert daisy-alert-info" if.bind="!isProduction">
-        <span class="font-bold flex items-center gap-2">🧪 Test Mode 🧪</span>
-        <span class="opacity-80">This order will be validated but NOT executed.</span>
+      <div else class="alert alert-info p-4 bg-blue-50 border border-blue-200 rounded-lg" if.bind="!isProduction">
+        <span class="font-bold flex items-center gap-2 text-blue-800">🧪 Test Mode 🧪</span>
+        <span class="text-blue-700">This order will be validated but NOT executed.</span>
       </div>
-        </div>
+    </div>
 
     <!-- Order Details -->
-    <div class="grid grid-cols-2 gap-4 bg-base-200 rounded-lg p-5 text-sm text-base-content shadow-inner">
+    <div class="grid grid-cols-2 gap-4 bg-gray-100 rounded-lg p-5 text-sm shadow-inner">
       <div class="font-semibold">Asset:</div>
-      <div class="font-mono text-primary">${pendingOrder.name}</div>
+      <div class="font-mono text-blue-600">${pendingOrder.name}</div>
 
       <div class="font-semibold">Type:</div>
       <div>
-        <span class="daisy-badge" class.bind="pendingOrder.limit ? 'daisy-badge-secondary' : 'daisy-badge-primary'">
+        <span class="badge px-3 py-1 rounded-full text-sm font-medium" 
+              class.bind="pendingOrder.limit ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'">
           ${pendingOrder.limit ? 'LIMIT' : 'MARKET'}
         </span>
       </div>
@@ -54,57 +56,59 @@
       <div class="font-mono">${pendingOrder.percentage.toFixed(2)}%</div>
 
       <div class="font-semibold">${pendingOrder.direction === 'sell' ? 'Estimated Revenue:' : 'Estimated Cost:'}</div>
-      <div class="font-mono font-bold text-lg" class.bind="needsSafetyCheck ? 'text-error' : 'text-accent'">
+      <div class="font-mono font-bold text-lg" class.bind="needsSafetyCheck ? 'text-red-600' : 'text-green-600'">
         $${estimatedValue.toFixed(2)} ${quoteCoin}
       </div>
     </div>
 
     <!-- Safety Confirmation (if needed) -->
     <div class="space-y-2" if.bind="needsSafetyCheck">
-      <div class="daisy-alert daisy-alert-warning text-sm">
-        <span class="font-bold">Final Safety Check</span>
-        <span>Type: 
-          <code class="bg-neutral text-neutral-content px-2 py-1 rounded font-mono text-sm tracking-wider">
+      <div class="alert p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
+        <span class="font-bold text-yellow-800">Final Safety Check</span>
+        <span class="text-yellow-700">Type: 
+          <code class="bg-gray-800 text-white px-2 py-1 rounded font-mono text-sm tracking-wider">
             ${confirmationText}
           </code>
         </span>
       </div>
 
-      <input 
+      <fluent-text-field 
         type="text" 
         placeholder="Type the confirmation text..." 
-        class="daisy-input daisy-input-lg daisy-input-bordered w-full text-center font-mono"
-        value.bind="safetyConfirmationInput"
-        class.bind="safetyConfirmationInput === confirmationText ? 'safety-input-success' : 'safety-input-error'"
-      />
+        class="w-full text-center"
+        appearance.bind="safetyConfirmationInput === confirmationText ? 'filled' : 'outline'"
+        value.two-way="safetyConfirmationInput"
+      ></fluent-text-field>
 
       <p class="text-center text-sm font-medium" 
-         class.bind="safetyConfirmationInput === confirmationText ? 'text-success' : 'text-error'">
+         class.bind="safetyConfirmationInput === confirmationText ? 'text-green-600' : 'text-red-600'">
         ${safetyConfirmationInput === confirmationText ? '✅ Safety check passed!' : '⚠️ Text does not match.'}
       </p>
     </div>
 
     <!-- Warning Footer -->
-    <div class="daisy-alert daisy-alert-warning text-sm">
-      <span class="font-bold">This action cannot be undone.</span>
-      <span>Please review all details before continuing.</span>
+    <div class="alert p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
+      <span class="font-bold text-yellow-800">This action cannot be undone.</span>
+      <span class="text-yellow-700">Please review all details before continuing.</span>
     </div>
 
     <!-- Actions -->
     <div class="flex gap-4 justify-end pt-4">
-      <button 
-        class="daisy-btn daisy-btn-error daisy-btn-lg flex-1 hover:scale-105 transition-transform disabled:opacity-50"
+      <fluent-button 
+        appearance="accent"
+        class="flex-1"
         click.trigger="executeOrder()"
         disabled.bind="needsSafetyCheck && safetyConfirmationInput !== confirmationText"
       >
         🚀 Execute ${pendingOrder ? pendingOrder.direction.toUpperCase() : ''} Order
-      </button>
-      <button 
-        class="daisy-btn daisy-btn-outline daisy-btn-lg flex-1 hover:scale-105"
+      </fluent-button>
+      <fluent-button 
+        appearance="outline"
+        class="flex-1"
         click.trigger="cancel()"
       >
         ❌ Cancel
-      </button>
+      </fluent-button>
     </div>
   </div>
-</div>
+</fluent-dialog>

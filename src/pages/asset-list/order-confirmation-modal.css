@@ -1,15 +1,51 @@
-/* Custom safety input success state - using standard Tailwind classes */
+/* Fluent UI Dialog Styling */
+.order-confirmation-dialog {
+  --dialog-height: auto;
+  --dialog-width: auto;
+}
+.order-confirmation-dialog .dialog-content {
+  background: var(--neutral-layer-1);
+  color: var(--neutral-foreground-rest);
+  border: 1px solid var(--neutral-stroke-rest);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+/* Alert Styling */
+.alert {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+}
+.alert-error {
+  background-color: color-mix(in oklab, var(--error-fill-rest) 10%, var(--neutral-layer-1));
+  border-color: var(--error-stroke-rest);
+}
+.alert-info {
+  background-color: color-mix(in oklab, var(--accent-fill-rest) 10%, var(--neutral-layer-1));
+  border-color: var(--accent-stroke-rest);
+}
+/* Badge Styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+/* Custom safety input styling - keeping for backward compatibility */
 .safety-input-error {
-  border-color: #f87171;
-  /* light red */
-  background-color: #1f1f1f;
-  /* darker background for dark mode */
-  color: #f87171;
-  /* matching visible red text */
+  border-color: var(--error-stroke-rest);
+  background-color: var(--neutral-layer-2);
+  color: var(--error-foreground-rest);
 }
 .safety-input-success {
-  border-color: #10b981;
-  background-color: #1e293b;
-  /* slate-800 for dark mode */
-  color: #6ee7b7;
+  border-color: var(--success-stroke-rest);
+  background-color: var(--neutral-layer-2);
+  color: var(--success-foreground-rest);
 }
