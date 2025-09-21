@@ -38,9 +38,10 @@ export class ExchangeComponent {
   useAmount: boolean = false;
   isRefreshing: boolean = false;
   isUpdating = false; // Flag to prevent infinite loops
+  private orderModal: any; // Reference to the modal component
 
   /** 
-   * pendingOrder set or not set determines whether the modal is visible
+   * Current order being processed (for data only, not modal visibility)
    */
   pendingOrder: IAssetEx | null = null;
   highValueConfirmed: boolean = false;
@@ -251,7 +252,8 @@ export class ExchangeComponent {
 
       // Approach #2: Show enhanced modal dialog for detailed confirmation
       // This replaces the basic browser confirm() with a proper modal
-      this.pendingOrder = asset;
+      this.pendingOrder = asset; // Data flows to modal via binding
+      this.orderModal.showModal(); // Explicit modal control
 
       // The modal will handle the execution via the executeConfirmedOrder callback
       // No need to continue execution here as the modal takes over
@@ -399,11 +401,13 @@ export class ExchangeComponent {
       throw error;
     } finally {
       this.pendingOrder = null;
+      this.orderModal.hideModal(); // Explicit modal hide
     }
   }
 
   cancelOrder(): void {
     this.pendingOrder = null;
+    this.orderModal.hideModal(); // Explicit modal hide
   }
 
   get quoteCoin(): string {

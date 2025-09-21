@@ -29,6 +29,7 @@ export class OrderConfirmationModal {
   private wasProduction: boolean;
   private isProduction: boolean;
   private dialogRef: HTMLDialogElement;
+  private isVisible: boolean = false;
 
   constructor(
     private exchangeService: IAssetExchangeService
@@ -46,6 +47,21 @@ export class OrderConfirmationModal {
         alert(`❌ Failed to determine production mode for ${this.pendingOrder.name}. Check console for details.`);
         throw new Error('Failed to determine production mode');
       });
+  }
+
+  // Explicit methods for modal control
+  async showModal(): Promise<void> {
+    this.safetyConfirmationInput = '';
+    this.isVisible = true; // Explicit visibility control
+
+    this.fetchTestModeStatus()
+      .then((mode) => this.wasProduction = mode);
+  }
+
+  hideModal(): void {
+    this.isVisible = false; // Explicit visibility control
+    this.safetyConfirmationInput = '';
+    // Note: Don't clear pendingOrder here as it's managed by the parent component
   }
 
   get estimatedValue(): number {
@@ -86,7 +102,7 @@ export class OrderConfirmationModal {
         /**
          * this will close the modal.
          */
-        this.pendingOrder = null;
+        this.hideModal();
         return;
       }
     }
@@ -95,15 +111,17 @@ export class OrderConfirmationModal {
     if (this.needsSafetyCheck) {
       if (this.safetyConfirmationInput !== this.confirmationText) {
         alert('❌ Safety check failed. Order submission cancelled.');
-        this.pendingOrder = null;
+        this.hideModal();
         return;
       }
     }
 
     try {
       await this.onExecute();
+      this.hideModal(); // Explicit method call after successful execution
     } catch (error) {
       this.logger.error('Error executing order: ', error);
+      this.hideModal(); // Explicit method call on error
       // alert(`❌ Error executing order for ${this.pendingOrder.name}. Check console for details.`);
     }
   }
@@ -112,17 +130,6 @@ export class OrderConfirmationModal {
     if (this.onCancel) {
       this.onCancel();
     }
-    this.pendingOrder = null; // This will trigger pendingOrderChanged to close modal
-  }
-
-  // Update state when pendingOrder changes
-  async pendingOrderChanged(_newVal: IAssetEx | null, _oldVal: IAssetEx | null): Promise<void> {
-    this.safetyConfirmationInput = '';
-
-    // Check production mode when modal becomes visible (pendingOrder is set)
-    if (_newVal !== null) {
-      this.fetchTestModeStatus()
-        .then((mode) => this.wasProduction = mode); // Store initial state when modal opens
-    }
+    this.hideModal(); // Explicit method call
   }
 }

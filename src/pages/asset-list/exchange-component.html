@@ -132,7 +132,8 @@
 
     <!-- Order Confirmation Modal -->
     <order-confirmation-modal
-      pending-order.two-way="pendingOrder"
+      ref="orderModal"
+      pending-order.bind="pendingOrder"
       quote-coin.bind="quoteCoin"
       on-execute.bind="executeConfirmedOrder.bind($this)"
       on-cancel.bind="cancelOrder.bind($this)">
