@@ -5,7 +5,7 @@
     <div if.bind="ordersStore.openOrders.length === 0" class="text-center text-gray-500 mt-2">
       No open orders found
     </div>
-    <fluent-data-grid else rows-data.bind="openOrdersData" class="w-fit mx-auto">
+    <data-grid else class="w-fit mx-auto">
       <fluent-data-grid-row type="header">
         <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
         <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
@@ -16,8 +16,8 @@
         <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Actions</fluent-data-grid-cell>
       </fluent-data-grid-row>
       
-      <fluent-data-grid-row repeat.for="order of ordersStore.openOrders">
-        <fluent-data-grid-cell grid-column="1">${ new Date(order.createdAt).toLocaleString() }</fluent-data-grid-cell>
+      <fluent-data-grid-row repeat.for="order of openOrdersData">
+        <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="2">${order.exchange}</fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="3">${order.direction}</fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
@@ -32,17 +32,16 @@
           </fluent-button>
         </fluent-data-grid-cell>
       </fluent-data-grid-row>
-    </fluent-data-grid>
+    </data-grid>
   </div>
   
   <!-- ***** CLOSED ORDERS SECTION ***** -->
   <div class="daisy-collapse daisy-collapse-arrow bg-base-200 my-4 max-w-fit mx-auto">
-    <fluent-checkbox class="daisy-peer"></fluent-checkbox>
     <div class="daisy-collapse-title text-2xl font-bold text-center">
       Closed Orders
     </div>
     <div class="daisy-collapse-content">
-      <fluent-data-grid rows-data.bind="closedOrdersData" class="w-fit mx-auto">
+      <data-grid class="w-fit mx-auto">
         <fluent-data-grid-row type="header">
           <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
           <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Closed</fluent-data-grid-cell>
@@ -56,19 +55,19 @@
           <fluent-data-grid-cell cell-type="columnheader" grid-column="10">Total Cost</fluent-data-grid-cell>
         </fluent-data-grid-row>
         
-        <fluent-data-grid-row repeat.for="order of ordersStore.closedOrders">
-          <fluent-data-grid-cell grid-column="1">${ new Date(order.createdAt).toLocaleString() }</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="2">${ new Date(order.closedAt).toLocaleString() }</fluent-data-grid-cell>
+        <fluent-data-grid-row repeat.for="order of closedOrdersData">
+          <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="2">${order.closed}</fluent-data-grid-cell>
           <fluent-data-grid-cell grid-column="3">${order.exchange}</fluent-data-grid-cell>
           <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="5">${order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)')}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="5">${order.type}</fluent-data-grid-cell>
           <fluent-data-grid-cell grid-column="6">${order.status}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="7">${order.status === 'executed' ? order.amountExecuted : order.amount}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="8">${order.status === 'executed' ? order.price : ''}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="9">${order.type === 'limit' ? order.limitPrice : ''}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="10">${order.status === 'executed' ? order.cost : ''}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="7">${order.coins}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="8">${order.executedPrice}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="9">${order.limitPrice}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="10">${order.totalCost}</fluent-data-grid-cell>
         </fluent-data-grid-row>
-      </fluent-data-grid>
+      </data-grid>
     </div>
   </div>
 </template>

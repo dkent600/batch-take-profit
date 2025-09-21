@@ -1,0 +1,16 @@
+<template>
+  <div class="w-full max-w-[1000px] p-6 rounded-[14px]
+                shadow-[0_8px_28px_rgba(0,0,0,0.45)]
+                bg-[var(--neutral-layer-2)]" 
+        class.bind="class"
+        style.bind="style">
+    <fluent-data-grid 
+      class="w-full rounded-xl overflow-hidden
+               border border-[color:color-mix(in_oklab,_var(--accent-base-color)_25%,_transparent)]">
+      
+      <!-- Content projection for custom headers and rows -->
+      <au-slot></au-slot>
+      
+    </fluent-data-grid>
+  </div>
+</template>

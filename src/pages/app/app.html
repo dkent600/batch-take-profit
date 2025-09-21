@@ -1,3 +1,14 @@
 <template>
-  <asset-list></asset-list>
+  <!-- accent-base-color is jade-olivine -->
+  <!-- #b87333 would be copper -->
+  <!-- class uses Tailwind for container surface: spacing, radius, shadow, bg/fg -->
+  <fluent-design-system-provider 
+  appearance="dark"
+  style="
+    --base-layer-luminance: 0.1;
+    --accent-base-color: #4a7a49;"
+    class="min-h-screen flex items-center justify-center bg-[var(--neutral-layer-1)] text-[var(--neutral-foreground-rest)]"
+  />
+    <asset-list></asset-list>
+  </fluent-design-system-provider>
 </template>

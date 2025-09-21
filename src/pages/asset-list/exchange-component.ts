@@ -35,7 +35,6 @@ export class ExchangeComponent {
   @bindable assets: IAssetEx[] = [];
   private readonly logger: ILogger = resolve(ILogger).scopeTo('ExchangeComponent');
 
-  // Internal state - no longer bound to parent
   useAmount: boolean = false;
   isRefreshing: boolean = false;
   isUpdating = false; // Flag to prevent infinite loops
@@ -46,10 +45,11 @@ export class ExchangeComponent {
   pendingOrder: IAssetEx | null = null;
   highValueConfirmed: boolean = false;
 
-  async attached(): Promise<void> {
+  async binding(): Promise<void> {
     for (const asset of this.assets) {
       asset.direction = "sell";
       asset.limit = false;
+      asset.selected = false;
     }
     /**
      * At this point these requests need to be made one-by-one or the 
@@ -100,12 +100,14 @@ export class ExchangeComponent {
         this.assetExchangeService.fetchPrice(asset, this.assetsStore.getQuoteCoin(asset))
           .then(price => {
             asset.currentPrice = price;
-            if (--count === 0) {
-              resolve();
-            }
           })
           .catch(error => {
             this.logger.error(`Failed to fetch current price for ${asset.name}: ${error}`);
+          })
+          .finally(() => {
+            if (--count === 0) {
+              resolve();
+            }
           });
       }
     });
@@ -116,7 +118,10 @@ export class ExchangeComponent {
     return new Promise(resolve => {
       for (const asset of this.assets) {
         this.updateAssetBalance(asset)
-          .then(() => {
+          .catch(error => {
+            this.logger.error(`Failed to fetch current balance for ${asset.name}: ${error}`);
+          })
+          .finally(() => {
             if (--count === 0) {
               resolve();
             }
@@ -350,27 +355,27 @@ export class ExchangeComponent {
   }
 
   // Data preparation method for fluent-data-grid
-  get assetsData(): any[] {
-    if (!this.assets) return [];
+  // get assetsData(): any[] {
+  //   if (!this.assets) return [];
 
-    return this.assets.map(asset => ({
-      selected: asset.selected,
-      exchange: asset.exchange,
-      coin: asset.name,
-      balance: asset.balance,
-      direction: asset.direction,
-      percentage: asset.percentage,
-      amount: asset.amount,
-      currentPrice: asset.currentPrice,
-      limit: asset.limit,
-      limitPrice: asset.LimitPrice,
-      totalValue: (asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount,
-      percentageInvalid: asset.percentageInvalid,
-      amountInvalid: asset.amountInvalid,
-      LimitPriceInvalid: asset.LimitPriceInvalid,
-      asset: asset // Keep reference to original asset for event handlers
-    }));
-  }
+  //   return this.assets.map(asset => ({
+  //     selected: asset.selected,
+  //     exchange: asset.exchange,
+  //     coin: asset.name,
+  //     balance: asset.balance,
+  //     direction: asset.direction,
+  //     percentage: asset.percentage,
+  //     amount: asset.amount,
+  //     currentPrice: asset.currentPrice,
+  //     limit: asset.limit,
+  //     limitPrice: asset.LimitPrice,
+  //     totalValue: (asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount,
+  //     percentageInvalid: asset.percentageInvalid,
+  //     amountInvalid: asset.amountInvalid,
+  //     LimitPriceInvalid: asset.LimitPriceInvalid,
+  //     asset: asset // Keep reference to original asset for event handlers
+  //   }));
+  // }
 
   // Modal callback methods
   async executeConfirmedOrder(): Promise<void> {

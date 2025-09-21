@@ -1,7 +1,7 @@
 import { bindable } from '@aurelia/runtime-html';
 import './orders-display.css';
-import { AssetsConfigServiceToken, IAsset } from '../../services/assets-config-service.js';
-import { IAssetExchangeService, IRequestQueueService } from '../../services/interfaces.js';
+import { IAsset } from '../../services/assets-config-service.js';
+import { IAssetExchangeService } from '../../services/interfaces.js';
 import { ILogger, inject, resolve } from 'aurelia';
 import { AssetExchangeApiServiceToken } from '../../services/index.js';
 import { AssetsStoreToken } from '../../stores/assets-store.js';
@@ -12,13 +12,11 @@ import { RequestQueueServiceToken } from '../../services/request-queue-service.j
 @inject(
   AssetExchangeApiServiceToken,
   OrdersStoreToken,
-  RequestQueueServiceToken,
   AssetsStoreToken,)
 export class OrdersDisplay {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly ordersStore: IOrdersStore,
-    private readonly queueService: IRequestQueueService,
     private readonly assetsStore: IAssetsStore
   ) {
 
@@ -26,7 +24,7 @@ export class OrdersDisplay {
   @bindable assets: IAsset[];
   private readonly logger: ILogger = resolve(ILogger).scopeTo('OrdersDisplay');
 
-  async attached(): Promise<void> {
+  async binding(): Promise<void> {
     this.ordersStore.fetchOpenedOrders();
     this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets);
   }
@@ -60,14 +58,15 @@ export class OrdersDisplay {
   }
 
   // Data preparation methods for fluent-data-grid
-  get openOrdersData(): any[] {
+  get openOrdersData(): IOpenedOrderListItem[] {
     if (!this.ordersStore.openOrders) return [];
 
     return this.ordersStore.openOrders.map(order => ({
-      created: new Date(order.createdAt).toLocaleString(),
+      createdAt: new Date(order.createdAt).toLocaleString(),
       exchange: order.exchange,
       direction: order.direction,
       pair: order.pair,
+      type: order.type,
       price: order.price,
       amount: order.amount,
       orderId: order.orderId
@@ -78,7 +77,7 @@ export class OrdersDisplay {
     if (!this.ordersStore.closedOrders) return [];
 
     return this.ordersStore.closedOrders.map(order => ({
-      created: new Date(order.createdAt).toLocaleString(),
+      createdAt: new Date(order.createdAt).toLocaleString(),
       closed: new Date(order.closedAt).toLocaleString(),
       exchange: order.exchange,
       pair: order.pair,

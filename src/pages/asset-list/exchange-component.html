@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center p-6">
     <h1 class="text-2xl font-bold text-center mb-6">Buy and Sell by Percentage</h1>
     <!-- ***** GRID SECTION ***** -->
-    <fluent-data-grid rows-data.bind="assetsData" class="w-fit mx-auto">
+    <data-grid class="w-fit mx-auto">
       <fluent-data-grid-row type="header">
         <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Select</fluent-data-grid-cell>
         <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
@@ -83,7 +83,7 @@
           </div>
         </fluent-data-grid-cell>
       </fluent-data-grid-row>
-    </fluent-data-grid>
+    </data-grid>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
     <div class="flex flex-col items-center justify-center mt-4 gap-2">
@@ -131,11 +131,11 @@
     </div>
 
     <!-- Order Confirmation Modal -->
-    <order-confirmation-modal
+    <!-- <order-confirmation-modal
       pending-order.two-way="pendingOrder"
       quote-coin.bind="quoteCoin"
       on-execute.bind="executeConfirmedOrder.bind($this)"
       on-cancel.bind="cancelOrder.bind($this)">
-    </order-confirmation-modal>
+    </order-confirmation-modal> -->
   </div>
 </template>
