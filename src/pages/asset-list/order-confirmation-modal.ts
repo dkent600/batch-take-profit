@@ -48,18 +48,6 @@ export class OrderConfirmationModal {
       });
   }
 
-  private showModal(): void {
-    if (this.dialogRef) {
-      this.dialogRef.showModal();
-    }
-  }
-
-  private hideModal(): void {
-    if (this.dialogRef) {
-      this.dialogRef.close();
-    }
-  }
-
   get estimatedValue(): number {
     if (!this.pendingOrder) return 0;
     const price = this.pendingOrder.limit ? this.pendingOrder.LimitPrice : this.pendingOrder.currentPrice;
@@ -98,7 +86,7 @@ export class OrderConfirmationModal {
         /**
          * this will close the modal.
          */
-        this.closeModal();
+        this.pendingOrder = null;
         return;
       }
     }
@@ -107,7 +95,7 @@ export class OrderConfirmationModal {
     if (this.needsSafetyCheck) {
       if (this.safetyConfirmationInput !== this.confirmationText) {
         alert('❌ Safety check failed. Order submission cancelled.');
-        this.closeModal();
+        this.pendingOrder = null;
         return;
       }
     }
@@ -135,9 +123,6 @@ export class OrderConfirmationModal {
     if (_newVal !== null) {
       this.fetchTestModeStatus()
         .then((mode) => this.wasProduction = mode); // Store initial state when modal opens
-      this.showModal();
-    } else {
-      this.hideModal();
     }
   }
 }
