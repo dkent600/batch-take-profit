@@ -8,7 +8,6 @@ export class DataGrid {
   @bindable style: string = '';
 
   constructor() {
-    console.log('DataGrid custom element initialized');
   }
 
   // attached() {
