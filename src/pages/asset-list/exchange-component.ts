@@ -8,6 +8,7 @@ import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/excha
 import { OrdersStoreToken } from '../../stores/orders-store.js';
 import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
 import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
+import { IOrderConfirmationModal, OrderConfirmationModal } from './order-confirmation-modal.js';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
@@ -22,14 +23,16 @@ interface IAssetEx extends IAsset {
   AssetExchangeApiServiceToken,
   OrdersStoreToken,
   RequestQueueServiceToken,
-  AssetsStoreToken
+  AssetsStoreToken,
+  OrderConfirmationModal
 )
 export class ExchangeComponent {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly ordersStore: IOrdersStore,
     private readonly queueService: IRequestQueueService,
-    private readonly assetsStore: IAssetsStore) {
+    private readonly assetsStore: IAssetsStore,
+    private readonly orderConfirmationModal: IOrderConfirmationModal) {
   }
 
   @bindable assets: IAssetEx[] = [];
@@ -253,7 +256,7 @@ export class ExchangeComponent {
       // Approach #2: Show enhanced modal dialog for detailed confirmation
       // This replaces the basic browser confirm() with a proper modal
       this.pendingOrder = asset; // Data flows to modal via binding
-      this.orderModal.showModal(); // Explicit modal control
+      this.orderConfirmationModal.showModal(); // Explicit modal control
 
       // The modal will handle the execution via the executeConfirmedOrder callback
       // No need to continue execution here as the modal takes over
@@ -401,13 +404,13 @@ export class ExchangeComponent {
       throw error;
     } finally {
       this.pendingOrder = null;
-      this.orderModal.hideModal(); // Explicit modal hide
+      this.orderConfirmationModal.hideModal(); // Explicit modal hide
     }
   }
 
   cancelOrder(): void {
     this.pendingOrder = null;
-    this.orderModal.hideModal(); // Explicit modal hide
+    this.orderConfirmationModal.hideModal(); // Explicit modal hide
   }
 
   get quoteCoin(): string {

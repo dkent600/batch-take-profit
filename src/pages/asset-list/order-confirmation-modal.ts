@@ -3,7 +3,7 @@ import './order-confirmation-modal.css';
 import { IAsset } from '../../services/assets-config-service.js';
 import { IAssetExchangeService } from '../../services/interfaces.js';
 import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/exchange-api-service.js';
-import { ILogger, inject, resolve } from '@aurelia/kernel';
+import { DI, ILogger, inject, resolve } from '@aurelia/kernel';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
@@ -13,6 +13,13 @@ interface IAssetEx extends IAsset {
   direction: 'buy' | 'sell';
   limit: boolean;
 }
+
+export interface IOrderConfirmationModal {
+  showModal(): Promise<unknown>;
+  hideModal(): void;
+}
+
+export const OrderConfirmationModalToken = DI.createInterface<IOrderConfirmationModal>('OrderConfirmationModal');
 
 @inject(AssetExchangeApiServiceToken)
 export class OrderConfirmationModal {
@@ -28,7 +35,6 @@ export class OrderConfirmationModal {
   private safetyConfirmationInput: string = '';
   private wasProduction: boolean;
   private isProduction: boolean;
-  private dialogRef: HTMLDialogElement;
   private isVisible: boolean = false;
 
   constructor(
@@ -50,11 +56,11 @@ export class OrderConfirmationModal {
   }
 
   // Explicit methods for modal control
-  async showModal(): Promise<void> {
+  async showModal(): Promise<unknown> {
     this.safetyConfirmationInput = '';
     this.isVisible = true; // Explicit visibility control
 
-    this.fetchTestModeStatus()
+    return this.fetchTestModeStatus()
       .then((mode) => this.wasProduction = mode);
   }
 
