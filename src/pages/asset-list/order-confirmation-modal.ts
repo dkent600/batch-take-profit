@@ -28,7 +28,7 @@ export class OrderConfirmationModal {
   private safetyConfirmationInput: string = '';
   private wasProduction: boolean;
   private isProduction: boolean;
-  private dialogRef: HTMLElement;
+  private dialogRef: HTMLDialogElement;
 
   constructor(
     private exchangeService: IAssetExchangeService
@@ -48,19 +48,15 @@ export class OrderConfirmationModal {
       });
   }
 
-  get isOpen(): boolean {
-    return this.pendingOrder !== null;
-  }
-
-  private openDialog() {
+  private showModal(): void {
     if (this.dialogRef) {
-      this.dialogRef.setAttribute('open', '');
+      this.dialogRef.showModal();
     }
   }
 
-  private closeDialog() {
+  private hideModal(): void {
     if (this.dialogRef) {
-      this.dialogRef.removeAttribute('open');
+      this.dialogRef.close();
     }
   }
 
@@ -128,13 +124,7 @@ export class OrderConfirmationModal {
     if (this.onCancel) {
       this.onCancel();
     }
-    this.closeModal();
-  }
-
-  private closeModal(): void {
-    this.pendingOrder = null;
-    this.safetyConfirmationInput = '';
-    this.closeDialog();
+    this.pendingOrder = null; // This will trigger pendingOrderChanged to close modal
   }
 
   // Update state when pendingOrder changes
@@ -145,9 +135,9 @@ export class OrderConfirmationModal {
     if (_newVal !== null) {
       this.fetchTestModeStatus()
         .then((mode) => this.wasProduction = mode); // Store initial state when modal opens
-      this.openDialog();
+      this.showModal();
     } else {
-      this.closeDialog();
+      this.hideModal();
     }
   }
 }
