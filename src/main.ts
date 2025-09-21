@@ -31,7 +31,6 @@ import {
 import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
-import { OrderConfirmationModal, OrderConfirmationModalToken } from './pages/asset-list/order-confirmation-modal.js';
 import { DataGrid } from './components/ui/data-grid.js';
 
 let logger: ILogger;
@@ -116,7 +115,6 @@ async function startApp() {
       Registration.singleton(AssetsStoreToken, AssetsStore),
       Registration.singleton(OrdersStoreToken, OrdersStore),
       Registration.singleton(RequestQueueServiceToken, RequestQueueService),
-      Registration.singleton(OrderConfirmationModalToken, OrderConfirmationModal),
       AssetList,
       DataGrid
     ).app(App);

@@ -8,7 +8,6 @@ import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/excha
 import { OrdersStoreToken } from '../../stores/orders-store.js';
 import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
 import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
-import { IOrderConfirmationModal, OrderConfirmationModal } from './order-confirmation-modal.js';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
@@ -23,8 +22,7 @@ interface IAssetEx extends IAsset {
   AssetExchangeApiServiceToken,
   OrdersStoreToken,
   RequestQueueServiceToken,
-  AssetsStoreToken,
-  OrderConfirmationModal
+  AssetsStoreToken
 )
 export class ExchangeComponent {
   constructor(

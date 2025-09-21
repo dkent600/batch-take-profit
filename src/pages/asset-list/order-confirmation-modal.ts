@@ -14,13 +14,6 @@ interface IAssetEx extends IAsset {
   limit: boolean;
 }
 
-export interface IOrderConfirmationModal {
-  showModal(): Promise<unknown>;
-  hideModal(): void;
-}
-
-export const OrderConfirmationModalToken = DI.createInterface<IOrderConfirmationModal>('OrderConfirmationModal');
-
 @inject(AssetExchangeApiServiceToken)
 export class OrderConfirmationModal {
   /** 
