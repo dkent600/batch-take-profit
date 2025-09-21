@@ -1,73 +1,84 @@
 <template>
   <!-- ***** OPEN ORDERS SECTION ***** -->
-  <div>
-    <h2 class="text-2xl font-bold text-center">Open Orders</h2>
-    <div if.bind="ordersStore.openOrders.length === 0" class="text-center text-gray-500 mt-2">
-      No open orders found
-    </div>
-    <data-grid else class="w-fit mx-auto">
-      <fluent-data-grid-row type="header">
-        <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
-        <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
-        <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Direction</fluent-data-grid-cell>
-        <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
-        <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Price</fluent-data-grid-cell>
-        <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Amount</fluent-data-grid-cell>
-        <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Actions</fluent-data-grid-cell>
-      </fluent-data-grid-row>
-      
-      <fluent-data-grid-row repeat.for="order of openOrdersData">
-        <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
-        <fluent-data-grid-cell grid-column="2">${order.exchange}</fluent-data-grid-cell>
-        <fluent-data-grid-cell grid-column="3">${order.direction}</fluent-data-grid-cell>
-        <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
-        <fluent-data-grid-cell grid-column="5">${order.price}</fluent-data-grid-cell>
-        <fluent-data-grid-cell grid-column="6">${order.amount}</fluent-data-grid-cell>
-        <fluent-data-grid-cell grid-column="7">
-          <fluent-button 
-            appearance="stealth" 
-            size="small"
-            click.trigger="cancelOrder(order.orderId)">
-            Cancel
-          </fluent-button>
-        </fluent-data-grid-cell>
-      </fluent-data-grid-row>
-    </data-grid>
-  </div>
-  
+  <div class="my-4 max-w-fit mx-auto">
+    <fluent-accordion>
+      <fluent-accordion-item>
+        <div slot="heading" class="text-2xl font-bold text-center py-2">
+          Open Orders
+        </div>
+        <div class="p-4">
+            <div if.bind="ordersStore.openOrders.length === 0" class="text-center text-gray-500 mt-2">
+              No open orders found
+            </div>
+            <data-grid else class="w-fit mx-auto">
+              <fluent-data-grid-row type="header">
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Direction</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Price</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Amount</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Actions</fluent-data-grid-cell>
+              </fluent-data-grid-row>
+              
+              <fluent-data-grid-row repeat.for="order of openOrdersData">
+                <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
+                <fluent-data-grid-cell grid-column="2">${order.exchange}</fluent-data-grid-cell>
+                <fluent-data-grid-cell grid-column="3">${order.direction}</fluent-data-grid-cell>
+                <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
+                <fluent-data-grid-cell grid-column="5">${order.price}</fluent-data-grid-cell>
+                <fluent-data-grid-cell grid-column="6">${order.amount}</fluent-data-grid-cell>
+                <fluent-data-grid-cell grid-column="7">
+                  <fluent-button 
+                    appearance="stealth" 
+                    size="small"
+                    click.trigger="cancelOrder(order.orderId)">
+                    Cancel
+                  </fluent-button>
+                </fluent-data-grid-cell>
+              </fluent-data-grid-row>
+            </data-grid>
+          </div>
+        </fluent-accordion-item>
+    </fluent-accordion>
+
   <!-- ***** CLOSED ORDERS SECTION ***** -->
-  <div class="daisy-collapse daisy-collapse-arrow bg-base-200 my-4 max-w-fit mx-auto">
-    <div class="daisy-collapse-title text-2xl font-bold text-center">
-      Closed Orders
-    </div>
-    <div class="daisy-collapse-content">
-      <data-grid class="w-fit mx-auto">
-        <fluent-data-grid-row type="header">
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Closed</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Exchange</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Type</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Status</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Coins</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="8">Executed Price</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="9">Limit Price</fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="10">Total Cost</fluent-data-grid-cell>
-        </fluent-data-grid-row>
-        
-        <fluent-data-grid-row repeat.for="order of closedOrdersData">
-          <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="2">${order.closed}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="3">${order.exchange}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="5">${order.type}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="6">${order.status}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="7">${order.coins}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="8">${order.executedPrice}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="9">${order.limitPrice}</fluent-data-grid-cell>
-          <fluent-data-grid-cell grid-column="10">${order.totalCost}</fluent-data-grid-cell>
-        </fluent-data-grid-row>
-      </data-grid>
-    </div>
+  <div class="my-4 max-w-fit mx-auto">
+    <fluent-accordion>
+      <fluent-accordion-item>
+        <div slot="heading" class="text-2xl font-bold text-center py-2">
+          Closed Orders
+        </div>
+        <div class="p-4">
+          <data-grid class="w-fit mx-auto">
+            <fluent-data-grid-row type="header">
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Closed</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Exchange</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Type</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Status</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Coins</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="8">Executed Price</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="9">Limit Price</fluent-data-grid-cell>
+              <fluent-data-grid-cell cell-type="columnheader" grid-column="10">Total Cost</fluent-data-grid-cell>
+            </fluent-data-grid-row>
+            
+            <fluent-data-grid-row repeat.for="order of closedOrdersData">
+              <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="2">${order.closed}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="3">${order.exchange}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="5">${order.type}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="6">${order.status}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="7">${order.coins}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="8">${order.executedPrice}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="9">${order.limitPrice}</fluent-data-grid-cell>
+              <fluent-data-grid-cell grid-column="10">${order.totalCost}</fluent-data-grid-cell>
+            </fluent-data-grid-row>
+          </data-grid>
+        </div>
+      </fluent-accordion-item>
+    </fluent-accordion>
   </div>
 </template>
