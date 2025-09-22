@@ -8,7 +8,8 @@ import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/excha
 import { OrdersStoreToken } from '../../stores/orders-store.js';
 import { IAssetsStore, IOrdersStore } from '../../stores/interfaces.js';
 import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
-
+import { IDialogService } from '@aurelia/dialog';
+import { OrderConfirmationModal } from '../../dialogs/order-confirmation-modal/order-confirmation-modal.js';
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
   amountInvalid?: boolean;
@@ -22,14 +23,16 @@ interface IAssetEx extends IAsset {
   AssetExchangeApiServiceToken,
   OrdersStoreToken,
   RequestQueueServiceToken,
-  AssetsStoreToken
+  AssetsStoreToken,
+  IDialogService
 )
 export class ExchangeComponent {
   constructor(
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly ordersStore: IOrdersStore,
     private readonly queueService: IRequestQueueService,
-    private readonly assetsStore: IAssetsStore) {
+    private readonly assetsStore: IAssetsStore,
+    private readonly dialogService: IDialogService) {
   }
 
   @bindable assets: IAssetEx[] = [];
@@ -252,8 +255,7 @@ export class ExchangeComponent {
 
       // Approach #2: Show enhanced modal dialog for detailed confirmation
       // This replaces the basic browser confirm() with a proper modal
-      this.pendingOrder = asset; // Data flows to modal via binding
-      // ************** this.orderConfirmationModal.showModal(); // Explicit modal control
+      this.showOrderConfirmModal(asset);
 
       // The modal will handle the execution via the executeConfirmedOrder callback
       // No need to continue execution here as the modal takes over
@@ -399,19 +401,39 @@ export class ExchangeComponent {
       this.logger.error(error);
       alert(`❌ Error creating order for ${asset.name}. Check console for details.`);
       throw error;
-    } finally {
-      this.pendingOrder = null;
-      // ************** this.orderConfirmationModal.hideModal(); // Explicit modal hide
-    }
-  }
 
-  cancelOrder(): void {
-    this.pendingOrder = null;
-    // ************** this.orderConfirmationModal.hideModal(); // Explicit modal hide
+    } finally {
+      this.cancelOrderConfirmModal();
+    }
   }
 
   get quoteCoin(): string {
     return this.pendingOrder ? this.assetsStore.getQuoteCoin(this.pendingOrder) : '';
+  }
+
+  cancelOrder(): void {
+    this.cancelOrderConfirmModal();
+  }
+
+  cancelOrderConfirmModal(): void {
+    this.pendingOrder = null;
+    this.dialogService.closeAll();
+  }
+
+  showOrderConfirmModal(asset: IAssetEx): void {
+    this.pendingOrder = asset; // Data flows to modal via binding
+    this.dialogService.open(
+      {
+        component: OrderConfirmationModal,
+        options: { modal: true },
+        model: {
+          pendingOrder: this.pendingOrder,
+          quoteCoin: this.quoteCoin,
+          onExecute: this.executeConfirmedOrder.bind(this),
+          onCancel: this.cancelOrder.bind(this),
+        }
+      }
+    )
   }
 
 }

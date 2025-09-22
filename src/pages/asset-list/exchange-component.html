@@ -90,19 +90,19 @@
       <div class="flex flex-row gap-4">
         <div class="text-sm">Select 
           <fluent-button
-            appearance="subtle"
+            appearance="lightweight"
             click.trigger="selectAll()"
             style="padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">All</fluent-button>
           |
           <fluent-button
-            appearance="subtle"
+            appearance="lightweight"
             click.trigger="selectNone()"
             style="padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">None</fluent-button>
         </div>
       </div>
       <div class="flex flex-row gap-4">
         <fluent-button
-          appearance="subtle"
+          appearance="lightweight"
           click.trigger="refresh()"
           style="display: flex; justify-content: center; align-items: center; padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">
             <span class="whitespace-nowrap">Refresh Prices and Balances</span>
@@ -118,16 +118,16 @@
       <div class="flex flex-row gap-4 py-2">
         <fluent-button
           click.trigger="createOrders()"
-          appearance="outline"
+          appearance="accent"
           disabled.bind="!hasSelection || hasInvalidSelection"
           style="display: flex; align-items: center; font-size: 14px;">
           Place the ${selectedOrders.length} selected order<template if.bind="selectedOrders.length != 1">s</template>
         </fluent-button>
       </div>
       <!-- ***** HELP MESSAGES SECTION ***** -->
-      <div class="text-yellow-500 text-xs mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it.</div>
-      <div class="text-yellow-500 text-xs mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Coins to Buy/Sell".</div>
-      <div class="text-yellow-500 text-xs mt-1">Order history in Kraken can be found in KrakenPro => Trade => Open Orders, not in Kraken regular.</div>
+      <div class="text-yellow-500 text-sm mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it.</div>
+      <div class="text-yellow-500 text-sm mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Coins to Buy/Sell".</div>
+      <div class="text-yellow-500 text-sm mt-1">Order history in Kraken can be found in KrakenPro => Trade => Open Orders, not in Kraken regular.</div>
     </div>
 
     <!-- Order Confirmation Modal -->

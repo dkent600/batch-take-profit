@@ -15,27 +15,48 @@ interface IAssetEx extends IAsset {
   limit: boolean;
 }
 
+interface IOrderConfirmationModel {
+  pendingOrder: IAssetEx | null,
+  quoteCoin: string,
+  onExecute: () => Promise<void>,
+  onCancel: () => void
+}
+
 @inject(AssetExchangeApiServiceToken, DialogController)
 export class OrderConfirmationModal {
-  /** 
-   * pendingOrder set or not set determines whether the modal is visible
-   */
-  @bindable pendingOrder: IAssetEx | null = null;
-  @bindable quoteCoin: string = '';
-  @bindable onExecute: () => Promise<void>;
-  @bindable onCancel: () => void;
+  private pendingOrder: IAssetEx | null = null;
+  private quoteCoin: string = '';
+  private onExecute: () => Promise<void>;
+  private onCancel: () => void;
   private readonly logger: ILogger = resolve(ILogger).scopeTo('OrderConfirmationModal');
 
   private safetyConfirmationInput: string = '';
   private wasProduction: boolean;
   private isProduction: boolean;
-  // private isVisible: boolean = false;
 
   constructor(
     private exchangeService: IAssetExchangeService,
     private controller: DialogController
   ) {
     // No initialization here - we'll check when needed
+  }
+
+  // called when the dialog is created; receives the 'model' you passed to open(...)
+  activate(model?: {
+    pendingOrder: IAssetEx | null,
+    quoteCoin: string,
+    onExecute: () => Promise<void>,
+    onCancel: () => void
+  }) {
+    this.pendingOrder = model.pendingOrder;
+    this.quoteCoin = model.quoteCoin;
+    this.onExecute = model.onExecute;
+    this.onCancel = model.onCancel;
+
+    this.safetyConfirmationInput = '';
+
+    return this.fetchTestModeStatus()
+      .then((mode) => this.wasProduction = mode);
   }
 
   private async fetchTestModeStatus(): Promise<boolean> {
@@ -50,30 +71,18 @@ export class OrderConfirmationModal {
       });
   }
 
-  // Explicit methods for modal control
-  async showModal(): Promise<unknown> {
-    this.safetyConfirmationInput = '';
-    // this.isVisible = true; // Explicit visibility control
-
-    return this.fetchTestModeStatus()
-      .then((mode) => this.wasProduction = mode);
-  }
-
   cancel(): void {
     if (this.onCancel) {
       this.onCancel();
     }
     this.controller.cancel();
-    // this.isVisible = false; // Explicit visibility control
     this.safetyConfirmationInput = '';
     // Note: Don't clear pendingOrder here as it's managed by the parent component
   }
 
   ok(): void {
     this.controller.ok('done');
-    // this.isVisible = false; // Explicit visibility control
     this.safetyConfirmationInput = '';
-    // Note: Don't clear pendingOrder here as it's managed by the parent component
   }
 
 

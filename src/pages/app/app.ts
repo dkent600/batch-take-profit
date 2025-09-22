@@ -1,4 +1,4 @@
-import { IDialogService } from '@aurelia/dialog';
+import { DialogOpenPromise, IDialogService } from '@aurelia/dialog';
 import { FluentDialogExample } from '../../dialogs/fluent-dialog-example/fluent-dialog-example.js';
 import './app.css';
 import { inject } from '@aurelia/kernel';
@@ -7,23 +7,20 @@ import { inject } from '@aurelia/kernel';
 export class App {
   constructor(private readonly dialog: IDialogService) { }
 
+  private p: DialogOpenPromise;
+
   async open() {
 
-    const p = this.dialog.open(
+    this.p = this.dialog.open(
       {
         component: FluentDialogExample,
-        options: { modal: true },
+        options: { modal: true, persistent: false },
         model: { message: 'Hello Fluent!' }
       });
-    p.whenClosed()
+
+    this.p.whenClosed()
       .then(result => {
         console.log('closed:', result);      // should log, and the UI should close
       }); // resolve on ok/cancel/close
-
-    // this.dialog.open({
-    //   component: () => FluentDialogExample,                 // any Aurelia component
-    //   model: { message: 'Hello Fluent!' },
-    //   options: { modal: true, persistent: false }
-    // });
   }
 }
