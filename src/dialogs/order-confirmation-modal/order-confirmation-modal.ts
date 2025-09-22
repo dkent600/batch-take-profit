@@ -3,7 +3,8 @@ import './order-confirmation-modal.css';
 import { IAsset } from '../../services/assets-config-service.js';
 import { IAssetExchangeService } from '../../services/interfaces.js';
 import { AssetExchangeApiServiceToken } from '../../services/exchange-apis/exchange-api-service.js';
-import { DI, ILogger, inject, resolve } from '@aurelia/kernel';
+import { ILogger, inject, resolve } from '@aurelia/kernel';
+import { DialogController, DialogService } from '@aurelia/dialog';
 
 interface IAssetEx extends IAsset {
   percentageInvalid?: boolean;
@@ -14,7 +15,7 @@ interface IAssetEx extends IAsset {
   limit: boolean;
 }
 
-@inject(AssetExchangeApiServiceToken)
+@inject(AssetExchangeApiServiceToken, DialogController)
 export class OrderConfirmationModal {
   /** 
    * pendingOrder set or not set determines whether the modal is visible
@@ -28,10 +29,11 @@ export class OrderConfirmationModal {
   private safetyConfirmationInput: string = '';
   private wasProduction: boolean;
   private isProduction: boolean;
-  private isVisible: boolean = false;
+  // private isVisible: boolean = false;
 
   constructor(
-    private exchangeService: IAssetExchangeService
+    private exchangeService: IAssetExchangeService,
+    private controller: DialogController
   ) {
     // No initialization here - we'll check when needed
   }
@@ -51,17 +53,29 @@ export class OrderConfirmationModal {
   // Explicit methods for modal control
   async showModal(): Promise<unknown> {
     this.safetyConfirmationInput = '';
-    this.isVisible = true; // Explicit visibility control
+    // this.isVisible = true; // Explicit visibility control
 
     return this.fetchTestModeStatus()
       .then((mode) => this.wasProduction = mode);
   }
 
-  hideModal(): void {
-    this.isVisible = false; // Explicit visibility control
+  cancel(): void {
+    if (this.onCancel) {
+      this.onCancel();
+    }
+    this.controller.cancel();
+    // this.isVisible = false; // Explicit visibility control
     this.safetyConfirmationInput = '';
     // Note: Don't clear pendingOrder here as it's managed by the parent component
   }
+
+  ok(): void {
+    this.controller.ok('done');
+    // this.isVisible = false; // Explicit visibility control
+    this.safetyConfirmationInput = '';
+    // Note: Don't clear pendingOrder here as it's managed by the parent component
+  }
+
 
   get estimatedValue(): number {
     if (!this.pendingOrder) return 0;
@@ -101,7 +115,7 @@ export class OrderConfirmationModal {
         /**
          * this will close the modal.
          */
-        this.hideModal();
+        this.cancel();
         return;
       }
     }
@@ -110,25 +124,18 @@ export class OrderConfirmationModal {
     if (this.needsSafetyCheck) {
       if (this.safetyConfirmationInput !== this.confirmationText) {
         alert('❌ Safety check failed. Order submission cancelled.');
-        this.hideModal();
+        this.cancel();
         return;
       }
     }
 
     try {
       await this.onExecute();
-      this.hideModal(); // Explicit method call after successful execution
+      this.ok(); // Explicit method call after successful execution
     } catch (error) {
       this.logger.error('Error executing order: ', error);
-      this.hideModal(); // Explicit method call on error
+      this.cancel(); // Explicit method call on error
       // alert(`❌ Error executing order for ${this.pendingOrder.name}. Check console for details.`);
     }
-  }
-
-  cancel(): void {
-    if (this.onCancel) {
-      this.onCancel();
-    }
-    this.hideModal(); // Explicit method call
   }
 }

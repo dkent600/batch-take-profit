@@ -1,9 +1,7 @@
 import { Aurelia, ILogger, Registration, AppTask, IContainer, IAttrMapper, NodeObserverLocator } from 'aurelia';
 import { App } from './pages/app/app.js';
+import './pages/app/app.css';
 import { AssetList } from './pages/asset-list/asset-list.js';
-
-import { DialogConfiguration } from '@aurelia/dialog';
-import { FluentDialogRenderer } from './dialogs/fluent-dialog-renderers/fluent-dialog-renderer.js';
 
 // Import Fluent UI components
 import {
@@ -67,7 +65,9 @@ async function startApp() {
 
     console.info('✅ Fluent UI components registered successfully');
 
+    // Register other services with proper interface-to-implementation mapping
     app.register(
+      // Configure Aurelia 2 + Fluent UI Integration
       AppTask.creating(IContainer, container => {
         // Configure two-way binding for Fluent UI components
         const attrMapper = container.get(IAttrMapper);
@@ -109,24 +109,18 @@ async function startApp() {
 
         console.info('✅ Using Aurelia 2 + Fluent UI integration');
       }),
-      DialogConfiguration.customize(settings => {
-        settings.renderer = FluentDialogRenderer; // <-- aurelia dialog fluentui custom renderer
-        settings.rejectOnCancel = true;           // optional preference
-      }),
-
       Registration.singleton(TelegramServiceToken, TelegramService),
       Registration.singleton(AssetsConfigServiceToken, AssetsConfigService),
       Registration.singleton(AssetExchangeApiServiceToken, AssetExchangeApiService),
       Registration.singleton(AssetsStoreToken, AssetsStore),
       Registration.singleton(OrdersStoreToken, OrdersStore),
       Registration.singleton(RequestQueueServiceToken, RequestQueueService),
-      // FASTAdapter, // enables sensible 2-way bindings for FAST/Fluent elements
       AssetList,
-      DataGrid)
-      .app(App);
+      DataGrid
+    ).app(App);
     return app.start();
   }
-  catch (error) { logger ? logger.error(error) : console.error(error) };
+  catch (error) { console.error(error) };
 }
 
 startApp();

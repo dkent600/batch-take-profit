@@ -18,4 +18,13 @@ export default defineConfig({
     nodePolyfills(),
     tailwindcss(),
   ],
+  optimizeDeps: {
+    force: true, // one-time: first boot after this will rebuild deps
+    include: [
+      'aurelia',
+      '@aurelia/runtime-html',
+      // 'aurelia-fast-adapter',
+      '@fluentui/web-components', // or '@microsoft/fast-components' if you use fast-*
+    ],
+  }
 });

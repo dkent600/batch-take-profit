@@ -29,8 +29,7 @@ export class ExchangeComponent {
     private readonly assetExchangeService: IAssetExchangeService,
     private readonly ordersStore: IOrdersStore,
     private readonly queueService: IRequestQueueService,
-    private readonly assetsStore: IAssetsStore,
-    private readonly orderConfirmationModal: IOrderConfirmationModal) {
+    private readonly assetsStore: IAssetsStore) {
   }
 
   @bindable assets: IAssetEx[] = [];
@@ -254,7 +253,7 @@ export class ExchangeComponent {
       // Approach #2: Show enhanced modal dialog for detailed confirmation
       // This replaces the basic browser confirm() with a proper modal
       this.pendingOrder = asset; // Data flows to modal via binding
-      this.orderConfirmationModal.showModal(); // Explicit modal control
+      // ************** this.orderConfirmationModal.showModal(); // Explicit modal control
 
       // The modal will handle the execution via the executeConfirmedOrder callback
       // No need to continue execution here as the modal takes over
@@ -402,13 +401,13 @@ export class ExchangeComponent {
       throw error;
     } finally {
       this.pendingOrder = null;
-      this.orderConfirmationModal.hideModal(); // Explicit modal hide
+      // ************** this.orderConfirmationModal.hideModal(); // Explicit modal hide
     }
   }
 
   cancelOrder(): void {
     this.pendingOrder = null;
-    this.orderConfirmationModal.hideModal(); // Explicit modal hide
+    // ************** this.orderConfirmationModal.hideModal(); // Explicit modal hide
   }
 
   get quoteCoin(): string {
