@@ -18,7 +18,8 @@
                 <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
                 <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Price</fluent-data-grid-cell>
                 <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Amount</fluent-data-grid-cell>
-                <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Actions</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Value</fluent-data-grid-cell>
+                <fluent-data-grid-cell cell-type="columnheader" grid-column="8">Actions</fluent-data-grid-cell>
               </fluent-data-grid-row>
               
               <fluent-data-grid-row repeat.for="order of openOrdersData">
@@ -28,7 +29,8 @@
                 <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
                 <fluent-data-grid-cell grid-column="5">${order.price}</fluent-data-grid-cell>
                 <fluent-data-grid-cell grid-column="6">${order.amount}</fluent-data-grid-cell>
-                <fluent-data-grid-cell grid-column="7">
+                <fluent-data-grid-cell grid-column="7">${order.amount * order.price}</fluent-data-grid-cell>
+                <fluent-data-grid-cell grid-column="8">
                   <fluent-button 
                     appearance="stealth" 
                     size="small"
