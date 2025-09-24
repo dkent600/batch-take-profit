@@ -26,10 +26,11 @@ export class MyComponent {
 - Request queue service handles API rate limiting automatically
 
 ### Fluent UI Integration
-- Uses `@fluentui/web-components` with custom Aurelia integration in `main.ts`
+- Uses `@fluentui/web-components@2.6.1` with streamlined Aurelia integration in `main.ts`
 - Two-way binding configured for fluent components via `IAttrMapper` and `NodeObserverLocator`
 - Custom dialog renderer `FluentDialogRenderer` for consistent UI
-- Components use `<fluent-*>` tags, not direct HTML elements
+- Components use `<fluent-*>` tags with native Fluent theming (no custom CSS overrides)
+- Reference implementation available in `fluent-test` sibling project for isolated testing
 
 ### Component Architecture
 - Custom elements use shadow DOM: `@useShadowDOM({ mode: 'open' })`

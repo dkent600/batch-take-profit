@@ -1,0 +1,27 @@
+<template>
+  <fluent-design-system-provider use-defaults base-layer-luminance="0.15">
+    <div class="app-container">
+      <h1>Fluent UI Web Components Test</h1>
+      <p class="message">${message}</p>
+      
+      <div class="controls">
+        <fluent-button click.trigger="toggleTheme()" appearance="accent">
+          Toggle Theme
+        </fluent-button>
+        
+        <fluent-button appearance="neutral" click.trigger="showAlert()">
+          Show Alert
+        </fluent-button>
+        
+        <fluent-button appearance="stealth" disabled.bind="isDisabled">
+          Disabled Button
+        </fluent-button>
+      </div>
+      
+      <div class="theme-info">
+        <p>Current theme: ${darkMode ? 'Dark' : 'Light'}</p>
+        <p>Button clicked: ${clickCount} times</p>
+      </div>
+    </div>
+  </fluent-design-system-provider>
+</template>

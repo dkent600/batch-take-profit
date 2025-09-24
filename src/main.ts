@@ -5,13 +5,9 @@ import { AssetList } from './pages/asset-list/asset-list.js';
 import { DialogConfiguration } from '@aurelia/dialog';
 import { FluentDialogRenderer } from './dialogs/fluent-dialog-renderers/fluent-dialog-renderer.js';
 
-// Import Fluent UI CSS theme
-import './simple-dark-theme.css';
-
-// Import Fluent UI components - using specific imports to avoid resolution issues
+// Import Fluent UI components
 import {
   provideFluentDesignSystem,
-  fluentDesignSystemProvider,
   fluentButton,
   fluentCheckbox,
   fluentTextField,
@@ -21,16 +17,11 @@ import {
   fluentDataGrid,
   fluentDataGridRow,
   fluentDataGridCell,
+  fluentDesignSystemProvider,
   fluentAccordion,
   fluentAccordionItem,
   fluentDialog
 } from '@fluentui/web-components';
-
-console.log('🔍 Fluent UI imports loaded:', {
-  provideFluentDesignSystem: typeof provideFluentDesignSystem,
-  fluentDesignSystemProvider: typeof fluentDesignSystemProvider,
-  fluentButton: typeof fluentButton
-});
 
 import {
   TelegramService, TelegramServiceToken,
@@ -57,7 +48,7 @@ async function startApp() {
     await envService.init();
     logger = app.container.get(ILogger).scopeTo('Main');
 
-    // Register Fluent UI components
+    // Register Fluent UI components - simplified approach from fluent-test
     provideFluentDesignSystem()
       .register(
         fluentDesignSystemProvider(),
@@ -75,7 +66,9 @@ async function startApp() {
         fluentDialog()
       );
 
-    console.info('✅ Fluent UI components registered successfully'); app.register(
+    console.info('✅ Fluent UI components registered successfully');
+
+    app.register(
       AppTask.creating(IContainer, container => {
         // Configure two-way binding for Fluent UI components
         const attrMapper = container.get(IAttrMapper);
@@ -115,7 +108,7 @@ async function startApp() {
           }
         });
 
-        console.info('✅ Using Aurelia 2 + Fluent UI integration');
+        console.info('✅ Aurelia 2 + Fluent UI integration configured');
       }),
       DialogConfiguration.customize(settings => {
         settings.renderer = FluentDialogRenderer; // <-- aurelia dialog fluentui custom renderer
@@ -128,7 +121,7 @@ async function startApp() {
       Registration.singleton(AssetsStoreToken, AssetsStore),
       Registration.singleton(OrdersStoreToken, OrdersStore),
       Registration.singleton(RequestQueueServiceToken, RequestQueueService),
-      // FASTAdapter, // enables sensible 2-way bindings for FAST/Fluent elements
+      // Components
       AssetList,
       IconButton,
       DataGrid)

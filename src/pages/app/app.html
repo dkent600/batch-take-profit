@@ -1,7 +1,12 @@
 <template>
-  <!-- Simple approach - just use direct styling and working design system provider -->
-  <fluent-design-system-provider appearance="dark">
-    <div style="min-height: 100vh; padding: 1rem; background: #1e1e1e; color: white;">
+  <fluent-design-system-provider ref="fluentProvider" use-defaults base-layer-luminance="0.15">
+    <div class="app-container">
+    <h1>Ferngully Crypto Dashboard</h1>
+    <div class="flex justify-end">
+      <fluent-button click.trigger="toggleTheme()" appearance="accent">
+      ${darkMode ? "Light Mode" : "Dark Mode"}
+      </fluent-button>
+    </div>
       <asset-list></asset-list>
     </div>
   </fluent-design-system-provider>
