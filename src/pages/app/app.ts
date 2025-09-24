@@ -10,7 +10,6 @@ export class App {
   private p: DialogOpenPromise;
 
   async open() {
-
     this.p = this.dialog.open(
       {
         component: FluentDialogExample,
@@ -20,7 +19,7 @@ export class App {
 
     this.p.whenClosed()
       .then(result => {
-        console.log('closed:', result);      // should log, and the UI should close
-      }); // resolve on ok/cancel/close
+        console.log('closed:', result);
+      });
   }
 }

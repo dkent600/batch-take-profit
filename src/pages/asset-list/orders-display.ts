@@ -25,10 +25,16 @@ export class OrdersDisplay {
   private readonly logger: ILogger = resolve(ILogger).scopeTo('OrdersDisplay');
 
   async binding(): Promise<void> {
-    this.ordersStore.fetchOpenedOrders();
-    this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets);
+    this.fetchOpenedOrders();
+    this.fetchClosedOrders();
   }
 
+  private fetchOpenedOrders(): void {
+    this.ordersStore.fetchOpenedOrders();
+  }
+  private fetchClosedOrders(): void {
+    this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets);
+  }
   // detached() {
   //   if (this.balanceUpdateTimer) {
   //     clearInterval(this.balanceUpdateTimer);
@@ -48,8 +54,8 @@ export class OrdersDisplay {
     this.assetExchangeService.cancelOrder("kraken", txId)
       .then(async () => {
         alert(`✅ Order ${txId} cancelled successfully.`);
-        this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets);
-        this.ordersStore.fetchOpenedOrders();
+        this.fetchClosedOrders();
+        this.fetchOpenedOrders();
       })
       .catch(error => {
         this.logger.error('Error cancelling order:', error);

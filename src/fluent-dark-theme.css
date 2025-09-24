@@ -1,0 +1,101 @@
+/* Fluent UI Dark Theme CSS Custom Properties */
+:root {
+  /* Neutral colors for dark theme */
+  --neutral-foreground-rest: #ffffff;
+  --neutral-foreground-hover: #f0f0f0;
+  --neutral-foreground-pressed: #e0e0e0;
+  --neutral-foreground-disabled: #858585;
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --neutral-layer-3: #3d3d3d;
+  --neutral-layer-4: #4a4a4a;
+  --neutral-stroke-rest: #666666;
+  --neutral-stroke-hover: #777777;
+  --neutral-stroke-pressed: #555555;
+  /* Accent colors - green theme */
+  --accent-base-color: #4a7a49;
+  --accent-fill-rest: #4a7a49;
+  --accent-fill-hover: #5a8a59;
+  --accent-fill-pressed: #3a6a39;
+  --accent-foreground-rest: #ffffff;
+  /* Base layer luminance for dark theme */
+  --base-layer-luminance: 0.1;
+  --design-unit: 4px;
+  --corner-radius: 4;
+  --stroke-width: 1px;
+}
+/* Apply dark theme to body */
+body {
+  background-color: var(--neutral-layer-1);
+  color: var(--neutral-foreground-rest);
+}
+/* Ensure fluent-design-system-provider uses these values */
+fluent-design-system-provider[appearance="dark"] {
+  --neutral-foreground-rest: #ffffff;
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --accent-base-color: #4a7a49;
+}
+/* COMPREHENSIVE FLUENT UI DARK THEME OVERRIDES */
+/* Fluent Buttons - Force dark theme */
+fluent-button {
+  --neutral-foreground-rest: #ffffff;
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --accent-fill-rest: #4a7a49;
+  --accent-foreground-rest: #ffffff;
+}
+/* Fluent Accordion - Force dark theme */
+fluent-accordion,
+fluent-accordion-item {
+  --neutral-foreground-rest: #ffffff;
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --neutral-layer-3: #3d3d3d;
+  --neutral-stroke-rest: #666666;
+  background: var(--neutral-layer-1);
+  color: var(--neutral-foreground-rest);
+}
+/* Fluent Data Grid - Force dark theme */
+fluent-data-grid,
+fluent-data-grid-row,
+fluent-data-grid-cell {
+  --neutral-foreground-rest: #ffffff;
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --neutral-layer-3: #3d3d3d;
+  --neutral-stroke-rest: #666666;
+  background: var(--neutral-layer-1);
+  color: var(--neutral-foreground-rest);
+}
+/* Fluent Text Fields and Inputs */
+fluent-text-field,
+fluent-text-area,
+fluent-select {
+  --neutral-foreground-rest: #ffffff;
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --neutral-stroke-rest: #666666;
+  background: var(--neutral-layer-2);
+  color: var(--neutral-foreground-rest);
+}
+/* Fluent Checkbox */
+fluent-checkbox {
+  --neutral-foreground-rest: #ffffff;
+  --neutral-stroke-rest: #666666;
+  --accent-fill-rest: #4a7a49;
+}
+/* AGGRESSIVE OVERRIDE - Force dark backgrounds for ALL fluent components */
+fluent-button,
+fluent-accordion,
+fluent-accordion-item,
+fluent-data-grid,
+fluent-data-grid-row,
+fluent-data-grid-cell,
+fluent-text-field,
+fluent-select,
+fluent-checkbox,
+fluent-dialog {
+  background: var(--neutral-layer-1) !important;
+  color: var(--neutral-foreground-rest) !important;
+}

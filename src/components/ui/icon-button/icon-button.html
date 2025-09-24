@@ -1,0 +1,13 @@
+<template>
+  <fluent-button
+    class="icon-btn ${shape}"
+    size.bind="size"
+    appearance.bind="appearance"
+    aria-label.bind="ariaLabel"
+    title.bind="title"
+    disabled.bind="disabled"
+  >
+    <!-- put your SVG or icon font here -->
+    <slot name="icon"></slot>
+  </fluent-button>
+</template>

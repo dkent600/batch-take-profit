@@ -5,9 +5,13 @@ import { AssetList } from './pages/asset-list/asset-list.js';
 import { DialogConfiguration } from '@aurelia/dialog';
 import { FluentDialogRenderer } from './dialogs/fluent-dialog-renderers/fluent-dialog-renderer.js';
 
-// Import Fluent UI components
+// Import Fluent UI CSS theme
+import './simple-dark-theme.css';
+
+// Import Fluent UI components - using specific imports to avoid resolution issues
 import {
   provideFluentDesignSystem,
+  fluentDesignSystemProvider,
   fluentButton,
   fluentCheckbox,
   fluentTextField,
@@ -17,11 +21,16 @@ import {
   fluentDataGrid,
   fluentDataGridRow,
   fluentDataGridCell,
-  fluentDesignSystemProvider,
   fluentAccordion,
   fluentAccordionItem,
   fluentDialog
 } from '@fluentui/web-components';
+
+console.log('🔍 Fluent UI imports loaded:', {
+  provideFluentDesignSystem: typeof provideFluentDesignSystem,
+  fluentDesignSystemProvider: typeof fluentDesignSystemProvider,
+  fluentButton: typeof fluentButton
+});
 
 import {
   TelegramService, TelegramServiceToken,
@@ -33,7 +42,8 @@ import {
 import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
-import { DataGrid } from './components/ui/data-grid.js';
+import { DataGrid } from './components/ui/data-grid/data-grid.js';
+import { IconButton } from './components/ui/icon-button/icon-button.js';
 
 let logger: ILogger;
 
@@ -65,9 +75,7 @@ async function startApp() {
         fluentDialog()
       );
 
-    console.info('✅ Fluent UI components registered successfully');
-
-    app.register(
+    console.info('✅ Fluent UI components registered successfully'); app.register(
       AppTask.creating(IContainer, container => {
         // Configure two-way binding for Fluent UI components
         const attrMapper = container.get(IAttrMapper);
@@ -122,6 +130,7 @@ async function startApp() {
       Registration.singleton(RequestQueueServiceToken, RequestQueueService),
       // FASTAdapter, // enables sensible 2-way bindings for FAST/Fluent elements
       AssetList,
+      IconButton,
       DataGrid)
       .app(App);
     return app.start();

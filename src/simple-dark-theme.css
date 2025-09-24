@@ -1,0 +1,81 @@
+/* Simple Dark Theme Override for Fluent UI */
+/* Force dark theme for the entire app */
+body {
+  background: #1e1e1e;
+  color: #ffffff;
+}
+/* AGGRESSIVE: Force dark theme on ALL Fluent UI components */
+/* Fluent Buttons */
+fluent-button {
+  --neutral-fill-rest: #2d2d2d;
+  --neutral-fill-hover: #3d3d3d;
+  --neutral-foreground-rest: #ffffff;
+  --accent-fill-rest: #4a7a49;
+  --accent-foreground-rest: #ffffff;
+}
+fluent-button[appearance="accent"] {
+  background: #4a7a49 !important;
+  color: #ffffff !important;
+}
+fluent-button[appearance="stealth"] {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+fluent-button[appearance="outline"] {
+  background: transparent !important;
+  color: #ffffff !important;
+  border: 1px solid #666666 !important;
+}
+/* Fluent Accordion */
+fluent-accordion,
+fluent-accordion-item {
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --neutral-foreground-rest: #ffffff;
+  background: #1e1e1e !important;
+  color: #ffffff !important;
+}
+/* Fluent Data Grid */
+fluent-data-grid,
+fluent-data-grid-row,
+fluent-data-grid-cell {
+  --neutral-layer-1: #1e1e1e;
+  --neutral-layer-2: #2d2d2d;
+  --neutral-foreground-rest: #ffffff;
+  --neutral-stroke-rest: #666666;
+  background: #1e1e1e !important;
+  color: #ffffff !important;
+  border-color: #666666 !important;
+}
+/* Fluent Form Controls */
+fluent-text-field,
+fluent-text-area,
+fluent-select {
+  --neutral-fill-input-rest: #2d2d2d;
+  --neutral-foreground-rest: #ffffff;
+  --neutral-stroke-rest: #666666;
+  background: #2d2d2d !important;
+  color: #ffffff !important;
+  border: 1px solid #666666 !important;
+}
+fluent-checkbox {
+  --neutral-foreground-rest: #ffffff;
+  --neutral-stroke-rest: #666666;
+  --accent-fill-rest: #4a7a49;
+  color: #ffffff !important;
+}
+/* Fluent Dialog */
+fluent-dialog {
+  --neutral-layer-floating: #2d2d2d;
+  --neutral-foreground-rest: #ffffff;
+  background: #2d2d2d !important;
+  color: #ffffff !important;
+}
+/* Force all text content to be white */
+fluent-accordion-item *,
+fluent-data-grid *,
+fluent-button *,
+fluent-text-field *,
+fluent-select * {
+  color: inherit !important;
+}

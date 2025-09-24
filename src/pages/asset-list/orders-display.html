@@ -7,6 +7,14 @@
           Open Orders
         </div>
         <div class="p-4">
+            <icon-button click.trigger="fetchOpenOrders" 
+              title="Refresh"
+              ariaLabel="Refresh">
+              <span slot="icon">↻</span>
+              <!-- <span slot="icon"><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 8.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7Zm9 3-.93-.34a7.5 7.5 0 0 0-.6-1.44l.55-.8a1 1 0 0 0-.1-1.24l-1.5-1.5a1 1 0 0 0-1.24-.1l-.8.55c-.47-.22-.96-.41-1.47-.55L14.5 4a1 1 0 0 0-1-.8h-2a1 1 0 0 0-1 .8l-.34.93c-.5.14-1 .33-1.47.55l-.8-.55a1 1 0 0 0-1.24.1L3.15 6.53a1 1 0 0 0-.1 1.24l.55.8c-.23.47-.42.96-.56 1.47L2 12a1 1 0 0 0 .8 1l.93.34c.14.5.33 1 .55 1.47l-.55.8a1 1 0 0 0 .1 1.24l1.5 1.5a1 1 0 0 0 1.24.1l.8-.55c.47.23.96.41 1.47.56L10 22a1 1 0 0 0 1 .8h2a1 1 0 0 0 1-.8l.34-.93c.5-.14 1-.33 1.47-.56l.8.55a1 1 0 0 0 1.24-.1l1.5-1.5a1 1 0 0 0 .1-1.24l-.55-.8c.23-.47.42-.96.56-1.47L22 13a1 1 0 0 0-.8-1Z"/>
+              </svg></span> -->
+            </icon-button>
             <div if.bind="ordersStore.openOrders.length === 0" class="text-center text-gray-500 mt-2">
               No open orders found
             </div>

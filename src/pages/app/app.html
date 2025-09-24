@@ -1,16 +1,8 @@
 <template>
-  <!-- accent-base-color is jade-olivine -->
-  <!-- #b87333 would be copper -->
-  <!-- class uses Tailwind for container surface: spacing, radius, shadow, bg/fg -->
-  <fluent-design-system-provider 
-  appearance="dark"
-  style="
-    --base-layer-luminance: 0.1;
-    --accent-base-color: #4a7a49;"
-    class="min-h-screen flex items-center justify-center bg-[var(--neutral-layer-1)] text-[var(--neutral-foreground-rest)]"
-    >
-    <!-- <fluent-button appearance="accent" click.trigger="open()">Open Fluent dialog</fluent-button> -->
-    <asset-list></asset-list>
+  <!-- Simple approach - just use direct styling and working design system provider -->
+  <fluent-design-system-provider appearance="dark">
+    <div style="min-height: 100vh; padding: 1rem; background: #1e1e1e; color: white;">
+      <asset-list></asset-list>
+    </div>
   </fluent-design-system-provider>
-  
 </template>

@@ -31,7 +31,7 @@ import {
 import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
-import { DataGrid } from './components/ui/data-grid.js';
+import { DataGrid } from './components/ui/data-grid/data-grid.js';
 
 let logger: ILogger;
 

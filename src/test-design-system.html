@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluent Design System Test</title>
+  <script type="module">
+    import { 
+      provideFluentDesignSystem, 
+      fluentDesignSystemProvider, 
+      fluentButton 
+    } from '@fluentui/web-components';
+
+    provideFluentDesignSystem().register(
+      fluentDesignSystemProvider(),
+      fluentButton()
+    );
+  </script>
+</head>
+<body>
+  <fluent-design-system-provider appearance="dark" style="--accent-base-color: #4a7a49;">
+    <div style="padding: 2rem; min-height: 100vh; background: var(--neutral-layer-1); color: var(--neutral-foreground-rest);">
+      <h1>Design System Test</h1>
+      <fluent-button appearance="accent">Test Button</fluent-button>
+      <fluent-button appearance="stealth" style="border-radius: 50%; width: 40px; height: 40px;">🔄</fluent-button>
+    </div>
+  </fluent-design-system-provider>
+</body>
+</html>
