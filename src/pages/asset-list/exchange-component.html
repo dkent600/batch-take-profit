@@ -85,20 +85,13 @@
     </data-grid>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
+    <div style="display: flex; align-items: center; justify-content: center; gap: 4px;">
+      <span>Select</span>
+      <fluent-button appearance="lightweight" click.trigger="selectAll()">All</fluent-button>
+      <span>|</span>
+      <fluent-button appearance="lightweight" click.trigger="selectNone()">None</fluent-button>
+    </div>
     <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-mt-4 tw-gap-2">
-      <div class="tw-flex tw-flex-row tw-gap-4">
-        <div class="tw-text-sm">Select 
-          <fluent-button
-            appearance="lightweight"
-            click.trigger="selectAll()"
-            style="padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">All</fluent-button>
-          |
-          <fluent-button
-            appearance="lightweight"
-            click.trigger="selectNone()"
-            style="padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">None</fluent-button>
-        </div>
-      </div>
       <div class="tw-flex tw-flex-row tw-gap-4">
         <fluent-button
           appearance="lightweight"
