@@ -28,10 +28,10 @@
 
     <!-- Order Details -->
     <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-bg-gray-100 tw-rounded-lg tw-p-5 tw-text-sm tw-shadow-inner">
-      <div class="font-semibold">Asset:</div>
+      <div class="tw-font-semibold">Asset:</div>
       <div class="tw-font-mono tw-text-blue-600">${pendingOrder.name}</div>
 
-      <div class="font-semibold">Type:</div>
+      <div class="tw-font-semibold">Type:</div>
       <div>
         <span class="tw-badge tw-px-3 tw-py-1 tw-rounded-full tw-text-sm tw-font-medium" 
               class.bind="pendingOrder.limit ? 'tw-bg-purple-100 tw-text-purple-800' : 'tw-bg-green-100 tw-text-green-800'">
@@ -39,30 +39,30 @@
         </span>
       </div>
 
-      <div class="font-semibold">Amount:</div>
-      <div class="font-mono">${pendingOrder.amount.toFixed(8)} ${pendingOrder.name}</div>
+      <div class="tw-font-semibold">Amount:</div>
+      <div class="tw-font-mono">${pendingOrder.amount.toFixed(8)} ${pendingOrder.name}</div>
 
-      <div class="font-semibold" if.bind="pendingOrder.limit">Price:</div>
-      <div class="font-mono" if.bind="pendingOrder.limit">${pendingOrder.LimitPrice} ${quoteCoin}</div>
+      <div class="tw-font-semibold" if.bind="pendingOrder.limit">Price:</div>
+      <div class="tw-font-mono" if.bind="pendingOrder.limit">${pendingOrder.LimitPrice} ${quoteCoin}</div>
 
-      <div class="font-semibold">Balance:</div>
-      <div class="font-mono">${pendingOrder.balance.toFixed(8)} ${pendingOrder.name}</div>
+      <div class="tw-font-semibold">Balance:</div>
+      <div class="tw-font-mono">${pendingOrder.balance.toFixed(8)} ${pendingOrder.name}</div>
 
-      <div class="font-semibold">Percentage:</div>
-      <div class="font-mono">${pendingOrder.percentage.toFixed(2)}%</div>
+      <div class="tw-font-semibold">Percentage:</div>
+      <div class="tw-font-mono">${pendingOrder.percentage.toFixed(2)}%</div>
 
-      <div class="font-semibold">${pendingOrder.direction === 'sell' ? 'Estimated Revenue:' : 'Estimated Cost:'}</div>
+      <div class="tw-font-semibold">${pendingOrder.direction === 'sell' ? 'Estimated Revenue:' : 'Estimated Cost:'}</div>
       <div class="tw-font-mono tw-font-bold tw-text-lg" class.bind="needsSafetyCheck ? 'tw-text-red-600' : 'tw-text-green-600'">
         $${estimatedValue.toFixed(2)} ${quoteCoin}
       </div>
     </div>
 
     <!-- Safety Confirmation (if needed) -->
-    <div class="space-y-2" if.bind="needsSafetyCheck">
-      <div class="alert p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
-        <span class="font-bold text-yellow-800">Final Safety Check</span>
-        <span class="text-yellow-700">Type: 
-          <code class="bg-gray-800 text-white px-2 py-1 rounded font-mono text-sm tracking-wider">
+    <div class="tw-space-y-2" if.bind="needsSafetyCheck">
+      <div class="alert tw-p-4 tw-bg-yellow-50 tw-border tw-border-yellow-200 tw-rounded-lg tw-text-sm">
+        <span class="tw-font-bold tw-text-yellow-800">Final Safety Check</span>
+        <span class="tw-text-yellow-700">Type: 
+          <code class="tw-bg-gray-800 tw-text-white tw-px-2 tw-py-1 tw-rounded tw-font-mono tw-text-sm tw-tracking-wider">
             ${confirmationText}
           </code>
         </span>
@@ -71,13 +71,13 @@
       <fluent-text-field 
         type="text" 
         placeholder="Type the confirmation text..." 
-        class="w-full text-center"
+        class="tw-w-full tw-text-center"
         appearance.bind="safetyConfirmationInput === confirmationText ? 'filled' : 'outline'"
         value.two-way="safetyConfirmationInput"
       ></fluent-text-field>
 
-      <p class="text-center text-sm font-medium" 
-         class.bind="safetyConfirmationInput === confirmationText ? 'text-green-600' : 'text-red-600'">
+      <p class="tw-text-center tw-text-sm tw-font-medium" 
+         class.bind="safetyConfirmationInput === confirmationText ? 'tw-text-green-600' : 'tw-text-red-600'">
         ${safetyConfirmationInput === confirmationText ? '✅ Safety check passed!' : '⚠️ Text does not match.'}
       </p>
     </div>
