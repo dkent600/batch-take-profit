@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col items-center p-6">
+  <div class="tw-flex tw-flex-col tw-items-center tw-p-6">
     <!-- ***** GRID SECTION ***** -->
-    <data-grid class="w-fit mx-auto">
+    <data-grid class="tw-w-fit tw-mx-auto">
       <fluent-data-grid-row type="header">
         <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Select</fluent-data-grid-cell>
         <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
@@ -44,7 +44,7 @@
             input.trigger="validatePercentage(asset)">
           </fluent-text-field>
           <div else>${asset.percentage}</div>
-          <div if.bind="asset.percentageInvalid" class="text-red-500 text-xs mt-1">Invalid percentage</div>
+          <div if.bind="asset.percentageInvalid" class="tw-text-red-500 tw-text-xs tw-mt-1">Invalid percentage</div>
         </fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="7">
           <fluent-text-field
@@ -56,7 +56,7 @@
             style="width: 8rem; text-align: center; font-size: 12px;"
             input.trigger="validateAmount(asset)">
           </fluent-text-field>
-          <div if.bind="asset.amountInvalid" class="text-red-500 text-xs mt-1">Invalid amount</div>
+          <div if.bind="asset.amountInvalid" class="tw-text-red-500 tw-text-xs tw-mt-1">Invalid amount</div>
         </fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="8">${asset.currentPrice}</fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="9" style="text-align: center;">
@@ -74,7 +74,7 @@
             input.trigger="validateLimitPrice(asset)">
           </fluent-text-field>
           <div else>---</div>
-          <div if.bind="asset.LimitPriceInvalid" class="text-red-500 text-xs mt-1">Invalid limit order price</div>
+          <div if.bind="asset.LimitPriceInvalid" class="tw-text-red-500 tw-text-xs tw-mt-1">Invalid limit order price</div>
         </fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="11">
           <div>
@@ -85,9 +85,9 @@
     </data-grid>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
-    <div class="flex flex-col items-center justify-center mt-4 gap-2">
-      <div class="flex flex-row gap-4">
-        <div class="text-sm">Select 
+    <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-mt-4 tw-gap-2">
+      <div class="tw-flex tw-flex-row tw-gap-4">
+        <div class="tw-text-sm">Select 
           <fluent-button
             appearance="lightweight"
             click.trigger="selectAll()"
@@ -99,22 +99,22 @@
             style="padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">None</fluent-button>
         </div>
       </div>
-      <div class="flex flex-row gap-4">
+      <div class="tw-flex tw-flex-row tw-gap-4">
         <fluent-button
           appearance="lightweight"
           click.trigger="refresh()"
           style="display: flex; justify-content: center; align-items: center; padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">
-            <span class="whitespace-nowrap">Refresh Prices and Balances</span>
-            <span if.bind="isRefreshing" class="flex items-center justify-center h-full ml-1" style="margin-left: 4px;">
-              <svg class="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            <span class="tw-whitespace-nowrap">Refresh Prices and Balances</span>
+            <span if.bind="isRefreshing" class="tw-flex tw-items-center tw-justify-center tw-h-full tw-ml-1" style="margin-left: 4px;">
+              <svg class="tw-animate-spin tw-h-4 tw-w-4 tw-text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
               </svg>
             </span>
         </fluent-button>
         </div>
       </div>
-      <div class="flex flex-row gap-4 py-2">
+      <div class="tw-flex tw-flex-row tw-gap-4 tw-py-2">
         <fluent-button
           click.trigger="createOrders()"
           appearance="accent"
@@ -124,9 +124,9 @@
         </fluent-button>
       </div>
       <!-- ***** HELP MESSAGES SECTION ***** -->
-      <div class="text-yellow-500 text-sm mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it.</div>
-      <div class="text-yellow-500 text-sm mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Coins to Buy/Sell".</div>
-      <div class="text-yellow-500 text-sm mt-1">Order history in Kraken can be found in KrakenPro => Trade => Open Orders, not in Kraken regular.</div>
+      <div class="tw-text-yellow-500 tw-text-sm tw-mt-1">Orders will be executed in terms of "Coins to Buy/Sell". Is best to round it, by editing it.</div>
+      <div class="tw-text-yellow-500 tw-text-sm tw-mt-1">"$USD/Coin" is the current USD price of one coin. "Percent" is only to compute the default "Coins to Buy/Sell".</div>
+      <div class="tw-text-yellow-500 tw-text-sm tw-mt-1">Order history in Kraken can be found in KrakenPro => Trade => Open Orders, not in Kraken regular.</div>
     </div>
 
     <!-- Order Confirmation Modal -->

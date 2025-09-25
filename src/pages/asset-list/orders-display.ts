@@ -7,7 +7,30 @@ import { AssetExchangeApiServiceToken } from '../../services/index.js';
 import { AssetsStoreToken } from '../../stores/assets-store.js';
 import { IAssetsStore, IOrdersStore, IOpenedOrderListItem, IClosedOrderListItem } from '../../stores/interfaces.js';
 import { OrdersStoreToken } from '../../stores/orders-store.js';
-import { RequestQueueServiceToken } from '../../services/request-queue-service.js';
+
+interface IOpenedOrderListItemView {
+  createdAt: string,
+  exchange: string,
+  direction: string,
+  pair: string,
+  type: string,
+  price: string,
+  amount: string,
+  orderId: string,
+}
+
+interface IClosedOrderListItemView {
+  closed: string,
+  pair: string,
+  exchange: string,
+  type: string,
+  createdAt: string,
+  status: string,
+  coins: string,
+  executedPrice: string,
+  limitPrice: string,
+  totalCost: string,
+}
 
 @inject(
   AssetExchangeApiServiceToken,
@@ -23,6 +46,7 @@ export class OrdersDisplay {
   }
   @bindable assets: IAsset[];
   private readonly logger: ILogger = resolve(ILogger).scopeTo('OrdersDisplay');
+  fetchingOpenedOrders = false;
 
   async binding(): Promise<void> {
     this.fetchOpenedOrders();
@@ -30,11 +54,63 @@ export class OrdersDisplay {
   }
 
   private fetchOpenedOrders(): void {
-    this.ordersStore.fetchOpenedOrders();
+    this.fetchingOpenedOrders = true;
+    this.ordersStore.fetchOpenedOrders()
+      .then((orders: IOpenedOrderListItem[]) => {
+        this.openedOrders = orders.map(order => ({
+          createdAt: new Date(order.createdAt).toLocaleString(),
+          exchange: order.exchange,
+          direction: order.direction,
+          pair: order.pair,
+          type: order.type,
+          price: order.price,
+          amount: order.amount,
+          orderId: order.orderId
+        }));
+      })
+      .finally(() => {
+        this.fetchingOpenedOrders = false;
+      });
   }
   private fetchClosedOrders(): void {
-    this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets);
+    this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets)
+      .then((orders: IClosedOrderListItem[]) => {
+        this.closedOrders = orders.map(order => ({
+          closed: new Date(order.closedAt).toLocaleString(),
+          pair: order.pair,
+          exchange: order.exchange,
+          type: order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)'),
+          createdAt: new Date(order.createdAt).toLocaleString(),
+          status: order.status,
+          coins: order.status === 'executed' ? order.amountExecuted : order.amount,
+          executedPrice: order.status === 'executed' ? order.price : '',
+          limitPrice: order.type === 'limit' ? order.limitPrice : '',
+          totalCost: order.status === 'executed' ? order.cost : ''
+        }));
+
+      });
   }
+
+  private _openedOrders: IOpenedOrderListItemView[] = [];
+
+  private get openedOrders(): IOpenedOrderListItemView[] {
+    return this._openedOrders;
+  }
+
+  private set openedOrders(data: IOpenedOrderListItemView[]) {
+    this._openedOrders = data;
+  }
+
+  private _closedOrders: IClosedOrderListItemView[] = [];
+
+  private get closedOrders(): IClosedOrderListItemView[] {
+    return this._closedOrders;
+  }
+
+  private set closedOrders(data: IClosedOrderListItemView[]) {
+    this._closedOrders = data;
+  }
+
   // detached() {
   //   if (this.balanceUpdateTimer) {
   //     clearInterval(this.balanceUpdateTimer);
@@ -63,36 +139,4 @@ export class OrdersDisplay {
       });
   }
 
-  // Data preparation methods for fluent-data-grid
-  get openOrdersData(): IOpenedOrderListItem[] {
-    if (!this.ordersStore.openOrders) return [];
-
-    return this.ordersStore.openOrders.map(order => ({
-      createdAt: new Date(order.createdAt).toLocaleString(),
-      exchange: order.exchange,
-      direction: order.direction,
-      pair: order.pair,
-      type: order.type,
-      price: order.price,
-      amount: order.amount,
-      orderId: order.orderId
-    }));
-  }
-
-  get closedOrdersData(): any[] {
-    if (!this.ordersStore.closedOrders) return [];
-
-    return this.ordersStore.closedOrders.map(order => ({
-      createdAt: new Date(order.createdAt).toLocaleString(),
-      closed: new Date(order.closedAt).toLocaleString(),
-      exchange: order.exchange,
-      pair: order.pair,
-      type: order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)'),
-      status: order.status,
-      coins: order.status === 'executed' ? order.amountExecuted : order.amount,
-      executedPrice: order.status === 'executed' ? order.price : '',
-      limitPrice: order.type === 'limit' ? order.limitPrice : '',
-      totalCost: order.status === 'executed' ? order.cost : ''
-    }));
-  }
 }

@@ -20,7 +20,8 @@ import {
   fluentDesignSystemProvider,
   fluentAccordion,
   fluentAccordionItem,
-  fluentDialog
+  fluentDialog,
+  fluentProgressRing
 } from '@fluentui/web-components';
 
 import {
@@ -63,7 +64,8 @@ async function startApp() {
         fluentDataGridCell(),
         fluentAccordion(),
         fluentAccordionItem(),
-        fluentDialog()
+        fluentDialog(),
+        fluentProgressRing()
       );
 
     console.info('✅ Fluent UI components registered successfully');
