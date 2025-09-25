@@ -1,7 +1,6 @@
-@layer theme, base, components, utilities;
-@import "tailwindcss/theme.css" layer(theme) prefix(tw);
-@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
-/* Deliberately omitting preflight.css to avoid conflicts with Fluent UI */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 .app-container {
   padding: 2rem;
   max-width: 800px;

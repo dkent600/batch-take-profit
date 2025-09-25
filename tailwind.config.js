@@ -2,9 +2,13 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,html}"
+    "./src/**/*.{js,ts,html}",
+    "./test-tailwind.html"
   ],
   prefix: 'tw-',
+  corePlugins: {
+    preflight: false, // Disable preflight to avoid conflicts with Fluent UI
+  },
   theme: {
     extend: {
       // Extend with Fluent UI design tokens for consistency
@@ -19,5 +23,4 @@ export default {
     },
   },
   plugins: [],
-  // No need for corePlugins.preflight: false since we're not importing preflight.css
 }

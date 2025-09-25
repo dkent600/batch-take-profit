@@ -1,3 +1,4 @@
+@tailwind components;
 /* Fluent Data Grid Styling */
 /* data-grid {
   --design-unit: 4px;
@@ -40,37 +41,35 @@
   background-color: var(--neutral-fill-secondary-hover);
 }
 /* Data grid polish via parts */
-@layer components {
-  /* Default row/cell backgrounds from tokens */
-  fluent-data-grid::part(row) {
-    background: var(--neutral-layer-2);
-  }
-  fluent-data-grid::part(cell) {
-    padding: 12px 14px;
-    color: var(--neutral-foreground-rest);
-    border-bottom: 1px solid color-mix(in oklab, #ffffff 8%, transparent);
-  }
-  /* Header background blends neutral layer with copper accent */
-  .data-grid-header::part(row) {
-    background: color-mix(in oklab, var(--neutral-layer-3) 85%, var(--accent-base-color) 15%);
-  }
-  .data-grid-header::part(cell) {
-    font-weight: 600;
-    letter-spacing: .02em;
-    color: color-mix(in oklab, var(--neutral-foreground-rest) 92%, var(--accent-base-color) 8%);
-    border-bottom: 1px solid color-mix(in oklab, var(--accent-base-color) 30%, transparent);
-  }
-  /* Soft hover on data rows */
-  .hoverable-row::part(row) {
-    transition: background-color .15s ease;
-  }
-  .hoverable-row:hover::part(row) {
-    background: color-mix(in oklab, var(--neutral-layer-2) 75%, var(--accent-base-color) 25% / 14%);
-  }
-  /* Focus ring for keyboard users */
-  fluent-data-grid::part(cell):focus-visible {
-    outline: 2px solid color-mix(in oklab, var(--accent-base-color) 70%, white 30%);
-    outline-offset: -2px;
-    border-radius: 6px;
-  }
+/* Default row/cell backgrounds from tokens */
+fluent-data-grid::part(row) {
+  background: var(--neutral-layer-2);
+}
+fluent-data-grid::part(cell) {
+  padding: 12px 14px;
+  color: var(--neutral-foreground-rest);
+  border-bottom: 1px solid color-mix(in oklab, #ffffff 8%, transparent);
+}
+/* Header background blends neutral layer with copper accent */
+.data-grid-header::part(row) {
+  background: color-mix(in oklab, var(--neutral-layer-3) 85%, var(--accent-base-color) 15%);
+}
+.data-grid-header::part(cell) {
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: color-mix(in oklab, var(--neutral-foreground-rest) 92%, var(--accent-base-color) 8%);
+  border-bottom: 1px solid color-mix(in oklab, var(--accent-base-color) 30%, transparent);
+}
+/* Soft hover on data rows */
+.hoverable-row::part(row) {
+  transition: background-color .15s ease;
+}
+.hoverable-row:hover::part(row) {
+  background: color-mix(in oklab, var(--neutral-layer-2) 75%, var(--accent-base-color) 25% / 14%);
+}
+/* Focus ring for keyboard users */
+fluent-data-grid::part(cell):focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--accent-base-color) 70%, white 30%);
+  outline-offset: -2px;
+  border-radius: 6px;
 }

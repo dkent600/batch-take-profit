@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TailwindCSS Diagnostic Test</title>
+  <link rel="stylesheet" href="./src/pages/app/app.css">
+</head>
+<body>
+  <h1>TailwindCSS Diagnostic Test</h1>
+  
+  <!-- Test 1: Basic colors -->
+  <div class="tw-bg-red-500 tw-p-4 tw-text-white tw-mb-4">
+    RED BACKGROUND - If you see red, colors work
+  </div>
+  
+  <!-- Test 2: Flexbox alignment -->
+  <div class="tw-flex tw-justify-end tw-mb-4" style="border: 1px solid black;">
+    <button class="tw-bg-blue-500 tw-text-white tw-px-4 tw-py-2">RIGHT ALIGNED?</button>
+  </div>
+  
+  <!-- Test 3: Just justify-end -->
+  <div class="tw-justify-end" style="display: flex; border: 1px solid green;">
+    <span>Just justify-end class</span>
+  </div>
+  
+  <!-- Test 4: Margins and padding -->
+  <div class="tw-m-8 tw-p-8 tw-border-2 tw-border-purple-500">
+    Large margin and padding with purple border
+  </div>
+  
+  <!-- Test 5: Text utilities -->
+  <div class="tw-text-center tw-text-xl tw-font-bold tw-text-green-500">
+    Centered, large, bold, green text
+  </div>
+  
+  <!-- Test 6: Width utilities -->
+  <div class="tw-w-1/2 tw-bg-yellow-300 tw-h-8">
+    50% width yellow bar
+  </div>
+
+</body>
+</html>

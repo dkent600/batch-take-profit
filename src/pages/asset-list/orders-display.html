@@ -22,40 +22,41 @@
               if.bind="fetchingOpenedOrders"
               style="--design-unit: 1; width: 32px; height: 32px;">
             </fluent-progress-ring>
+          </div>
+          <div if.bind="openedOrders.length === 0" class="tw-text-center tw-text-gray-500 tw-mt-2">
+            No open orders found
+          </div>
+          <data-grid else class="tw-w-fit tw-mx-auto">
+        <fluent-data-grid-row type="header">
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Direction</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Price</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Amount</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Value</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="8">Actions</fluent-data-grid-cell>
+        </fluent-data-grid-row>
+        
+        <fluent-data-grid-row repeat.for="order of openedOrders">
+          <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="2">${order.exchange}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="3">${order.direction}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="5">${order.price}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="6">${order.amount}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="7">${order.amount * order.price}</fluent-data-grid-cell>
+          <fluent-data-grid-cell grid-column="8">
+            <fluent-button 
+              appearance="stealth" 
+              size="small"
+              click.trigger="cancelOrder(order.orderId)">
+              Cancel
+            </fluent-button>
+          </fluent-data-grid-cell>
+        </fluent-data-grid-row>
+          </data-grid>
         </div>
-        <div if.bind="openedOrders.length === 0" class="tw-text-center tw-text-gray-500 tw-mt-2">
-          No open orders found
-        </div>
-        <data-grid else class="tw-w-fit tw-mx-auto">
-          <fluent-data-grid-row type="header">
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="1">Created</fluent-data-grid-cell>
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="2">Exchange</fluent-data-grid-cell>
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="3">Direction</fluent-data-grid-cell>
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="4">Pair</fluent-data-grid-cell>
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="5">Price</fluent-data-grid-cell>
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="6">Amount</fluent-data-grid-cell>
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="7">Value</fluent-data-grid-cell>
-            <fluent-data-grid-cell cell-type="columnheader" grid-column="8">Actions</fluent-data-grid-cell>
-          </fluent-data-grid-row>
-          
-          <fluent-data-grid-row repeat.for="order of openedOrders">
-            <fluent-data-grid-cell grid-column="1">${order.createdAt}</fluent-data-grid-cell>
-            <fluent-data-grid-cell grid-column="2">${order.exchange}</fluent-data-grid-cell>
-            <fluent-data-grid-cell grid-column="3">${order.direction}</fluent-data-grid-cell>
-            <fluent-data-grid-cell grid-column="4">${order.pair}</fluent-data-grid-cell>
-            <fluent-data-grid-cell grid-column="5">${order.price}</fluent-data-grid-cell>
-            <fluent-data-grid-cell grid-column="6">${order.amount}</fluent-data-grid-cell>
-            <fluent-data-grid-cell grid-column="7">${order.amount * order.price}</fluent-data-grid-cell>
-            <fluent-data-grid-cell grid-column="8">
-              <fluent-button 
-                appearance="stealth" 
-                size="small"
-                click.trigger="cancelOrder(order.orderId)">
-                Cancel
-              </fluent-button>
-            </fluent-data-grid-cell>
-          </fluent-data-grid-row>
-        </data-grid>
     </fluent-accordion-item>
   </fluent-accordion>
   </div>
