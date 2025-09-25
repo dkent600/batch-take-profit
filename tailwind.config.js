@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,html}"
   ],
+  prefix: 'tw-',
   theme: {
     extend: {
       // Extend with Fluent UI design tokens for consistency
