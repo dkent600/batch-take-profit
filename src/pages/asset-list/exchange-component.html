@@ -85,18 +85,17 @@
     </data-grid>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
-    <div class="tw-flex tw-items-center tw-justify-center tw-gap-1">
-      <span>Select</span>
-      <fluent-button appearance="lightweight" click.trigger="selectAll()">All</fluent-button>
-      <span>|</span>
-      <fluent-button appearance="lightweight" click.trigger="selectNone()">None</fluent-button>
+    <div class="tw-flex tw-items-center tw-justify-center tw-gap-0">
+      <span class="tw-text-sm tw-font-medium tw-p-1">Select</span>
+      <fluent-button appearance="stealth" class="tw-underline" style="--design-unit: 0px;" click.trigger="selectAll()">All</fluent-button>
+      <fluent-button appearance="stealth" class="tw-underline" style="--design-unit: 0px;" click.trigger="selectNone()">None</fluent-button>
     </div>
     <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-mt-4 tw-gap-2">
       <div class="tw-flex tw-flex-row tw-gap-4">
         <fluent-button
-          appearance="lightweight"
+          appearance="stealth"
           click.trigger="refresh()"
-          style="display: flex; justify-content: center; align-items: center; padding: 0; min-width: auto; font-size: 14px; color: var(--accent-foreground-rest); text-decoration: underline;">
+          class="tw-flex tw-center tw-underline">
             <span class="tw-whitespace-nowrap">Refresh Prices and Balances</span>
             <span if.bind="isRefreshing" class="tw-flex tw-items-center tw-justify-center tw-h-full tw-ml-1" style="margin-left: 4px;">
               <svg class="tw-animate-spin tw-h-4 tw-w-4 tw-text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -112,7 +111,7 @@
           click.trigger="createOrders()"
           appearance="accent"
           disabled.bind="!hasSelection || hasInvalidSelection"
-          style="display: flex; align-items: center; font-size: 14px;">
+          class="tw-flex tw-center">
           Place the ${selectedOrders.length} selected order<template if.bind="selectedOrders.length != 1">s</template>
         </fluent-button>
       </div>

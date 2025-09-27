@@ -1,9 +1,36 @@
 <template>
+<fluent-button 
+appearance="accent"
+class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
+  Brand Accent
+</fluent-button>
+
+<fluent-button appearance="accent"
+  style="--accent-fill-rest:#4a7a49; --accent-fill-hover:#3a6139; --accent-fill-active:#2d4a2c">
+  Brand Accent II
+</fluent-button>
+
+<fluent-button appearance="accent"
+  class="tw-[--accent-fill-rest:#4a7a49] tw-[--accent-fill-hover:#3a6139] tw-[--accent-fill-active:#2d4a2c]">
+  Brand Accent TW
+</fluent-button>
+
+<fluent-button appearance="accent"
+  style="
+    --accent-fill-rest:#4a7a49;
+    --accent-fill-hover:#3a6139;
+    --accent-fill-active:#2d4a2c;
+    --foreground-on-accent:#ffffff;">
+  Brand Accent
+</fluent-button>
+
+
   <!-- ***** OPEN ORDERS SECTION ***** -->
   <div class="tw-my-4 tw-max-w-fit tw-mx-auto">
     <fluent-accordion>
       <fluent-accordion-item>
-        <div slot="heading" class="tw-text-2xl tw-font-bold tw-text-center tw-py-2">
+        <div slot="heading" 
+          class="tw-text-2xl tw-font-bold tw-text-center tw-py-2">
           Open Orders (${openedOrders.length})
         </div>
         <div class="tw-p-4">

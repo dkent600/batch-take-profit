@@ -5,6 +5,10 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
+  "html.suggest.html5": true,
+  "html.autoClosingTags": true,
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.includeCompletionsForModuleExports": true,
   "editor.formatOnSave": true,
   "eslint.format.enable": false,
   "editor.defaultFormatter": null,
@@ -19,5 +23,28 @@
     "enable": false
   },
   "eslint.enable": false,
-  "debug.javascript.autoAttachFilter": "disabled"
+  "debug.javascript.autoAttachFilter": "disabled",
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "typescript": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "class:\\s*?[\"'`]([^\"'`]*).*?[\"'`]",
+      "[\"'`]([^\"'`]*)[\"'`]"
+    ],
+    [
+      "tw`([^`]*)`",
+      "([^`]*)"
+    ],
+    [
+      "class=\"([^\"]*)\"",
+      "([^\"]*)"
+    ],
+    [
+      "class='([^']*)'",
+      "([^']*)"
+    ]
+  ],
+  "tailwindCSS.emmetCompletions": true
 }

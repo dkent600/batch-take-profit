@@ -10,6 +10,13 @@ export default {
     preflight: false, // Disable preflight to avoid conflicts with Fluent UI
   },
   theme: {
+    content: [
+      './index.html',
+      './src/**/*.{html,ts,tsx,js,jsx}',   // include Aurelia .html files
+    ],
+    safelist: [
+      { pattern: /tw-\[\-\-[a-z0-9\-]+:.*\]/i }, // picks up tw-[--...:...]
+    ],
     extend: {
       // Extend with Fluent UI design tokens for consistency
       colors: {
