@@ -28,6 +28,21 @@
 .header-cell-right {
   @apply header-cell tw-text-right;
 }
+/* Compact header variants */
+.header-cell-compact {
+  @apply tw-px-1 tw-py-2 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-whitespace-nowrap;
+  color: var(--neutral-foreground-rest);
+  border-bottom: 1px solid var(--neutral-stroke-divider);
+}
+.header-cell-compact-left {
+  @apply header-cell-compact tw-text-left;
+}
+.header-cell-compact-center {
+  @apply header-cell-compact tw-text-center;
+}
+.header-cell-compact-right {
+  @apply header-cell-compact tw-text-right;
+}
 /* Body Styles */
 .table-body {
   background-color: var(--neutral-layer-1);
@@ -63,12 +78,33 @@
   @apply table-cell tw-text-sm tw-text-right tw-font-mono tw-font-semibold;
   color: var(--neutral-foreground-rest);
 }
+/* Compact cell variants */
+.cell-compact-center {
+  @apply table-cell tw-text-center tw-px-1 tw-py-2;
+  color: var(--neutral-foreground-rest);
+}
+.cell-compact-left {
+  @apply table-cell tw-text-sm tw-font-medium tw-px-1 tw-py-2;
+  color: var(--neutral-foreground-rest);
+}
+.cell-compact-right {
+  @apply table-cell tw-text-sm tw-text-right tw-font-mono tw-px-1 tw-py-2;
+  color: var(--neutral-foreground-hint);
+}
+.cell-compact-right-bold {
+  @apply table-cell tw-text-sm tw-text-right tw-font-mono tw-font-semibold tw-px-1 tw-py-2;
+  color: var(--neutral-foreground-rest);
+}
 /* Special Data Styles */
-.coin-name {
-  @apply tw-text-sm tw-font-bold;
-  color: var(--accent-foreground-rest);
+.currency-value {
+  @apply tw-text-sm tw-font-mono tw-font-semibold;
+  color: var(--neutral-foreground-rest);
 }
 .percentage-display {
+  @apply tw-text-sm tw-font-mono;
+  color: var(--neutral-foreground-hint);
+}
+.number-value {
   @apply tw-text-sm tw-font-mono;
   color: var(--neutral-foreground-hint);
 }
@@ -76,9 +112,15 @@
   @apply tw-text-center tw-text-sm tw-font-light;
   color: var(--neutral-foreground-disabled);
 }
-.error-message {
-  @apply tw-text-xs tw-mt-1 tw-font-medium;
-  color: var(--error-foreground-rest);
+.loading-cell {
+  @apply tw-py-6;
+  color: var(--neutral-foreground-hint);
+}
+.empty-cell {
+  @apply tw-py-6;
+}
+.action-cell {
+  @apply tw-flex tw-items-center tw-justify-center tw-gap-1;
 }
 /* Override Fluent UI component widths for compact table */
 .table fluent-select {
@@ -92,4 +134,8 @@
 }
 .table fluent-checkbox {
   width: auto !important;
+}
+.table fluent-button {
+  width: auto !important;
+  min-width: 2rem !important;
 }

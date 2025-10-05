@@ -250,6 +250,45 @@ export class ComponentName {
 - Secure communication with backend over HTTPS
 - User session management through backend
 
+## TypeScript Coding Conventions
+
+### Interface Naming
+All TypeScript interfaces must be prefixed with "I" to follow industry best practices and improve code clarity:
+
+```typescript
+// ✅ Correct - Interface prefixed with "I"
+export interface ITableColumn {
+  key: string;
+  name: string;
+  type?: 'text' | 'number' | 'currency';
+}
+
+export interface IAsset {
+  id: string;
+  name: string;
+  exchange: string;
+}
+
+// ❌ Incorrect - Missing "I" prefix
+export interface TableColumn {
+  key: string;
+  name: string;
+}
+```
+
+### Benefits of "I" Prefix Convention
+- **Clear Distinction**: Immediately identifies interfaces vs classes/types
+- **IntelliSense Clarity**: IDEs group interfaces together in autocomplete
+- **Industry Standard**: Widely adopted in TypeScript community
+- **Consistency**: Aligns with Microsoft TypeScript guidelines
+- **Refactoring Safety**: Reduces naming conflicts when converting between interfaces/classes
+
+### Implementation Guidelines
+- Apply "I" prefix to all exported interfaces
+- Apply "I" prefix to all internal interfaces used across modules
+- Local interfaces within single functions may omit prefix for brevity
+- Update existing interfaces during refactoring to maintain consistency
+
 ## Future Architecture Considerations
 
 ### Scalability
