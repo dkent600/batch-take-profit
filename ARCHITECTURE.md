@@ -144,6 +144,28 @@ Order history and status tracking with filtering and search capabilities.
 
 ## Integration Patterns
 
+### Fluent UI Integration
+
+**FluentUIAdapter Pattern**
+The project uses a custom FluentUIAdapter (located in `src/stores/fluent-ui-adapter.ts`) to handle two-way binding between Aurelia and Fluent UI Web Components:
+
+```typescript
+// Registration in main.ts
+FluentUIAdapter.customize({ withPrefix: 'fluent' })
+```
+
+**Key Benefits:**
+- Automatic two-way binding for all Fluent UI form components
+- Centralized configuration for component event handling
+- Clean separation from manual IAttrMapper setup
+- Extensible for new component types
+
+**Shadow DOM Constraints:**
+- Fluent UI components use Shadow DOM, creating style isolation
+- Only CSS custom properties can style component internals
+- TailwindCSS classes work for layout containers only
+- Use `style="--design-unit: 2px"` for component customization
+
 ### Backend Communication
 
 All backend communication flows through the request queue:

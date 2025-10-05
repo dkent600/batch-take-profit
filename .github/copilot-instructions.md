@@ -26,8 +26,9 @@ export class MyComponent {
 - Request queue service handles API rate limiting automatically
 
 ### Fluent UI Integration
-- Uses `@fluentui/web-components@2.6.1` with streamlined Aurelia integration in `main.ts`
-- Two-way binding configured for fluent components via `IAttrMapper` and `NodeObserverLocator`
+- Uses `@fluentui/web-components@2.6.1` with custom FluentUIAdapter in `src/stores/fluent-ui-adapter.ts`
+- Two-way binding configured via FluentUIAdapter for seamless form interactions
+- Custom FluentUIAdapter replaces aurelia-fast-adapter for better Fluent UI support
 - Custom dialog renderer `FluentDialogRenderer` for consistent UI
 - Components use `<fluent-*>` tags with native Fluent theming (no custom CSS overrides)
 - Reference implementation available in `fluent-test` sibling project for isolated testing
@@ -70,7 +71,7 @@ export class MyComponent {
 
 ### File Organization
 - Services in `src/services/` with interfaces in `interfaces.ts`
-- Stores in `src/stores/` with shared interfaces
+- Stores in `src/stores/` with shared interfaces and FluentUIAdapter
 - Components in `src/components/ui/` with subfolder per component
 - Pages in `src/pages/` (app-level routing components)
 
