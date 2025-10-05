@@ -88,7 +88,7 @@ export class OrderConfirmationModal {
 
   get estimatedValue(): number {
     if (!this.pendingOrder) return 0;
-    const price = this.pendingOrder.limit ? this.pendingOrder.LimitPrice : this.pendingOrder.currentPrice;
+    const price = this.pendingOrder.limit ? this.pendingOrder.limitPrice : this.pendingOrder.currentPrice;
     return this.pendingOrder.amount * price;
   }
 

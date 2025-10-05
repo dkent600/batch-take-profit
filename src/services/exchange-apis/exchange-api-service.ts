@@ -46,18 +46,18 @@ export class AssetExchangeApiService implements IAssetExchangeService {
   async createSellOrder(asset: IAsset, to: string, limit: boolean): Promise<unknown> {
     try {
       asset.amount = +asset.amount || 0; // Ensure amount is a number
-      asset.LimitPrice = +asset.LimitPrice || 0;
+      asset.limitPrice = +asset.limitPrice || 0;
 
       if (!asset.amount) {
         throw new Error('Amount is required to create a market sell order');
       }
-      if (limit && !asset.LimitPrice) {
+      if (limit && !asset.limitPrice) {
         throw new Error('Limit price is required to create a limit sell order');
       }
       const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/sell/${limit ? "limit" : "market"}`, {
         name: asset.name,
         amount: asset.amount,
-        price: asset.LimitPrice, // will be ignored for market orders
+        price: asset.limitPrice, // will be ignored for market orders
         to,
       });
       return response.data;
@@ -70,18 +70,18 @@ export class AssetExchangeApiService implements IAssetExchangeService {
   async createBuyOrder(asset: IAsset, from: string, limit: boolean): Promise<unknown> {
     try {
       asset.amount = +asset.amount || 0; // Ensure amount is a number
-      asset.LimitPrice = +asset.LimitPrice || 0;
+      asset.limitPrice = +asset.limitPrice || 0;
 
       if (!asset.amount) {
         throw new Error('Amount is required to create a market buy order');
       }
-      if (limit && !asset.LimitPrice) {
+      if (limit && !asset.limitPrice) {
         throw new Error('Limit price is required to create a limit buy order');
       }
       const response = await axios.post(`${this.configService.serviceUrl}/api/v1/${asset.exchange.toLocaleLowerCase()}/orders/buy/${limit ? "limit" : "market"}`, {
         name: asset.name,
         amount: asset.amount,
-        price: asset.LimitPrice, // will be ignored for market orders
+        price: asset.limitPrice, // will be ignored for market orders
         from,
       });
       return response.data;

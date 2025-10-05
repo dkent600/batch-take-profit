@@ -8,7 +8,7 @@ export interface IAsset {
   currentPrice: number
   amount?: number;
   balance?: number;
-  LimitPrice?: number;
+  limitPrice?: number;
 }
 
 interface IExchange {

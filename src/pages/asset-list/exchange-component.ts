@@ -327,7 +327,7 @@ export class ExchangeComponent {
   }
 
   async validateLimitPrice(asset: IAssetEx): Promise<void> {
-    const originalValue = String(asset.LimitPrice);
+    const originalValue = String(asset.limitPrice);
 
     // Check if the string is a valid number format
     // Allows: whole numbers (4, 100), full decimals (.5, 4.5, 50.555), numbers with commas (1,000.50)
@@ -354,7 +354,7 @@ export class ExchangeComponent {
 
   // Helper methods for the enhanced confirmation system
   private calculateEstimatedValue(asset: IAssetEx): number {
-    const price = asset.limit ? asset.LimitPrice : asset.currentPrice;
+    const price = asset.limit ? asset.limitPrice : asset.currentPrice;
     return asset.amount * price;
   }
 
@@ -372,8 +372,8 @@ export class ExchangeComponent {
   //     amount: asset.amount,
   //     currentPrice: asset.currentPrice,
   //     limit: asset.limit,
-  //     limitPrice: asset.LimitPrice,
-  //     totalValue: (asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount,
+  //     limitPrice: asset.limitPrice,
+  //     totalValue: (asset.limit ? asset.limitPrice : asset.currentPrice) * asset.amount,
   //     percentageInvalid: asset.percentageInvalid,
   //     amountInvalid: asset.amountInvalid,
   //     LimitPriceInvalid: asset.LimitPriceInvalid,

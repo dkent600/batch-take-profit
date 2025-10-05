@@ -67,7 +67,7 @@
             if.bind="asset.limit"
             type="number"
             min="0"
-            value.two-way="asset.LimitPrice"
+            value.two-way="asset.limitPrice"
             required
             appearance.bind="asset.LimitPriceInvalid ? 'error' : 'outline'"
             style="width: 8rem; text-align: center; font-size: 12px;"
@@ -78,7 +78,7 @@
         </fluent-data-grid-cell>
         <fluent-data-grid-cell grid-column="11">
           <div>
-            ${(asset.limit ? asset.LimitPrice : asset.currentPrice) * asset.amount}
+            ${(asset.limit ? asset.limitPrice : asset.currentPrice) * asset.amount}
           </div>
         </fluent-data-grid-cell>
       </fluent-data-grid-row>

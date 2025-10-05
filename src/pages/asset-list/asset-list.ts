@@ -19,7 +19,7 @@ export class AssetList {
 
   private initAssets(): void {
     for (const asset of this.assets) {
-      asset.LimitPrice = 0; // Initialize limit order price
+      asset.limitPrice = 0; // Initialize limit order price
     }
   }
 }

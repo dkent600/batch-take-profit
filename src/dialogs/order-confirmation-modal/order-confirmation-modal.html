@@ -43,7 +43,7 @@
       <div class="tw-font-mono">${pendingOrder.amount.toFixed(8)} ${pendingOrder.name}</div>
 
       <div class="tw-font-semibold" if.bind="pendingOrder.limit">Price:</div>
-      <div class="tw-font-mono" if.bind="pendingOrder.limit">${pendingOrder.LimitPrice} ${quoteCoin}</div>
+      <div class="tw-font-mono" if.bind="pendingOrder.limit">${pendingOrder.limitPrice} ${quoteCoin}</div>
 
       <div class="tw-font-semibold">Balance:</div>
       <div class="tw-font-mono">${pendingOrder.balance.toFixed(8)} ${pendingOrder.name}</div>
