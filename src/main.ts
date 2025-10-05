@@ -1,9 +1,10 @@
-import { Aurelia, ILogger, Registration, AppTask, IContainer, IAttrMapper, NodeObserverLocator } from 'aurelia';
+import { Aurelia, ILogger, Registration } from 'aurelia';
 import { App } from './pages/app/app.js';
 import { AssetList } from './pages/asset-list/asset-list.js';
 
 import { DialogConfiguration } from '@aurelia/dialog';
 import { FluentDialogRenderer } from './dialogs/fluent-dialog-renderers/fluent-dialog-renderer.js';
+import { FluentUIAdapter } from './stores/fluent-ui-adapter.js';
 
 // Import Fluent UI components
 import {
@@ -71,47 +72,9 @@ async function startApp() {
     console.info('✅ Fluent UI components registered successfully');
 
     app.register(
-      AppTask.creating(IContainer, container => {
-        // Configure two-way binding for Fluent UI components
-        const attrMapper = container.get(IAttrMapper);
-        attrMapper.useTwoWay((el, property) => {
-          switch (el.tagName) {
-            case 'FLUENT-TEXT-FIELD':
-            case 'FLUENT-TEXT-AREA':
-              return property === 'value';
-            case 'FLUENT-CHECKBOX':
-            case 'FLUENT-SWITCH':
-              return property === 'checked';
-            case 'FLUENT-SELECT':
-              return property === 'value';
-            default:
-              return false;
-          }
-        });
+      // Configure FluentUIAdapter for two-way binding
+      FluentUIAdapter.customize({ withPrefix: 'fluent' }),
 
-        // Configure event observation for Fluent UI components
-        const nodeObserverLocator = container.get(NodeObserverLocator);
-        const valuePropertyConfig = { events: ['input', 'change'] };
-        nodeObserverLocator.useConfig({
-          'FLUENT-TEXT-FIELD': {
-            value: valuePropertyConfig
-          },
-          'FLUENT-TEXT-AREA': {
-            value: valuePropertyConfig
-          },
-          'FLUENT-SELECT': {
-            value: valuePropertyConfig
-          },
-          'FLUENT-CHECKBOX': {
-            checked: valuePropertyConfig
-          },
-          'FLUENT-SWITCH': {
-            checked: valuePropertyConfig
-          }
-        });
-
-        console.info('✅ Aurelia 2 + Fluent UI integration configured');
-      }),
       DialogConfiguration.customize(settings => {
         settings.renderer = FluentDialogRenderer; // <-- aurelia dialog fluentui custom renderer
         settings.rejectOnCancel = true;           // optional preference
@@ -128,6 +91,7 @@ async function startApp() {
       IconButton,
       DataGrid)
       .app(App);
+
     return app.start();
   }
   catch (error) { logger ? logger.error(error) : console.error(error) };
