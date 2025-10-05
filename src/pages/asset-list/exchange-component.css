@@ -1,11 +1,11 @@
 /* Table Container */
 .table-container {
-  @apply tw-w-fit tw-mx-auto tw-overflow-x-auto tw-rounded-lg;
+  @apply tw-inline-block tw-mx-auto tw-overflow-x-auto tw-rounded-lg;
   box-shadow: var(--elevation-shadow);
 }
 /* Table Base */
 .trading-table {
-  @apply tw-min-w-full tw-border-collapse;
+  @apply tw-border-collapse tw-table-auto;
   background-color: var(--neutral-layer-1);
 }
 /* Header Styles */
@@ -15,7 +15,7 @@
       var(--neutral-layer-3) 100%);
 }
 .header-cell {
-  @apply tw-px-4 tw-py-3 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider;
+  @apply tw-px-2 tw-py-3 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-whitespace-nowrap;
   color: var(--neutral-foreground-rest);
   border-bottom: 1px solid var(--neutral-stroke-divider);
 }
@@ -45,7 +45,7 @@
 }
 /* Cell Base Styles */
 .table-cell {
-  @apply tw-px-4 tw-py-3 tw-whitespace-nowrap;
+  @apply tw-px-2 tw-py-3 tw-whitespace-nowrap;
 }
 .cell-center {
   @apply table-cell tw-text-center;
@@ -79,4 +79,17 @@
 .error-message {
   @apply tw-text-xs tw-mt-1 tw-font-medium;
   color: var(--error-foreground-rest);
+}
+/* Override Fluent UI component widths for compact table */
+.trading-table fluent-select {
+  width: auto !important;
+  min-width: 4rem !important;
+}
+.trading-table fluent-text-field {
+  width: auto !important;
+  min-width: 3rem !important;
+  max-width: 5rem !important;
+}
+.trading-table fluent-checkbox {
+  width: auto !important;
 }
