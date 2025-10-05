@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import aurelia from '@aurelia/vite-plugin';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   server: {
@@ -9,6 +11,14 @@ export default defineConfig({
   },
   esbuild: {
     target: 'es2022'
+  },
+  css: {
+    postcss: {
+      plugins: [
+        tailwindcss(),
+        autoprefixer()
+      ]
+    }
   },
   plugins: [
     aurelia({
