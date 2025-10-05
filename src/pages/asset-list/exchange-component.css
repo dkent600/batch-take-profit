@@ -1,11 +1,11 @@
 /* Table Container */
 .table-container {
-  @apply tw-inline-block tw-mx-auto tw-overflow-x-auto tw-rounded-lg;
+  @apply tw-overflow-x-auto tw-rounded-lg tw-w-fit;
   box-shadow: var(--elevation-shadow);
 }
 /* Table Base */
 .trading-table {
-  @apply tw-border-collapse tw-table-auto;
+  @apply tw-border-collapse tw-table-auto tw-w-auto;
   background-color: var(--neutral-layer-1);
 }
 /* Header Styles */
