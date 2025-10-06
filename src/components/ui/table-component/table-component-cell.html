@@ -1,0 +1,12 @@
+<template>
+  <th if.bind="cellType === 'columnheader'" 
+      class="${getCellClass()} " 
+      style="${getGridColumnStyle()}">
+      <slot></slot>
+  </th>
+  <td if.bind="cellType === 'data'" 
+      class="${getCellClass()}" 
+      style="${getGridColumnStyle()}">
+      <slot></slot>
+  </td>
+</template>

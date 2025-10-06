@@ -1,23 +1,8 @@
 <template>
   <div class="tw-flex tw-flex-col tw-items-center tw-p-6">
     <!-- ***** TABLE SECTION ***** -->
-    <div class="table-container">
+    <table-component table-columns.bind="columns" table-rows.bind="assets">
       <table class="table">
-        <thead class="table-header">
-          <tr>
-            <th class="header-cell-left">Select</th>
-            <th class="header-cell-left">Exchange</th>
-            <th class="header-cell-left">Coin</th>
-            <th class="header-cell-right">Balance</th>
-            <th class="header-cell-center">Buy/Sell</th>
-            <th class="header-cell-center">Percent</th>
-            <th class="header-cell-center">Coins to Buy/Sell</th>
-            <th class="header-cell-right">$USD/Coin</th>
-            <th class="header-cell-center">Limit</th>
-            <th class="header-cell-center">Limit Price</th>
-            <th class="header-cell-right">Total Buy/Sell in $USD</th>
-          </tr>
-        </thead>
         <tbody class="table-body">
           <tr repeat.for="asset of assets" class="table-row">
             <td class="cell-center">
@@ -85,7 +70,7 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </table-component>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
     <div class="tw-flex tw-items-center tw-justify-center tw-gap-0">

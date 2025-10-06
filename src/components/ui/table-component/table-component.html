@@ -1,16 +1,10 @@
 <template>
   <div class="table-container">
     <table class="table">
-      <thead class="table-header">
-        <tr>
-          <th repeat.for="column of tableColumns" class="${getColumnClass(column)}">
-            ${column.name}
-          </th>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-        <tr if.bind="loading" class="table-row">
-          <td class="cell-center loading-cell" colspan.bind="tableColumns.length">
+      <!-- Loading state -->
+      <tbody if.bind="loading" class="table-body">
+        <tr class="table-row">
+          <td class="cell-center loading-cell" style="padding: 2rem; text-align: center;">
             <div class="tw-flex tw-items-center tw-justify-center tw-gap-2">
               <svg class="tw-animate-spin tw-h-4 tw-w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -20,22 +14,19 @@
             </div>
           </td>
         </tr>
-        <tr if.bind="!loading && tableRows.length === 0" class="table-row">
-          <td class="cell-center empty-cell" colspan.bind="tableColumns.length">
+      </tbody>
+
+      <!-- Empty state (only shown if showEmptyState is true and no content is slotted) -->
+      <tbody if.bind="!loading && showEmptyState" class="table-body">
+        <tr class="table-row">
+          <td class="cell-center empty-cell" style="padding: 2rem; text-align: center;">
             <span class="placeholder-text">${emptyMessage}</span>
           </td>
         </tr>
-        <tr if.bind="!loading && tableRows.length > 0" repeat.for="item of tableRows" class="table-row">
-          <td repeat.for="column of tableColumns" class="${getCellClass(column)}">
-            <span if.bind="column.type !== 'action'" class="${getCellValueClass(column)}">
-              ${formatCellValue(item[column.key], column, item)}
-            </span>
-            <div if.bind="column.type === 'action'" class="action-cell">
-              <slot name="action-cell" action-item.bind="item" action-column.bind="column"></slot>
-            </div>
-          </td>
-        </tr>
       </tbody>
+
+      <!-- Content slot for table-component-row elements -->
+      <slot if.bind="!loading"></slot>
     </table>
   </div>
 </template>

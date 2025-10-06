@@ -1,0 +1,81 @@
+/* Shadow DOM component CSS - needs all table styles for isolation */
+:host {
+  display: contents;
+  /* Makes the custom element transparent for table layout */
+}
+/* Import TailwindCSS styles */
+.tw-block {
+  display: block;
+}
+.tw-px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.tw-py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.tw-text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.tw-font-semibold {
+  font-weight: 600;
+}
+.tw-uppercase {
+  text-transform: uppercase;
+}
+.tw-tracking-wider {
+  letter-spacing: 0.05em;
+}
+.tw-whitespace-nowrap {
+  white-space: nowrap;
+}
+.tw-text-left {
+  text-align: left;
+}
+.tw-text-center {
+  text-align: center;
+}
+.tw-text-right {
+  text-align: right;
+}
+.tw-transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+}
+.tw-duration-150 {
+  transition-duration: 150ms;
+}
+.tw-ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Table cell base styles */
+.table-cell {
+  padding: 0.75rem 1rem;
+  color: var(--neutral-foreground-rest);
+  border-bottom: 1px solid var(--neutral-stroke-divider);
+  white-space: nowrap;
+  vertical-align: middle;
+  /* Remove text-align property to let TailwindCSS utilities work */
+}
+.table-header-cell {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--neutral-foreground-rest);
+  border-bottom: 2px solid var(--neutral-stroke-divider);
+  background: linear-gradient(135deg,
+      var(--neutral-layer-2) 0%,
+      var(--neutral-layer-3) 100%);
+  white-space: nowrap;
+  /* Remove text-align property to let TailwindCSS utilities work */
+}
+.table-data-cell {
+  background-color: var(--neutral-layer-1);
+  transition: background-color 150ms ease-in-out;
+}
+.table-data-cell:hover {
+  background-color: var(--neutral-layer-2);
+}

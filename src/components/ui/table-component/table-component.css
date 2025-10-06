@@ -1,126 +1,47 @@
+/* Table Component Container Styles */
+/* Shadow DOM host styling */
+:host {
+  display: block;
+  width: fit-content;
+}
 /* Table Container */
 .table-container {
-  @apply tw-overflow-x-auto tw-rounded-lg tw-w-fit;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  width: fit-content;
   box-shadow: var(--elevation-shadow);
 }
 /* Table Base */
 .table {
-  @apply tw-border-collapse tw-table-auto tw-w-auto;
+  display: table;
+  border-collapse: collapse;
+  table-layout: auto;
+  width: auto;
   background-color: var(--neutral-layer-1);
 }
-/* Header Styles */
-.table-header {
-  background: linear-gradient(135deg,
-      var(--neutral-layer-2) 0%,
-      var(--neutral-layer-3) 100%);
+/* Ensure table elements have proper display values */
+table-component-row {
+  display: table-row;
 }
-.header-cell {
-  @apply tw-px-2 tw-py-3 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-whitespace-nowrap;
-  color: var(--neutral-foreground-rest);
-  border-bottom: 1px solid var(--neutral-stroke-divider);
+table-component-cell {
+  display: table-cell;
 }
-.header-cell-left {
-  @apply header-cell tw-text-left;
-}
-.header-cell-center {
-  @apply header-cell tw-text-center;
-}
-.header-cell-right {
-  @apply header-cell tw-text-right;
-}
-/* Compact header variants */
-.header-cell-compact {
-  @apply tw-px-1 tw-py-2 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-whitespace-nowrap;
-  color: var(--neutral-foreground-rest);
-  border-bottom: 1px solid var(--neutral-stroke-divider);
-}
-.header-cell-compact-left {
-  @apply header-cell-compact tw-text-left;
-}
-.header-cell-compact-center {
-  @apply header-cell-compact tw-text-center;
-}
-.header-cell-compact-right {
-  @apply header-cell-compact tw-text-right;
-}
-/* Body Styles */
-.table-body {
-  background-color: var(--neutral-layer-1);
-}
-.table-body tr {
-  @apply tw-border-b;
-  border-color: var(--neutral-stroke-divider);
-}
-.table-row {
-  @apply tw-transition-colors tw-duration-150 tw-ease-in-out;
-  background-color: var(--neutral-layer-1);
-}
-.table-row:hover {
-  background-color: var(--neutral-layer-2);
-}
-/* Cell Base Styles */
-.table-cell {
-  @apply tw-px-2 tw-py-3 tw-whitespace-nowrap;
-}
-.cell-center {
-  @apply table-cell tw-text-center;
-  color: var(--neutral-foreground-rest);
-}
-.cell-left {
-  @apply table-cell tw-text-sm tw-font-medium;
-  color: var(--neutral-foreground-rest);
-}
-.cell-right {
-  @apply table-cell tw-text-sm tw-text-right tw-font-mono;
+/* Loading State */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
   color: var(--neutral-foreground-hint);
 }
-.cell-right-bold {
-  @apply table-cell tw-text-sm tw-text-right tw-font-mono tw-font-semibold;
-  color: var(--neutral-foreground-rest);
-}
-/* Compact cell variants */
-.cell-compact-center {
-  @apply table-cell tw-text-center tw-px-1 tw-py-2;
-  color: var(--neutral-foreground-rest);
-}
-.cell-compact-left {
-  @apply table-cell tw-text-sm tw-font-medium tw-px-1 tw-py-2;
-  color: var(--neutral-foreground-rest);
-}
-.cell-compact-right {
-  @apply table-cell tw-text-sm tw-text-right tw-font-mono tw-px-1 tw-py-2;
-  color: var(--neutral-foreground-hint);
-}
-.cell-compact-right-bold {
-  @apply table-cell tw-text-sm tw-text-right tw-font-mono tw-font-semibold tw-px-1 tw-py-2;
-  color: var(--neutral-foreground-rest);
-}
-/* Special Data Styles */
-.currency-value {
-  @apply tw-text-sm tw-font-mono tw-font-semibold;
-  color: var(--neutral-foreground-rest);
-}
-.percentage-display {
-  @apply tw-text-sm tw-font-mono;
-  color: var(--neutral-foreground-hint);
-}
-.number-value {
-  @apply tw-text-sm tw-font-mono;
-  color: var(--neutral-foreground-hint);
-}
-.placeholder-text {
-  @apply tw-text-center tw-text-sm tw-font-light;
+/* Empty State */
+.empty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
   color: var(--neutral-foreground-disabled);
-}
-.loading-cell {
-  @apply tw-py-6;
-  color: var(--neutral-foreground-hint);
-}
-.empty-cell {
-  @apply tw-py-6;
-}
-.action-cell {
-  @apply tw-flex tw-items-center tw-justify-center tw-gap-1;
+  font-style: italic;
 }
 /* Override Fluent UI component widths for compact table */
 .table fluent-select {
