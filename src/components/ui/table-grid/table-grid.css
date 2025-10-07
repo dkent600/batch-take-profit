@@ -1,10 +1,4 @@
 /* Table Component Container Styles */
-/* Shadow DOM host styling */
-:host {
-  display: block;
-  width: fit-content;
-}
-/* Table Container */
 .table-container {
   overflow-x: auto;
   border-radius: 0.5rem;
@@ -16,15 +10,8 @@
   display: table;
   border-collapse: collapse;
   table-layout: auto;
-  width: auto;
+  width: 100%;
   background-color: var(--neutral-layer-1);
-}
-/* Ensure table elements have proper display values */
-table-component-row {
-  display: table-row;
-}
-table-component-cell {
-  display: table-cell;
 }
 /* Loading State */
 .loading-container {

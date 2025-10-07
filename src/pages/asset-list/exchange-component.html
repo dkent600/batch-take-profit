@@ -1,7 +1,7 @@
 <template>
   <div class="tw-flex tw-flex-col tw-items-center tw-p-6">
     <!-- ***** TABLE SECTION ***** -->
-    <table-component table-columns.bind="columns" table-rows.bind="assets">
+    <table-grid table-columns.bind="columns" table-rows.bind="assets">
       <table class="table">
         <tbody class="table-body">
           <tr repeat.for="asset of assets" class="table-row">
@@ -70,7 +70,7 @@
           </tr>
         </tbody>
       </table>
-    </table-component>
+    </table-grid>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
     <div class="tw-flex tw-items-center tw-justify-center tw-gap-0">

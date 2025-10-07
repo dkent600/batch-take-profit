@@ -1,0 +1,49 @@
+/* Table Component Container Styles */
+.table-container {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  width: fit-content;
+  box-shadow: var(--elevation-shadow);
+}
+/* Table Base */
+.table {
+  display: table;
+  border-collapse: collapse;
+  table-layout: auto;
+  width: 100%;
+  background-color: var(--neutral-layer-1);
+}
+/* Loading State */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: var(--neutral-foreground-hint);
+}
+/* Empty State */
+.empty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: var(--neutral-foreground-disabled);
+  font-style: italic;
+}
+/* Override Fluent UI component widths for compact table */
+.table fluent-select {
+  width: auto !important;
+  min-width: 4rem !important;
+}
+.table fluent-text-field {
+  width: auto !important;
+  min-width: 3rem !important;
+  max-width: 5rem !important;
+}
+.table fluent-checkbox {
+  width: auto !important;
+}
+.table fluent-button {
+  width: auto !important;
+  min-width: 2rem !important;
+}

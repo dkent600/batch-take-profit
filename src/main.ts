@@ -36,7 +36,8 @@ import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
 import { IconButton } from './components/ui/icon-button/icon-button.js';
-import { TableComponent, TableComponentRow, TableComponentCell } from './components/ui/table-component/index.js';
+import { TableGrid, TableGridRow, TableGridCell } from './components/ui/table-grid/index.js';
+import { TableGridd } from './components/ui/table-grid/table-gridd.js';
 
 let logger: ILogger;
 
@@ -89,9 +90,10 @@ async function startApp() {
       // Components
       AssetList,
       IconButton,
-      TableComponent,
-      TableComponentRow,
-      TableComponentCell)
+      TableGrid,
+      // TableGridRow,
+      // TableGridCell
+    )
       .app(App);
 
     return app.start();

@@ -1,0 +1,31 @@
+/* Table cell base styles */
+.table-cell {
+  display: table-cell;
+  padding: 0.75rem 1rem;
+  color: var(--neutral-foreground-rest);
+  border-bottom: 1px solid var(--neutral-stroke-divider);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.table-header-cell {
+  display: table-cell;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--neutral-foreground-rest);
+  border-bottom: 2px solid var(--neutral-stroke-divider);
+  background: linear-gradient(135deg,
+      var(--neutral-layer-2) 0%,
+      var(--neutral-layer-3) 100%);
+  white-space: nowrap;
+  /* Remove text-align property to let TailwindCSS utilities work */
+}
+.table-data-cell {
+  background-color: var(--neutral-layer-1);
+  transition: background-color 150ms ease-in-out;
+}
+.table-data-cell:hover {
+  background-color: var(--neutral-layer-2);
+}

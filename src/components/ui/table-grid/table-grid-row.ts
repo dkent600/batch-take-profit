@@ -1,11 +1,11 @@
-import { bindable, useShadowDOM } from 'aurelia';
-import './table-component-row.css';
+import { bindable, customElement } from 'aurelia';
+import './table-grid-row.css';
 /**
- * Table row component that works as a child of table-component.
+ * Table row component that works as a child of table-grid.
  * Supports header rows and data rows with proper styling.
  */
-@useShadowDOM({ mode: 'open' })
-export class TableComponentRow {
+@customElement('table-grid-row')
+export class TableGridRow {
   /**
    * Row type - determines styling and behavior
    * - 'header': Header row with column headers

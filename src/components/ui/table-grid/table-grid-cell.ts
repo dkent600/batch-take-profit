@@ -1,12 +1,12 @@
-import { bindable, useShadowDOM } from 'aurelia';
-import './table-component-cell.css';
+import { bindable, customElement } from 'aurelia';
+import './table-grid-cell.css';
 
 /**
- * Table cell component that works as a child of table-component-row.
+ * Table cell component that works as a child of table-grid-row.
  * Supports different cell types and flexible content projection.
  */
-@useShadowDOM({ mode: 'open' })
-export class TableComponentCell {
+@customElement('table-grid-cell')
+export class TableGridCell {
   /**
    * Cell type - determines the HTML element and styling
    * - 'columnheader': Header cell (th element)
@@ -44,7 +44,7 @@ export class TableComponentCell {
    */
   private getGridColumnStyle(): string {
     const gridStyle = this.gridColumn ? `grid-column: ${this.gridColumn};` : '';
-    const displayAndAlign = `display: block; text-align: ${this.align};`;
+    const displayAndAlign = `display: table-cell; text-align: ${this.align};`;
     return gridStyle ? `${gridStyle} ${displayAndAlign}` : displayAndAlign;
   }
 }

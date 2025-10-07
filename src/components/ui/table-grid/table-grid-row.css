@@ -1,0 +1,21 @@
+/* Table row styles */
+.table-row {
+  display: table-row;
+  transition: background-color 150ms ease-in-out;
+}
+.table-row:hover {
+  background-color: var(--neutral-layer-2);
+}
+.table-header-row {
+  background: linear-gradient(135deg,
+      var(--neutral-layer-2) 0%,
+      var(--neutral-layer-3) 100%);
+}
+.table-header-row:hover {
+  background: linear-gradient(135deg,
+      var(--neutral-layer-3) 0%,
+      var(--neutral-layer-4) 100%);
+}
+.table-data-row {
+  background-color: var(--neutral-layer-1);
+}
