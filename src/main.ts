@@ -35,9 +35,8 @@ import {
 import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
-import { DataGrid } from './components/ui/data-grid/data-grid.js';
 import { IconButton } from './components/ui/icon-button/icon-button.js';
-import { TableComponent, TableComponentRow, TableComponentCell } from './components/ui/index.js';
+import { TableComponent, TableComponentRow, TableComponentCell } from './components/ui/table-component/index.js';
 
 let logger: ILogger;
 
@@ -90,7 +89,6 @@ async function startApp() {
       // Components
       AssetList,
       IconButton,
-      DataGrid,
       TableComponent,
       TableComponentRow,
       TableComponentCell)
