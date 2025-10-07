@@ -43,7 +43,6 @@ export class MyComponent {
 - When unsure if a CSS custom property is exposed, explicitly state uncertainty rather than guess
 
 ### Component Architecture
-- Custom elements use shadow DOM: `@useShadowDOM({ mode: 'open' })`
 - Bindable properties with explicit TypeScript types using `@bindable`
 - File structure: `component-name.ts`, `component-name.html`, `component-name.css`
 - Register components in `main.ts` as part of Aurelia registration
