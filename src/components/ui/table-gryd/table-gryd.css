@@ -1,0 +1,74 @@
+/* TableGryd - container and base table styles
+	 Priority: Fluent UI design tokens -> Tailwind-friendly utility hooks -> plain CSS fallbacks
+*/
+table-gryd {
+  display: block;
+  width: 100%;
+}
+/* Outer scrolling container to allow horizontal scrolling on small viewports */
+.table-container {
+  width: 100%;
+  margin: 0;
+  overflow-x: auto;
+  border-radius: 6px;
+  background-color: var(--neutral-layer-1, #fff);
+  color: var(--neutral-foreground-rest, #222);
+  border: 1px solid var(--neutral-stroke-divider, rgb(0 0 0 / 8%));
+}
+/* Table layout uses classic table display so rows/cells behave naturally */
+.table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  /* prevent gaps between cells */
+  background-color: transparent;
+  color: inherit;
+}
+/* Support sticky header even when header row is a regular <tr> with .table-header-row */
+.table .table-header-row,
+.table thead .table-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+.table .table-header-cell,
+.table thead .table-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background-color: var(--neutral-layer-2, #f5f5f5);
+}
+/* Small wrapper for vertical scroll scenarios */
+.table-wrapper {
+  display: block;
+  width: 100%;
+  overflow: auto;
+}
+/* Utility hooks (tailwind-friendly parity)
+	 - .tw-table-compact: reduce padding and font-size for dense tables
+	 - .tw-table-zebra: even-row background shading
+*/
+.tw-table-compact .table-cell,
+.tw-table-compact .table-data-cell {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+}
+.tw-table-zebra .table-data-row:nth-child(even) {
+  background-color: var(--neutral-layer-1, #fff);
+}
+/* Loading / empty states */
+.loading-container,
+.empty-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  color: var(--neutral-foreground-hint, #888);
+}
+/* Keyboard / focus helpers */
+.table-row:focus-within,
+.table-row[aria-selected="true"] {
+  outline: 2px solid var(--accent-fill-rest, #0078d4);
+  outline-offset: -2px;
+}

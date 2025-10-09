@@ -50,39 +50,39 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
               style="--design-unit: 1; width: 32px; height: 32px;">
             </fluent-progress-ring>
           </div>
-          <table-component 
+          <table-gryd 
             class="tw-w-fit tw-mx-auto"
             show-empty-state.bind="openedOrders.length === 0" 
             loading.bind="fetchingOpenedOrders" 
             empty-message="No open orders found">
-            <table-component-row type="header">
-              <table-component-cell cell-type="columnheader">Created</table-component-cell>
-              <table-component-cell cell-type="columnheader">Exchange</table-component-cell>
-              <table-component-cell cell-type="columnheader" align="center">Direction</table-component-cell>
-              <table-component-cell cell-type="columnheader">Pair</table-component-cell>
-              <table-component-cell cell-type="columnheader">Price</table-component-cell>
-              <table-component-cell cell-type="columnheader">Amount</table-component-cell>
-              <table-component-cell cell-type="columnheader">Value</table-component-cell>
-              <table-component-cell cell-type="columnheader">Actions</table-component-cell>
-            </table-component-row>
-            <table-component-row repeat.for="order of openedOrders">
-              <table-component-cell>${order.createdAt}</table-component-cell>
-              <table-component-cell>${order.exchange}</table-component-cell>
-              <table-component-cell align="center">${order.direction}</table-component-cell>
-              <table-component-cell>${order.pair}</table-component-cell>
-              <table-component-cell>${order.price}</table-component-cell>
-              <table-component-cell>${order.amount}</table-component-cell>
-              <table-component-cell>${order.amount * order.price}</table-component-cell>
-              <table-component-cell>
+            <table-gryd-row type="header">
+              <table-gryd-cell cell-type="columnheader">Created</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Exchange</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader" align="center">Direction</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Pair</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Price</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Amount</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Value</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Actions</table-gryd-cell>
+            </table-gryd-row>
+            <table-gryd-row repeat.for="order of openedOrders">
+              <table-gryd-cell>${order.createdAt}</table-gryd-cell>
+              <table-gryd-cell>${order.exchange}</table-gryd-cell>
+              <table-gryd-cell align="center">${order.direction}</table-gryd-cell>
+              <table-gryd-cell>${order.pair}</table-gryd-cell>
+              <table-gryd-cell>${order.price}</table-gryd-cell>
+              <table-gryd-cell>${order.amount}</table-gryd-cell>
+              <table-gryd-cell>${order.amount * order.price}</table-gryd-cell>
+              <table-gryd-cell>
                 <fluent-button 
                   appearance="stealth" 
                   size="small"
                   click.trigger="cancelOrder(order.orderId)">
                   Cancel
                 </fluent-button>
-              </table-component-cell>
-            </table-component-row>
-          </table-component>
+              </table-gryd-cell>
+            </table-gryd-row>
+          </table-gryd>
         </div>
       </fluent-accordion-item>
 
@@ -92,37 +92,37 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
           Closed Orders
         </div>
         <div class="tw-p-4">
-          <table-component 
+          <table-gryd 
             class="tw-w-fit tw-mx-auto"
             show-empty-state.bind="closedOrders.length === 0" 
             loading.bind="fetchingClosedOrders" 
             empty-message="No closed orders found">
-            <table-component-row type="header">
-              <table-component-cell cell-type="columnheader">Created</table-component-cell>
-              <table-component-cell cell-type="columnheader">Closed</table-component-cell>
-              <table-component-cell cell-type="columnheader">Exchange</table-component-cell>
-              <table-component-cell cell-type="columnheader">Pair</table-component-cell>
-              <table-component-cell cell-type="columnheader">Type</table-component-cell>
-              <table-component-cell cell-type="columnheader">Status</table-component-cell>
-              <table-component-cell cell-type="columnheader">Coins</table-component-cell>
-              <table-component-cell cell-type="columnheader">Executed Price</table-component-cell>
-              <table-component-cell cell-type="columnheader">Limit Price</table-component-cell>
-              <table-component-cell cell-type="columnheader">Total Cost</table-component-cell>
-            </table-component-row>
+            <table-gryd-row type="header">
+              <table-gryd-cell cell-type="columnheader">Created</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Closed</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Exchange</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Pair</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Type</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Status</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Coins</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Executed Price</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Limit Price</table-gryd-cell>
+              <table-gryd-cell cell-type="columnheader">Total Cost</table-gryd-cell>
+            </table-gryd-row>
             
-            <table-component-row repeat.for="order of closedOrders">
-              <table-component-cell>${order.createdAt}</table-component-cell>
-              <table-component-cell>${order.closed}</table-component-cell>
-              <table-component-cell>${order.exchange}</table-component-cell>
-              <table-component-cell>${order.pair}</table-component-cell>
-              <table-component-cell>${order.type}</table-component-cell>
-              <table-component-cell>${order.status}</table-component-cell>
-              <table-component-cell>${order.coins}</table-component-cell>
-              <table-component-cell>${order.executedPrice}</table-component-cell>
-              <table-component-cell>${order.limitPrice}</table-component-cell>
-              <table-component-cell>${order.totalCost}</table-component-cell>
-            </table-component-row>
-          </table-component>
+            <table-gryd-row repeat.for="order of closedOrders">
+              <table-gryd-cell>${order.createdAt}</table-gryd-cell>
+              <table-gryd-cell>${order.closed}</table-gryd-cell>
+              <table-gryd-cell>${order.exchange}</table-gryd-cell>
+              <table-gryd-cell>${order.pair}</table-gryd-cell>
+              <table-gryd-cell>${order.type}</table-gryd-cell>
+              <table-gryd-cell>${order.status}</table-gryd-cell>
+              <table-gryd-cell>${order.coins}</table-gryd-cell>
+              <table-gryd-cell>${order.executedPrice}</table-gryd-cell>
+              <table-gryd-cell>${order.limitPrice}</table-gryd-cell>
+              <table-gryd-cell>${order.totalCost}</table-gryd-cell>
+            </table-gryd-row>
+          </table-gryd>
         </div>
       </fluent-accordion-item>
     </fluent-accordion>

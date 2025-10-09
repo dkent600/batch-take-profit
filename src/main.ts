@@ -2,7 +2,7 @@ import { Aurelia, ILogger, Registration } from 'aurelia';
 import { App } from './pages/app/app.js';
 import { AssetList } from './pages/asset-list/asset-list.js';
 
-import { DialogConfiguration } from '@aurelia/dialog';
+import { DialogConfiguration, DialogService } from '@aurelia/dialog';
 import { FluentDialogRenderer } from './dialogs/fluent-dialog-renderers/fluent-dialog-renderer.js';
 import { FluentUIAdapter } from './stores/fluent-ui-adapter.js';
 
@@ -36,7 +36,7 @@ import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
 import { IconButton } from './components/ui/icon-button/icon-button.js';
-import { TableComponent, TableComponentRow, TableComponentCell } from './components/ui/table-component/index.js';
+import { TableGryd, TableGrydRow, TableGrydCell } from './components/ui/table-gryd/index.js';
 
 let logger: ILogger;
 
@@ -75,6 +75,7 @@ async function startApp() {
       // Configure FluentUIAdapter for two-way binding
       FluentUIAdapter.customize({ withPrefix: 'fluent' }),
 
+      DialogService,
       DialogConfiguration.customize(settings => {
         settings.renderer = FluentDialogRenderer; // <-- aurelia dialog fluentui custom renderer
         settings.rejectOnCancel = true;           // optional preference
@@ -89,15 +90,21 @@ async function startApp() {
       // Components
       AssetList,
       IconButton,
-      TableComponent,
-      TableComponentRow,
-      TableComponentCell)
-      .app(App);
+      TableGryd,
+      TableGrydRow,
+      TableGrydCell
+    );
+
+    console.info('✅ App components registered successfully');
+
+    app.app(App);
+    console.info('✅ App started successfully');
 
     return app.start();
   }
-  catch (error) { logger ? logger.error(error) : console.error(error) };
+  catch (error) {
+    console.error(error);
+  }
 }
 
 startApp();
-

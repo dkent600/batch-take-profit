@@ -1,12 +1,12 @@
-import { bindable, useShadowDOM } from 'aurelia';
-import './table-component-cell.css';
+import { bindable, customElement } from 'aurelia';
+import './table-gryd-cell.css';
 
 /**
- * Table cell component that works as a child of table-component-row.
+ * Table cell component that works as a child of table-gryd-row.
  * Supports different cell types and flexible content projection.
  */
-@useShadowDOM({ mode: 'open' })
-export class TableComponentCell {
+@customElement('table-gryd-cell')
+export class TableGrydCell {
   /**
    * Cell type - determines the HTML element and styling
    * - 'columnheader': Header cell (th element)
@@ -25,7 +25,7 @@ export class TableComponentCell {
   @bindable public align: 'left' | 'center' | 'right' = 'left';
 
   /**
-   * Get CSS class for the cell based on type
+   * Get CSS class for the cell based on type and alignment
    */
   private getCellClass(): string {
     const classes = ['table-cell'];
@@ -36,15 +36,29 @@ export class TableComponentCell {
       classes.push('table-data-cell');
     }
 
+    // Add TailwindCSS alignment classes - these now work without Shadow DOM
+    switch (this.align) {
+      case 'center':
+        classes.push('tw-text-center');
+        break;
+      case 'right':
+        classes.push('tw-text-right');
+        break;
+      default:
+        classes.push('tw-text-left');
+        break;
+    }
+
     return classes.join(' ');
   }
 
   /**
-   * Get CSS grid column style if specified, plus display and alignment
+   * Get inline style for grid positioning if specified
    */
   private getGridColumnStyle(): string {
-    const gridStyle = this.gridColumn ? `grid-column: ${this.gridColumn};` : '';
-    const displayAndAlign = `display: block; text-align: ${this.align};`;
-    return gridStyle ? `${gridStyle} ${displayAndAlign}` : displayAndAlign;
+    if (this.gridColumn) {
+      return `grid-column: ${this.gridColumn};`;
+    }
+    return '';
   }
 }
