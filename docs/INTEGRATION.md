@@ -30,33 +30,6 @@ The backend handles all exchange authentication:
 
 ## Request Queue Integration
 
-### Critical Requirement: Nonce Handling
-
-Cryptocurrency exchanges require sequential nonce values for API requests. The frontend implements a sophisticated request queue to ensure proper ordering:
-
-```typescript
-@injectable()
-export class RequestQueueService {
-  private queue: Array<() => Promise<any>> = [];
-  private processing = false;
-  
-  public async enqueue<T>(operation: () => Promise<T>): Promise<T> {
-    return new Promise((resolve, reject) => {
-      this.queue.push(async () => {
-        try {
-          const result = await operation();
-          resolve(result);
-        } catch (error) {
-          reject(error);
-        }
-      });
-      
-      this.processQueue();
-    });
-  }
-}
-```
-
 ### Request Serialization Pattern
 
 **All API calls must use the queue service:**
@@ -364,14 +337,6 @@ Monitor backend health:
 const health = await this.apiService.checkHealth();
 this.logger.trace('Backend status:', health);
 ```
-
-### Log Analysis
-
-Key log messages to monitor:
-- `RequestQueue: Processing request` - Normal operation
-- `RequestQueue: Retry attempt` - Nonce error recovery
-- `API Error:` - Backend communication issues
-- `Order created:` - Successful operations
 
 ## Future Integration Improvements
 

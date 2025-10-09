@@ -63,9 +63,6 @@ This frontend application communicates with the **butterfly-services** REST API 
 - Execute market and limit orders
 - Retrieve order history and status
 
-### Request Queue System
-Due to cryptocurrency exchange API requirements (especially nonce handling), all API requests are serialized through a `RequestQueueService` to prevent race conditions and ensure proper request ordering.
-
 ### Key Features
 - **Batch Operations**: Execute multiple take-profit orders simultaneously
 - **Flexible Strategies**: Support for percentage-based or fixed-amount sales
@@ -152,12 +149,6 @@ This separation supports:
 
 ### Common Issues
 
-#### Nonce Errors
-If you encounter "EAPI:Invalid nonce" errors:
-1. Ensure only one instance of the application is running
-2. Check that butterfly-services backend is properly configured
-3. The RequestQueueService automatically handles request serialization
-
 #### Development Server Issues
 - **Port 5173 in use**: Change port in `vite.config.ts`
 - **Hot reload not working**: Clear browser cache and restart dev server
@@ -192,9 +183,8 @@ src/
 ## Contributing
 
 1. Follow the established architecture patterns (View/ViewModel/Store/Service)
-2. All API calls must use the RequestQueueService
-3. Add unit tests for new components and services
-4. Update documentation for significant changes
+2. Add unit tests for new components and services
+3. Update documentation for significant changes
 
 ## Related Projects
 

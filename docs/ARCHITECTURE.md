@@ -21,7 +21,7 @@ The batch-take-profit frontend is built using the Aurelia framework with TypeScr
 - Handle component lifecycle (attached, detached, etc.)
 
 ```typescript
-@inject(AssetStore, OrdersStore, RequestQueueService)
+@inject(AssetStore, OrdersStore)
 export class ExchangeComponent {
   public assets: IAsset[] = [];
   
@@ -69,41 +69,7 @@ Services handle external integrations and data access:
 - Handles authentication and request formatting
 - Provides typed methods for all API operations
 
-**RequestQueueService**
-- Serializes all API requests to prevent race conditions
-- Critical for handling exchange nonce requirements
-- Implements retry logic for failed requests
-
-**LogService**
-- Centralized logging with different severity levels
-- Configurable output destinations
-
-```typescript
-@injectable()
-export class RequestQueueService {
-  public async enqueue<T>(operation: () => Promise<T>): Promise<T> {
-    // Serialize requests to prevent nonce conflicts
-  }
-}
-```
-
 ## Key Technical Decisions
-
-### Request Serialization
-
-**Problem**: Cryptocurrency exchanges require strictly sequential request ordering (nonce values).
-
-**Solution**: All API calls are queued through `RequestQueueService`:
-
-```typescript
-// Instead of direct API calls
-const balance = await this.apiService.getBalance(asset);
-
-// All calls go through the queue
-const balance = await this.queueService.enqueue(() => 
-  this.apiService.getBalance(asset)
-);
-```
 
 ### Error Handling Strategy
 
@@ -198,12 +164,11 @@ Environment-specific configuration through JSON files:
 Aurelia's built-in DI container manages all dependencies:
 
 ```typescript
-@inject(AssetStore, OrdersStore, RequestQueueService, LogService)
+@inject(AssetStore, OrdersStore, LogService)
 export class ComponentName {
   constructor(
     private assetStore: AssetStore,
     private ordersStore: OrdersStore,
-    private queueService: RequestQueueService,
     private logger: LogService
   ) {}
 }

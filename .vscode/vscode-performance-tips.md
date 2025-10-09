@@ -1,12 +1,5 @@
 # VS Code Performance Optimization Tips
 
-## Applied Optimizations
-
-### 1. Disabled Verbose Request Queue Logging
-- **Issue**: `RequestQueueService` was logging every API request
-- **Solution**: Added `enableLogging = false` flag to reduce console noise
-- **Enable when debugging**: Set `enableLogging = true` in `request-queue-service.ts`
-
 ## Additional Performance Recommendations
 
 ### 2. VS Code Settings Optimization

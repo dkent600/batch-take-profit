@@ -63,7 +63,6 @@ export class MyComponent {
 ### Exchange API Integration
 - Services call backend APIs via `butterfly-services` at configured `serviceUrl`
 - Exchange-specific patterns: Kraken uses USD quotes, MEXC uses USDT
-- All external requests go through `RequestQueueService` for rate limiting
 - Error handling preserves backend error messages when available
 
 ## Project-Specific Conventions

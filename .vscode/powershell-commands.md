@@ -63,12 +63,6 @@ git status --porcelain | ForEach-Object {
 }
 ```
 
-### Commit with Message
-```powershell
-git add -A
-git commit -m "feat: optimize RequestQueueService performance"
-```
-
 ## Performance Optimization
 
 ### Clean Cache
