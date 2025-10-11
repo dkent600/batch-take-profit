@@ -58,7 +58,7 @@ export class OrdersDisplay {
     this.ordersStore.fetchOpenedOrders()
       .then((orders: IOpenedOrderListItem[]) => {
         this.openedOrders = orders.map(order => ({
-          createdAt: new Date(order.createdAt).toLocaleString(),
+          createdAt: this.formatDate(order.createdAt),
           exchange: order.exchange,
           direction: order.direction,
           pair: order.pair,
@@ -76,11 +76,11 @@ export class OrdersDisplay {
     this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets)
       .then((orders: IClosedOrderListItem[]) => {
         this.closedOrders = orders.map(order => ({
-          closed: new Date(order.closedAt).toLocaleString(),
+          closed: this.formatDate(order.closedAt),
           pair: order.pair,
           exchange: order.exchange,
           type: order.direction + (order.type === 'limit' ? ' (limit)' : ' (market)'),
-          createdAt: new Date(order.createdAt).toLocaleString(),
+          createdAt: this.formatDate(order.createdAt),
           status: order.status,
           coins: order.status === 'executed' ? order.amountExecuted : order.amount,
           executedPrice: order.status === 'executed' ? order.price : '',
@@ -139,4 +139,19 @@ export class OrdersDisplay {
       });
   }
 
+  formatDate(dt?: string): string {
+    if (!dt) {
+      return "";
+    }
+
+    const date = new Date(dt);
+
+    const year = date.getFullYear().toString().substring(2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  }
 }

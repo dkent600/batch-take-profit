@@ -18,7 +18,8 @@
 .table-container .table table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0;
+  border-spacing: 1rem 0;
+  /* horizontal-gap vertical-gap */
   background: transparent;
   /* Slight radius that aligns with Fluent controls */
   border-radius: calc(var(--control-corner-radius, 8px));
@@ -32,6 +33,7 @@
   background: transparent;
 }
 .table-container .table tbody td {
+  @apply tw-text-nowrap;
   background: transparent;
 }
 /* Loading / empty placeholders */
