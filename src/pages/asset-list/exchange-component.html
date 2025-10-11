@@ -83,14 +83,14 @@
         <fluent-button
           appearance="stealth"
           click.trigger="refresh()"
-          class="tw-flex tw-center tw-underline">
-            <span class="tw-whitespace-nowrap">Refresh Prices and Balances</span>
-            <span if.bind="isRefreshing" class="tw-flex tw-items-center tw-justify-center tw-h-full tw-ml-1" style="margin-left: 4px;">
+          class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-16">
+            <span class="tw-whitespace-nowrap tw-underline">Refresh Prices and Balances</span>
+            <div if.bind="isRefreshing">
               <svg class="tw-animate-spin tw-h-4 tw-w-4 tw-text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
               </svg>
-            </span>
+            </div>
         </fluent-button>
         </div>
       </div>
