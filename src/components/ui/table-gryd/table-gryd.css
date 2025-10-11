@@ -5,46 +5,34 @@
 /* Container wraps the table and lets it scroll horizontally on small screens */
 .table-container {
   /* Tailwind utility mix */
-  @apply tw-w-full tw-overflow-x-auto tw-rounded-2xl tw-shadow-sm tw-border;
+  @apply tw-w-full tw-overflow-x-auto;
   /* Fluent-aligned colors */
-  background: var(--neutral-layer-1);
+  background: transparent;
   color: var(--neutral-foreground-rest);
-  border-color: var(--neutral-stroke-rest);
+  border-color: transparent;
 }
 /* The actual table element */
-.table {
+.table-container .table {
+  background: transparent;
+}
+.table-container .table table {
   width: 100%;
   border-collapse: separate;
-  /* for nicer rounded corners */
   border-spacing: 0;
-  /* remove default spacing */
-  background: var(--neutral-layer-1);
+  background: transparent;
   /* Slight radius that aligns with Fluent controls */
   border-radius: calc(var(--control-corner-radius, 8px));
 }
 /* Table body wrapper used in loading/empty states */
-.table-body {
+.table-container .table tbody {
   @apply tw-align-middle;
 }
-/* Base row element (used by table-gryd-row) */
-.table-row {
-  /* Use design-unit for consistent density with Fluent */
-  --_row-py: calc(var(--design-unit, 4px) * 2);
-  --_row-px: calc(var(--design-unit, 4px) * 3);
+.table-container .table thead th {
+  @apply tw-pb-4;
+  background: transparent;
 }
-/* Zebra striping for data rows only (header gets its own bg) */
-.table-row.table-data-row:nth-child(even) td {
-  background: color-mix(in srgb, var(--neutral-layer-1) 92%, var(--neutral-layer-2, #000) 8%);
-}
-/* Hover for interactive feel */
-.table-row.table-data-row:hover td {
-  background: color-mix(in srgb, var(--neutral-layer-1) 88%, var(--neutral-layer-2, #000) 12%);
-}
-/* Focus ring if a cell or control inside gains focus */
-.table-row:has(:focus-visible) td,
-.table-row:has(:focus-visible) th {
-  outline: calc(var(--focus-stroke-width, 2px)) solid var(--focus-stroke-outer, var(--accent-fill-rest));
-  outline-offset: -1px;
+.table-container .table tbody td {
+  background: transparent;
 }
 /* Loading / empty placeholders */
 .loading-cell,
@@ -55,25 +43,6 @@
 /* Placeholder text used by empty state */
 .placeholder-text {
   @apply tw-italic tw-opacity-80;
-}
-/* Make Fluent buttons inside the grid feel at home */
-.table .cell-content fluent-button {
-  @apply tw-my-1;
-}
-/* Ensure Fluent text fields / combos don’t overflow cells */
-.table .cell-content fluent-text-field,
-.table .cell-content fluent-number-field,
-.table .cell-content fluent-select,
-.table .cell-content fluent-combobox {
-  width: 100%;
-  max-width: 100%;
-}
-/* Compact density option via a utility class on <table-gryd> host if desired */
-:host(.compact) .table-row td,
-:host(.compact) .table-row th {
-  --_row-py: calc(var(--design-unit, 4px) * 1.25);
-  --_row-px: calc(var(--design-unit, 4px) * 2);
-  font-size: 0.9rem;
 }
 /* Support for a center-aligned message row (used in loading/empty) */
 .cell-center {

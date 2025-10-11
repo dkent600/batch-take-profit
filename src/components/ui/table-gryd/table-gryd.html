@@ -21,14 +21,9 @@
     </div>
     
     <template if.bind="!loading && !showEmptyState">
-      <table class="table">
-          <tbody>
-          <au-slot name="head"></au-slot>
-        </tbody>
-        <tbody>
-          <au-slot name="body"></au-slot>
-        </tbody>
-      </table>
+      <div class="table">
+        <au-slot></au-slot>
+      </div>
     </template>
   </div>
 </template>

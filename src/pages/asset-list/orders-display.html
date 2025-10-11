@@ -1,4 +1,3 @@
-<template>
  <!--
 <fluent-button 
 appearance="accent"
@@ -34,25 +33,13 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
           class="tw-text-2xl tw-font-bold tw-text-center tw-py-2">
           Open Orders (${openedOrders.length})
         </div>
-        <div class="tw-p-4">
-          <div class="tw-grid tw-place-items-center tw-h-8 tw-w-8 tw-mx-auto">
-            <!-- 
-            <icon-button
-              if.bind="!fetchingOpenedOrders"
-              click.trigger="fetchOpenedOrders" 
-              title="Refresh"
-              ariaLabel="Refresh">
-              <span slot="icon">↻</span>
-              <span slot="icon"><svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 8.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7Zm9 3-.93-.34a7.5 7.5 0 0 0-.6-1.44l.55-.8a1 1 0 0 0-.1-1.24l-1.5-1.5a1 1 0 0 0-1.24-.1l-.8.55c-.47-.22-.96-.41-1.47-.55L14.5 4a1 1 0 0 0-1-.8h-2a1 1 0 0 0-1 .8l-.34.93c-.5.14-1 .33-1.47.55l-.8-.55a1 1 0 0 0-1.24.1L3.15 6.53a1 1 0 0 0-.1 1.24l.55.8c-.23.47-.42.96-.56 1.47L2 12a1 1 0 0 0 .8 1l.93.34c.14.5.33 1 .55 1.47l-.55.8a1 1 0 0 0 .1 1.24l1.5 1.5a1 1 0 0 0 1.24.1l.8-.55c.47.23.96.41 1.47.56L10 22a1 1 0 0 0 1 .8h2a1 1 0 0 0 1-.8l.34-.93c.5-.14 1-.33 1.47-.56l.8.55a1 1 0 0 0 1.24-.1l1.5-1.5a1 1 0 0 0 .1-1.24l-.55-.8c.23-.47.42-.96.56-1.47L22 13a1 1 0 0 0-.8-1Z"/>
-              </svg></span>
-            </icon-button>
-            -->
+        <div class="tw-px-4 tw-pb-4">
+          <div class="tw-grid tw-place-items-center tw-pb-4 tw-pt-2">
             <fluent-progress-ring 
+              click.trigger="fetchOpenedOrders()" 
               paused.bind="!fetchingOpenedOrders"
-              value.bind="fetchingOpenedOrders ? undefined : 15"
-              click.trigger="fetchOpenedOrders" 
-              style="--design-unit: 1; width: 32px; height: 32px;"
+              value.bind="fetchingOpenedOrders ? undefined : 80"
+              style="--design-unit: 1; width: 18px; height: 18px;"
               title="Refresh"
               ariaLabel="Refresh">
             </fluent-progress-ring>
@@ -62,7 +49,9 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
             show-empty-state.bind="openedOrders.length === 0" 
             loading.bind="false" 
             empty-message="No open orders found">
-            <template au-slot="head">
+            <table>
+            <thead>
+              <tr>
               <th>Created</th>
               <th>Exchange</th>
               <th class="tw-text-center">Direction</th>
@@ -71,8 +60,9 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
               <th>Amount</th>
               <th>Value</th>
               <th>Actions</th>
-            </template>
-            <template au-slot="body">
+              </tr>
+            </thead>
+            <tbody>
             <tr repeat.for="order of openedOrders">
               <td>${order.createdAt}</td>
               <td>${order.exchange}</td>
@@ -90,7 +80,8 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
                 </fluent-button>
               </td>
             </tr>
-            </template>
+            </tbody>
+          </table>
           </table-gryd>
         </div>
       </fluent-accordion-item>
@@ -106,7 +97,9 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
             show-empty-state.bind="closedOrders.length === 0" 
             loading.bind="false" 
             empty-message="No closed orders found">
-            <template au-slot="head">
+            <table>
+              <thead>
+              <tr>
               <th>Created</th>
               <th>Closed</th>
               <th>Exchange</th>
@@ -117,9 +110,9 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
               <th>Executed Price</th>
               <th>Limit Price</th>
               <th>Total Cost</th>
-            </template>
-            
-            <template au-slot="body">
+              </tr>
+            </thead>
+            <tbody>
             <tr repeat.for="order of closedOrders">
               <td>${order.createdAt}</td>
               <td>${order.closed}</td>
@@ -132,7 +125,8 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
               <td>${order.limitPrice}</td>
               <td>${order.totalCost}</td>
             </tr>
-            </template>
+            </tbody>
+          </table>
           </table-gryd>
         </div>
       </fluent-accordion-item>
