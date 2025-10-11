@@ -1,17 +1,17 @@
 <template>
   <div class="tw-flex tw-flex-col tw-items-center tw-p-6">
     <!-- ***** TABLE SECTION ***** -->
-    <table-component table-columns.bind="columns" table-rows.bind="assets">
+     <div class="exchange-component">
       <table class="table">
         <tbody class="table-body">
           <tr repeat.for="asset of assets" class="table-row">
             <td class="cell-center">
               <fluent-checkbox checked.bind="asset.selected"></fluent-checkbox>
             </td>
-            <td class="cell-left">${asset.exchange}</td>
-            <td class="cell-left"><span class="coin-name">${asset.name}</span></td>
-            <td class="cell-right">${asset.balance}</td>
-            <td class="cell-center">
+            <td class="table-cell cell-left">${asset.exchange}</td>
+            <td class="table-cell cell-left"><span class="coin-name">${asset.name}</span></td>
+            <td class="table-cell cell-right">${asset.balance}</td>
+            <td class="table-cell cell-center">
               <fluent-select
                 value.two-way="asset.direction"
                 style="width: 6rem;">
@@ -19,7 +19,7 @@
                 <fluent-option value="sell">Sell</fluent-option>
               </fluent-select>
             </td>
-            <td class="cell-center">
+            <td class="table-cell cell-center">
               <fluent-text-field
                 if.bind="!useAmount"
                 type="number"
@@ -34,7 +34,7 @@
               <div else class="percentage-display">${asset.percentage}%</div>
               <div if.bind="asset.percentageInvalid" class="error-message">Invalid percentage</div>
             </td>
-            <td class="cell-center">
+            <td class="table-cell cell-center">
               <fluent-text-field
                 type="number"
                 min="0"
@@ -46,11 +46,11 @@
               </fluent-text-field>
               <div if.bind="asset.amountInvalid" class="error-message">Invalid amount</div>
             </td>
-            <td class="cell-right">${asset.currentPrice}</td>
-            <td class="cell-center">
+            <td class="table-cell cell-right">${asset.currentPrice}</td>
+            <td class="table-cell cell-center">
               <fluent-checkbox checked.bind="asset.limit"></fluent-checkbox>
             </td>
-            <td class="cell-center">
+            <td class="table-cell cell-center">
               <fluent-text-field
                 if.bind="asset.limit"
                 type="number"
@@ -64,13 +64,13 @@
               <div else class="placeholder-text">---</div>
               <div if.bind="asset.LimitPriceInvalid" class="error-message">Invalid limit order price</div>
             </td>
-            <td class="cell-right-bold">
+            <td class="table-cell cell-right-bold">
               ${(asset.limit ? asset.limitPrice : asset.currentPrice) * asset.amount}
             </td>
           </tr>
         </tbody>
       </table>
-    </table-component>
+    </div>
     
     <!-- ***** BUTTON LINKS SECTION ***** -->
     <div class="tw-flex tw-items-center tw-justify-center tw-gap-0">

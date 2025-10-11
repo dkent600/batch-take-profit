@@ -1,95 +1,81 @@
 /* Table Container */
-.table-container {
+.exchange-component {
   @apply tw-overflow-x-auto tw-rounded-lg tw-w-fit;
   box-shadow: var(--elevation-shadow);
 }
 /* Table Base */
-.table {
+.exchange-component.table {
   @apply tw-border-collapse tw-table-auto tw-w-auto;
   background-color: var(--neutral-layer-1);
 }
 /* Header Styles */
-.table-header {
+.exchange-component .table-header {
   background: linear-gradient(135deg,
       var(--neutral-layer-2) 0%,
       var(--neutral-layer-3) 100%);
 }
-.header-cell {
-  @apply tw-px-2 tw-py-3 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-whitespace-nowrap;
-  color: var(--neutral-foreground-rest);
-  border-bottom: 1px solid var(--neutral-stroke-divider);
-}
-.header-cell-left {
-  @apply header-cell tw-text-left;
-}
-.header-cell-center {
-  @apply header-cell tw-text-center;
-}
-.header-cell-right {
-  @apply header-cell tw-text-right;
-}
 /* Body Styles */
-.table-body {
+.exchange-component .table-body {
   background-color: var(--neutral-layer-1);
 }
-.table-body tr {
+.exchange-component .table-body tr {
   @apply tw-border-b;
   border-color: var(--neutral-stroke-divider);
 }
-.table-row {
+.exchange-component .table-row {
   @apply tw-transition-colors tw-duration-150 tw-ease-in-out;
   background-color: var(--neutral-layer-1);
 }
-.table-row:hover {
+.exchange-component .table-row:hover {
   background-color: var(--neutral-layer-2);
 }
 /* Cell Base Styles */
-.table-cell {
+.exchange-component .table-cell {
   @apply tw-px-2 tw-py-3 tw-whitespace-nowrap;
 }
-.cell-center {
-  @apply table-cell tw-text-center;
+.exchange-component .table-cell .cell-center {
+  @apply tw-text-center;
   color: var(--neutral-foreground-rest);
 }
-.cell-left {
-  @apply table-cell tw-text-sm tw-font-medium;
+.exchange-component .table-cell .cell-left {
+  @apply tw-text-sm tw-font-medium;
   color: var(--neutral-foreground-rest);
 }
-.cell-right {
-  @apply table-cell tw-text-sm tw-text-right tw-font-mono;
+.exchange-component .table-cell .cell-right {
+  @apply tw-text-sm tw-text-right tw-font-mono;
   color: var(--neutral-foreground-hint);
 }
-.cell-right-bold {
-  @apply table-cell tw-text-sm tw-text-right tw-font-mono tw-font-semibold;
+.exchange-component .table-cell .cell-right-bold {
+  @apply tw-text-sm tw-text-right tw-font-mono tw-font-semibold;
   color: var(--neutral-foreground-rest);
 }
 /* Special Data Styles */
-.coin-name {
+.exchange-component .coin-name {
   @apply tw-text-sm tw-font-bold;
   color: var(--accent-foreground-rest);
 }
-.percentage-display {
+.exchange-component .percentage-display {
   @apply tw-text-sm tw-font-mono;
   color: var(--neutral-foreground-hint);
 }
-.placeholder-text {
+.exchange-component .placeholder-text {
   @apply tw-text-center tw-text-sm tw-font-light;
   color: var(--neutral-foreground-disabled);
 }
-.error-message {
+.exchange-component .error-message {
   @apply tw-text-xs tw-mt-1 tw-font-medium;
   color: var(--error-foreground-rest);
 }
 /* Override Fluent UI component widths for compact table */
-.table fluent-select {
+.exchange-component .table fluent-select {
   width: auto !important;
   min-width: 4rem !important;
 }
-.table fluent-text-field {
+.exchange-component .table fluent-text-field {
   width: auto !important;
   min-width: 3rem !important;
   max-width: 5rem !important;
 }
-.table fluent-checkbox {
+.exchange-component .table fluent-checkbox {
   width: auto !important;
 }
