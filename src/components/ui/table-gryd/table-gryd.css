@@ -1,74 +1,81 @@
-/* TableGryd - container and base table styles
-	 Priority: Fluent UI design tokens -> Tailwind-friendly utility hooks -> plain CSS fallbacks
+/* Table-Gryd styles */
+/* TableGryd: container & base table styling
+   Priority: Fluent tokens → Tailwind (@apply tw-*) → fallback CSS
 */
-table-gryd {
-  display: block;
-  width: 100%;
-}
-/* Outer scrolling container to allow horizontal scrolling on small viewports */
+/* Container wraps the table and lets it scroll horizontally on small screens */
 .table-container {
-  width: 100%;
-  margin: 0;
-  overflow-x: auto;
-  border-radius: 6px;
-  background-color: var(--neutral-layer-1, #fff);
-  color: var(--neutral-foreground-rest, #222);
-  border: 1px solid var(--neutral-stroke-divider, rgb(0 0 0 / 8%));
+  /* Tailwind utility mix */
+  @apply tw-w-full tw-overflow-x-auto tw-rounded-2xl tw-shadow-sm tw-border;
+  /* Fluent-aligned colors */
+  background: var(--neutral-layer-1);
+  color: var(--neutral-foreground-rest);
+  border-color: var(--neutral-stroke-rest);
 }
-/* Table layout uses classic table display so rows/cells behave naturally */
+/* The actual table element */
 .table {
-  display: table;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  /* for nicer rounded corners */
   border-spacing: 0;
-  /* prevent gaps between cells */
-  background-color: transparent;
-  color: inherit;
+  /* remove default spacing */
+  background: var(--neutral-layer-1);
+  /* Slight radius that aligns with Fluent controls */
+  border-radius: calc(var(--control-corner-radius, 8px));
 }
-/* Support sticky header even when header row is a regular <tr> with .table-header-row */
-.table .table-header-row,
-.table thead .table-header-row {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+/* Table body wrapper used in loading/empty states */
+.table-body {
+  @apply tw-align-middle;
 }
-.table .table-header-cell,
-.table thead .table-header-cell {
-  position: sticky;
-  top: 0;
-  z-index: 4;
-  background-color: var(--neutral-layer-2, #f5f5f5);
+/* Base row element (used by table-gryd-row) */
+.table-row {
+  /* Use design-unit for consistent density with Fluent */
+  --_row-py: calc(var(--design-unit, 4px) * 2);
+  --_row-px: calc(var(--design-unit, 4px) * 3);
 }
-/* Small wrapper for vertical scroll scenarios */
-.table-wrapper {
-  display: block;
+/* Zebra striping for data rows only (header gets its own bg) */
+.table-row.table-data-row:nth-child(even) td {
+  background: color-mix(in srgb, var(--neutral-layer-1) 92%, var(--neutral-layer-2, #000) 8%);
+}
+/* Hover for interactive feel */
+.table-row.table-data-row:hover td {
+  background: color-mix(in srgb, var(--neutral-layer-1) 88%, var(--neutral-layer-2, #000) 12%);
+}
+/* Focus ring if a cell or control inside gains focus */
+.table-row:has(:focus-visible) td,
+.table-row:has(:focus-visible) th {
+  outline: calc(var(--focus-stroke-width, 2px)) solid var(--focus-stroke-outer, var(--accent-fill-rest));
+  outline-offset: -1px;
+}
+/* Loading / empty placeholders */
+.loading-cell,
+.empty-cell {
+  @apply tw-text-sm tw-text-center;
+  color: var(--neutral-foreground-hint, var(--neutral-foreground-rest));
+}
+/* Placeholder text used by empty state */
+.placeholder-text {
+  @apply tw-italic tw-opacity-80;
+}
+/* Make Fluent buttons inside the grid feel at home */
+.table .cell-content fluent-button {
+  @apply tw-my-1;
+}
+/* Ensure Fluent text fields / combos don’t overflow cells */
+.table .cell-content fluent-text-field,
+.table .cell-content fluent-number-field,
+.table .cell-content fluent-select,
+.table .cell-content fluent-combobox {
   width: 100%;
-  overflow: auto;
+  max-width: 100%;
 }
-/* Utility hooks (tailwind-friendly parity)
-	 - .tw-table-compact: reduce padding and font-size for dense tables
-	 - .tw-table-zebra: even-row background shading
-*/
-.tw-table-compact .table-cell,
-.tw-table-compact .table-data-cell {
-  padding: 0.375rem 0.5rem;
-  font-size: 0.875rem;
+/* Compact density option via a utility class on <table-gryd> host if desired */
+:host(.compact) .table-row td,
+:host(.compact) .table-row th {
+  --_row-py: calc(var(--design-unit, 4px) * 1.25);
+  --_row-px: calc(var(--design-unit, 4px) * 2);
+  font-size: 0.9rem;
 }
-.tw-table-zebra .table-data-row:nth-child(even) {
-  background-color: var(--neutral-layer-1, #fff);
-}
-/* Loading / empty states */
-.loading-container,
-.empty-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25rem;
-  color: var(--neutral-foreground-hint, #888);
-}
-/* Keyboard / focus helpers */
-.table-row:focus-within,
-.table-row[aria-selected="true"] {
-  outline: 2px solid var(--accent-fill-rest, #0078d4);
-  outline-offset: -2px;
+/* Support for a center-aligned message row (used in loading/empty) */
+.cell-center {
+  @apply tw-text-center;
 }

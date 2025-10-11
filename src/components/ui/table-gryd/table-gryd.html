@@ -1,32 +1,34 @@
 <template>
   <div class="table-container">
-    <table class="table">
-      <!-- Loading state -->
-      <tbody if.bind="loading" class="table-body">
-        <tr class="table-row">
-          <td class="cell-center loading-cell" style="padding: 2rem; text-align: center;">
-            <div class="tw-flex tw-items-center tw-justify-center tw-gap-2">
-              <svg class="tw-animate-spin tw-h-4 tw-w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-              </svg>
-              <span>Loading...</span>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-
-      <!-- Empty state (only shown if showEmptyState is true and no content is slotted) -->
-      <tbody if.bind="!loading && showEmptyState" class="table-body">
-        <tr class="table-row">
-          <td class="cell-center empty-cell" style="padding: 2rem; text-align: center;">
-            <span class="placeholder-text">${emptyMessage}</span>
-          </td>
-        </tr>
-      </tbody>
-
-      <!-- Content slot for table-gryd-row elements -->
-      <au-slot if.bind="!loading"></au-slot>
-    </table>
+    <!-- Loading state -->
+    <div if.bind="loading" class="table-body">
+      <div class="cell-center loading-cell" style="padding: 2rem; text-align: center;">
+          <div class="tw-flex tw-items-center tw-justify-center tw-gap-2">
+            <svg class="tw-animate-spin tw-h-4 tw-w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <span>Loading...</span>
+          </div>
+        </div>
+    </div>
+      
+    <!-- Empty state (only shown if showEmptyState is true and no content is slotted) -->
+    <div if.bind="!loading && showEmptyState" class="table-body">
+      <div class="cell-center empty-cell" style="padding: 2rem; text-align: center;">
+        <span class="placeholder-text">${emptyMessage}</span>
+      </div>
+    </div>
+    
+    <template if.bind="!loading && !showEmptyState">
+      <table class="table">
+          <tbody>
+          <au-slot name="head"></au-slot>
+        </tbody>
+        <tbody>
+          <au-slot name="body"></au-slot>
+        </tbody>
+      </table>
+    </template>
   </div>
 </template>
