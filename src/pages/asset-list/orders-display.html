@@ -1,4 +1,5 @@
 <template>
+ <!--
 <fluent-button 
 appearance="accent"
 class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
@@ -23,7 +24,7 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
     --foreground-on-accent:#ffffff;">
   Brand Accent
 </fluent-button>
-
+-->
 
 <div class="tw-my-4 tw-max-w-fit tw-mx-auto">
   <fluent-accordion>
@@ -31,22 +32,7 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
       <fluent-accordion-item expanded>
         <div slot="heading" 
           class="tw-text-2xl tw-font-bold tw-text-center tw-py-2">
-          <div class="tw-flex tw-flex-col">
-            <div class="tw-flex`">
-              Open Orders 
-            </div>
-            <!-- (${openedOrders.length}) -->
-            <div class="tw-flex`">
-              <fluent-progress-ring 
-                paused.bind="!fetchingOpenedOrders"
-                value.bind="fetchingOpenedOrders ? undefined : 15"
-                click.trigger="fetchOpenedOrders" 
-                style="--design-unit: 1; width: 32px; height: 32px;"
-                title="Refresh"
-                ariaLabel="Refresh">
-              </fluent-progress-ring>
-            </div>
-          </div>
+          Open Orders (${openedOrders.length})
         </div>
         <div class="tw-p-4">
           <div class="tw-grid tw-place-items-center tw-h-8 tw-w-8 tw-mx-auto">
@@ -62,11 +48,19 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
               </svg></span>
             </icon-button>
             -->
+            <fluent-progress-ring 
+              paused.bind="!fetchingOpenedOrders"
+              value.bind="fetchingOpenedOrders ? undefined : 15"
+              click.trigger="fetchOpenedOrders" 
+              style="--design-unit: 1; width: 32px; height: 32px;"
+              title="Refresh"
+              ariaLabel="Refresh">
+            </fluent-progress-ring>
           </div>
           <table-gryd 
             class="tw-w-fit tw-mx-auto"
             show-empty-state.bind="openedOrders.length === 0" 
-            loading.bind="fetchingOpenedOrders" 
+            loading.bind="false" 
             empty-message="No open orders found">
             <template au-slot="head">
               <th>Created</th>
@@ -110,33 +104,35 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
           <table-gryd 
             class="tw-w-fit tw-mx-auto"
             show-empty-state.bind="closedOrders.length === 0" 
-            loading.bind="fetchingClosedOrders" 
+            loading.bind="false" 
             empty-message="No closed orders found">
-            <table-gryd-row type="header">
-              <table-gryd-cell cell-type="columnheader">Created</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Closed</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Exchange</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Pair</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Type</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Status</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Coins</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Executed Price</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Limit Price</table-gryd-cell>
-              <table-gryd-cell cell-type="columnheader">Total Cost</table-gryd-cell>
-            </table-gryd-row>
+            <template au-slot="head">
+              <th>Created</th>
+              <th>Closed</th>
+              <th>Exchange</th>
+              <th>Pair</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Coins</th>
+              <th>Executed Price</th>
+              <th>Limit Price</th>
+              <th>Total Cost</th>
+            </template>
             
-            <table-gryd-row repeat.for="order of closedOrders">
-              <table-gryd-cell>${order.createdAt}</table-gryd-cell>
-              <table-gryd-cell>${order.closed}</table-gryd-cell>
-              <table-gryd-cell>${order.exchange}</table-gryd-cell>
-              <table-gryd-cell>${order.pair}</table-gryd-cell>
-              <table-gryd-cell>${order.type}</table-gryd-cell>
-              <table-gryd-cell>${order.status}</table-gryd-cell>
-              <table-gryd-cell>${order.coins}</table-gryd-cell>
-              <table-gryd-cell>${order.executedPrice}</table-gryd-cell>
-              <table-gryd-cell>${order.limitPrice}</table-gryd-cell>
-              <table-gryd-cell>${order.totalCost}</table-gryd-cell>
-            </table-gryd-row>
+            <template au-slot="body">
+            <tr repeat.for="order of closedOrders">
+              <td>${order.createdAt}</td>
+              <td>${order.closed}</td>
+              <td>${order.exchange}</td>
+              <td>${order.pair}</td>
+              <td>${order.type}</td>
+              <td>${order.status}</td>
+              <td>${order.coins}</td>
+              <td>${order.executedPrice}</td>
+              <td>${order.limitPrice}</td>
+              <td>${order.totalCost}</td>
+            </tr>
+            </template>
           </table-gryd>
         </div>
       </fluent-accordion-item>

@@ -53,7 +53,7 @@ export class OrdersDisplay {
     this.fetchClosedOrders();
   }
 
-  private fetchOpenedOrders(): void {
+  private fetchOpenedOrders(event?: Event): void {
     this.fetchingOpenedOrders = true;
     this.ordersStore.fetchOpenedOrders()
       .then((orders: IOpenedOrderListItem[]) => {

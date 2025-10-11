@@ -96,3 +96,5 @@ When working with this codebase, prioritize understanding the service layer DI p
 **Remember**: Shadow DOM creates absolute style boundaries. Respect these boundaries by only suggesting appropriate customization methods for each component type.
 
 *   When suggesting code, do not include `// ...existing code...` comments.
+
+* Always refer to Aurelia 2, never to Aurelia 1 unless I instruct
