@@ -90,9 +90,7 @@ async function startApp() {
       // Components
       AssetList,
       IconButton,
-      TableGryd,
-      TableGrydRow,
-      TableGrydCell
+      TableGryd
     );
 
     console.info('✅ App components registered successfully');
