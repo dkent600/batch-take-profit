@@ -78,20 +78,17 @@
       <fluent-button appearance="stealth" class="tw-underline" style="--design-unit: 0px;" click.trigger="selectAll()">All</fluent-button>
       <fluent-button appearance="stealth" class="tw-underline" style="--design-unit: 0px;" click.trigger="selectNone()">None</fluent-button>
     </div>
-    <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-mt-4 tw-gap-2">
-      <div class="tw-flex tw-flex-row tw-gap-4">
+    <div class="tw-flex tw-items-center tw-justify-center tw-mt-4 tw-gap-2">
         <fluent-button
           appearance="stealth"
-          click.trigger="refresh()"
-          class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-16">
+          click.trigger="refresh()">
             <span class="tw-whitespace-nowrap tw-underline">Refresh Prices and Balances</span>
-            <div if.bind="isRefreshing">
-              <svg class="tw-animate-spin tw-h-4 tw-w-4 tw-text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-              </svg>
-            </div>
-        </fluent-button>
+         </fluent-button>
+        <div if.bind="isRefreshing">
+          <svg class="tw-animate-spin tw-h-4 tw-w-4 tw-text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
         </div>
       </div>
       <div class="tw-flex tw-flex-row tw-gap-4 tw-py-2">
