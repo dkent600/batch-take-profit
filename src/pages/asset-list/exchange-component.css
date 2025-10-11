@@ -64,7 +64,8 @@
 }
 .exchange-component .error-message {
   @apply tw-text-xs tw-mt-1 tw-font-medium;
-  color: var(--error-foreground-rest);
+  /* --neutral-foreground-rest: var(--color-red-primary); */
+  color: #ef4444;
 }
 /* Override Fluent UI component widths for compact table */
 .exchange-component .table fluent-select {
