@@ -36,7 +36,7 @@ import { AssetsStore, AssetsStoreToken } from './stores/assets-store.js';
 import { OrdersStoreToken, OrdersStore } from './stores/orders-store.js';
 import { RequestQueueService, RequestQueueServiceToken } from './services/request-queue-service.js';
 import { IconButton } from './components/ui/icon-button/icon-button.js';
-import { TableGryd, TableGrydRow, TableGrydCell } from './components/ui/table-gryd/index.js';
+import { TableGryd } from './components/ui/table-gryd/index.js';
 
 let logger: ILogger;
 
