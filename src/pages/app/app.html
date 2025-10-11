@@ -1,12 +1,15 @@
 <template>
   <fluent-design-system-provider ref="fluentProvider" use-defaults base-layer-luminance="0.15">
     <div class="app-container">
-    <h1>Ferngully Crypto Dashboard</h1>
-    <div class="tw-flex tw-justify-end tw-mb-4">
-      <fluent-button click.trigger="toggleTheme()" appearance="accent">
-      ${darkMode ? "Light Mode" : "Dark Mode"}
-      </fluent-button>
+      <div class="tw-flex tw-items-center">
+        <h1 class="tw-flex-grow tw-text-center">Ferngully Crypto Dashboard</h1>
+        <div class="tw-mr-12">
+          <fluent-button click.trigger="toggleTheme()" appearance="accent">
+          ${darkMode ? "Light Mode" : "Dark Mode"}
+          </fluent-button>
+        </div>
     </div>
+    
       <asset-list></asset-list>
     </div>
   </fluent-design-system-provider>
