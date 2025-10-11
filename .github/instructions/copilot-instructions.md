@@ -94,3 +94,5 @@ export class MyComponent {
 When working with this codebase, prioritize understanding the service layer DI patterns and Fluent UI integration over generic Aurelia patterns. The exchange-specific business logic in stores and services is critical for maintaining API compatibility.
 
 **Remember**: Shadow DOM creates absolute style boundaries. Respect these boundaries by only suggesting appropriate customization methods for each component type.
+
+*   When suggesting code, do not include `// ...existing code...` comments.
