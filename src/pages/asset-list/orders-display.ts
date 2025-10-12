@@ -46,7 +46,7 @@ export class OrdersDisplay {
   }
   @bindable assets: IAsset[];
   private readonly logger: ILogger = resolve(ILogger).scopeTo('OrdersDisplay');
-  fetchingOpenedOrders = false;
+  fetchingOpenedOrders = true;
 
   async binding(): Promise<void> {
     this.fetchOpenedOrders();
