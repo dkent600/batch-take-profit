@@ -79,7 +79,7 @@ async function startApp() {
       DialogService,
       DialogConfiguration.customize(settings => {
         settings.renderer = FluentDialogRenderer; // <-- aurelia dialog fluentui custom renderer
-        settings.rejectOnCancel = true;           // optional preference
+        settings.rejectOnCancel = false;           // optional preference
       }),
 
       Registration.singleton(TelegramServiceToken, TelegramService),
