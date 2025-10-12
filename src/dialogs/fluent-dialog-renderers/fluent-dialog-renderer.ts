@@ -9,13 +9,13 @@ class FluentDialogDom implements IDialogDom {
   private readonly overlay: HTMLElement | null;
 
   constructor(host: Element, controller: IDialogController, { modal = true, persistent = false } = {}) {
-    // A viewport container to handle positioning and scrolling
+    // A viewport container to handle positioning and scrolling.
+    // Centering is handled by the CSS override on the dialog's ::part(control).
     const viewport = document.createElement('div');
     viewport.className = [
       'fixed', 'inset-0', 'z-[9999]', // Positioning
-      'flex', 'justify-center', // Horizontal centering
       'overflow-y-auto', // Make the container scrollable
-      'p-4' // Padding
+      'p-4' // Add padding so the dialog doesn't touch the edges
     ].join(' ');
 
     const dlg = document.createElement('fluent-dialog') as any;

@@ -3,6 +3,6 @@
   fluent-dialog::part(control) {
     max-width: 32rem;
     width: 100%;
-    margin: auto;
+    margin: 4rem auto;
   }
 }
