@@ -9,41 +9,54 @@ class FluentDialogDom implements IDialogDom {
   private readonly overlay: HTMLElement | null;
 
   constructor(host: Element, controller: IDialogController, { modal = true, persistent = false } = {}) {
+    // A viewport container to handle positioning and scrolling
+    const viewport = document.createElement('div');
+    viewport.className = [
+      'fixed', 'inset-0', 'z-[9999]', // Positioning
+      'flex', 'justify-center', // Horizontal centering
+      'overflow-y-auto', // Make the container scrollable
+      'p-4' // Padding
+    ].join(' ');
+
     const dlg = document.createElement('fluent-dialog') as any;
     dlg.modal = modal;
 
     if (!persistent) {
       dlg.addEventListener('cancel', (e: CustomEvent) => {
-        // Prevent the default cancel behavior (which is to close the dialog)
-        // and instead delegate to the Aurelia dialog controller.
         e.preventDefault();
-        // Close the dialog with an 'ok' status but indicate it was cancelled.
-        // This avoids the unhandled promise rejection from controller.cancel().
-        void controller.ok({ output: 'cancelled', wasCancelled: true });
+        // This is the correct, idiomatic way.
+        // It will reject the dialog promise, which must be handled by the caller.
+        controller.cancel();
       });
     }
 
     // The host for Aurelia's content projection
     const contentHost = document.createElement('div');
-    // Add some padding to the content host
     contentHost.className = 'p-4';
     dlg.appendChild(contentHost);
 
-    host.appendChild(dlg);
+    viewport.appendChild(dlg);
+    host.appendChild(viewport);
 
-    this.root = dlg;
-    this.overlay = null; // No longer using a manual overlay
+    this.root = viewport; // The root is now the viewport
+    this.overlay = null;
     this.contentHost = contentHost;
   }
 
   async show(): Promise<void> {
-    (this.root as any).open = true;
+    const dlg = this.root.querySelector('fluent-dialog');
+    if (dlg) {
+      (dlg as any).open = true;
+    }
     await new Promise(r => requestAnimationFrame(() => r(null)));
     this.root.focus();
   }
 
   async hide(): Promise<void> {
-    (this.root as any).open = false;
+    const dlg = this.root.querySelector('fluent-dialog');
+    if (dlg) {
+      (dlg as any).open = false;
+    }
     await new Promise(r => requestAnimationFrame(() => r(null)));
   }
 

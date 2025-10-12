@@ -433,7 +433,7 @@ export class ExchangeComponent {
           onCancel: this.cancelOrder.bind(this),
         }
       }
-    )
+    );
   }
 
 }
