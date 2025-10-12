@@ -46,8 +46,8 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
           </div>
           <table-gryd 
             class="tw-w-fit tw-mx-auto"
-            show-empty-state.bind="openedOrders.length === 0" 
-            loading.bind="false" 
+            show-empty-state.bind="openedOrders?.length === 0" 
+            loading.bind="fetchingOpenedOrders" 
             empty-message="No open orders found">
             <table>
             <thead>
@@ -95,7 +95,7 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
           <table-gryd 
             class="tw-w-fit tw-mx-auto"
             show-empty-state.bind="closedOrders.length === 0" 
-            loading.bind="false" 
+            loading.bind="fetchingClosedOrders" 
             empty-message="No closed orders found">
             <table>
               <thead>
