@@ -2,6 +2,8 @@ import { Aurelia, ILogger, Registration } from 'aurelia';
 import { App } from './pages/app/app.js';
 import { AssetList } from './pages/asset-list/asset-list.js';
 
+import './fluent-dialog-overrides.css';
+
 import { DialogConfiguration, DialogService } from '@aurelia/dialog';
 import { FluentDialogRenderer } from './dialogs/fluent-dialog-renderers/fluent-dialog-renderer.js';
 import { FluentUIAdapter } from './stores/fluent-ui-adapter.js';

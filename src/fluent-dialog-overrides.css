@@ -1,0 +1,8 @@
+/* fluent-dialog-overrides.css */
+@layer fluent-dialog-overrides {
+  fluent-dialog::part(control) {
+    max-width: 32rem;
+    width: 100%;
+    margin: auto;
+  }
+}

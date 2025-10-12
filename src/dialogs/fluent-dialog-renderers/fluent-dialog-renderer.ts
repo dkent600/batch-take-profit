@@ -9,58 +9,34 @@ class FluentDialogDom implements IDialogDom {
   private readonly overlay: HTMLElement | null;
 
   constructor(host: Element, controller: IDialogController, { modal = true, persistent = false } = {}) {
-    const dlg = document.createElement('fluent-dialog') as HTMLElement;
+    const dlg = document.createElement('fluent-dialog') as any;
+    dlg.modal = modal;
 
-    // default/unnamed slot host
-    const body = document.createElement('div');
-    body.className = [
-      'flex',               // display: flex
-      'items-center',       // align-items: center
-      'justify-center',     // justify-content: center
-      'h-full',             // height: 100%
-      'w-full',             // width: 100%
-      'box-border'          // box-sizing: border-box
-    ].join(' ');
-
-    // NEW: a block wrapper so your content's root (e.g., <h2>) is NOT a flex item
-    const wrap = document.createElement('div');
-    wrap.className = 'block'; // normal block formatting context
-    body.appendChild(wrap);
-
-    dlg.appendChild(body);
-
-    // Optional overlay
-    let overlay: HTMLElement | null = null;
-    if (modal) {
-      overlay = document.createElement('div');
-      overlay.className = [
-        'fixed', 'inset-0',      // position: fixed; inset: 0
-        'bg-black/45',           // background: rgba(0,0,0,.45)
-        'z-[9998]'               // z-index: 9998
-      ].join(' ');
-      if (!persistent) overlay.addEventListener('click', () => controller.cancel());
-      host.appendChild(overlay);
+    if (!persistent) {
+      dlg.addEventListener('cancel', (e: CustomEvent) => {
+        // Prevent the default cancel behavior (which is to close the dialog)
+        // and instead delegate to the Aurelia dialog controller.
+        e.preventDefault();
+        // Close the dialog with an 'ok' status but indicate it was cancelled.
+        // This avoids the unhandled promise rejection from controller.cancel().
+        void controller.ok({ output: 'cancelled', wasCancelled: true });
+      });
     }
 
-    // Viewport container that centers the slot host
-    dlg.className = [
-      'fixed', 'inset-0',        // position: fixed; inset: 0
-      'grid', 'place-items-center',
-      'z-[9999]',
-      'outline-none'
-    ].join(' ');
-    dlg.tabIndex = -1;
-    dlg.addEventListener('keydown', e => { if (e.key === 'Escape' && !persistent) controller.cancel(); });
+    // The host for Aurelia's content projection
+    const contentHost = document.createElement('div');
+    // Add some padding to the content host
+    contentHost.className = 'p-4';
+    dlg.appendChild(contentHost);
 
     host.appendChild(dlg);
 
     this.root = dlg;
-    this.overlay = overlay;
-    this.contentHost = wrap;
+    this.overlay = null; // No longer using a manual overlay
+    this.contentHost = contentHost;
   }
 
   async show(): Promise<void> {
-    // Fluent v2: toggling the 'open' boolean is the supported pattern
     (this.root as any).open = true;
     await new Promise(r => requestAnimationFrame(() => r(null)));
     this.root.focus();
