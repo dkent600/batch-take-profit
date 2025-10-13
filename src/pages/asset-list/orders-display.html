@@ -52,25 +52,25 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
             <table>
             <thead>
               <tr>
-              <th class="tw-text-left">Created</th>
-              <th class="tw-text-left">Exchange</th>
-              <th class="tw-text-left">Direction</th>
-              <th class="tw-text-left">Pair</th>
-              <th class="tw-text-left">Price</th>
-              <th class="tw-text-left">Amount</th>
-              <th class="tw-text-left">Value</th>
+              <th>Created</th>
+              <th>Exchange</th>
+              <th>Direction</th>
+              <th>Pair</th>
+              <th>Price</th>
+              <th>Amount</th>
+              <th>Value</th>
               <th class="tw-text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
             <tr repeat.for="order of openedOrders">
-              <td class="tw-text-left">${order.createdAt}</td>
-              <td class="tw-text-left">${order.exchange}</td>
-              <td class="tw-text-left">${order.direction}</td>
-              <td class="tw-text-left">${order.pair}</td>
-              <td class="tw-text-left">${order.price}</td>
-              <td class="tw-text-left">${order.amount}</td>
-              <td class="tw-text-left">${order.amount * order.price}</td>
+              <td>${order.createdAt}</td>
+              <td>${order.exchange}</td>
+              <td>${order.direction}</td>
+              <td>${order.pair}</td>
+              <td>${order.price}</td>
+              <td>${order.amount}</td>
+              <td>${order.amount * order.price}</td>
               <td class="tw-text-center">
                 <fluent-button 
                   appearance="stealth" 
@@ -88,7 +88,8 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
 
       <!-- ***** CLOSED ORDERS SECTION ***** -->
       <fluent-accordion-item>
-        <div slot="heading" class="tw-text-2xl tw-font-bold tw-text-center tw-py-2">
+        <div slot="heading"
+          class="tw-text-2xl tw-font-bold tw-text-center tw-py-2">
           Closed Orders
         </div>
         <div class="tw-p-4">
@@ -110,30 +111,30 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
             <table>
               <thead>
               <tr>
-              <th class="tw-text-left">Created</th>
-              <th class="tw-text-left">Closed</th>
-              <th class="tw-text-left">Exchange</th>
-              <th class="tw-text-left">Pair</th>
-              <th class="tw-text-left">Type</th>
-              <th class="tw-text-left">Status</th>
-              <th class="tw-text-left">Coins</th>
-              <th class="tw-text-left">Executed Price</th>
-              <th class="tw-text-left">Limit Price</th>
-              <th class="tw-text-left">Total Cost</th>
+              <th>Created</th>
+              <th>Closed</th>
+              <th>Exchange</th>
+              <th>Pair</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Coins</th>
+              <th>Executed Price</th>
+              <th>Limit Price</th>
+              <th>Total Cost</th>
               </tr>
             </thead>
             <tbody>
             <tr repeat.for="order of closedOrders">
-              <td class="tw-text-left">${order.createdAt}</td>
-              <td class="tw-text-left">${order.closed}</td>
-              <td class="tw-text-left">${order.exchange}</td>
-              <td class="tw-text-left">${order.pair}</td>
-              <td class="tw-text-left">${order.type}</td>
-              <td class="tw-text-left">${order.status}</td>
-              <td class="tw-text-left">${order.coins}</td>
-              <td class="tw-text-left">${order.executedPrice}</td>
-              <td class="tw-text-left">${order.limitPrice}</td>
-              <td class="tw-text-left">${order.totalCost}</td>
+              <td class="tw-py-4">${order.createdAt}</td>
+              <td class="tw-py-4">${order.closed}</td>
+              <td class="tw-py-4">${order.exchange}</td>
+              <td class="tw-py-4">${order.pair}</td>
+              <td class="tw-py-4">${order.type}</td>
+              <td class="tw-py-4">${order.status}</td>
+              <td class="tw-py-4">${order.coins}</td>
+              <td class="tw-py-4">${order.executedPrice}</td>
+              <td class="tw-py-4">${order.limitPrice}</td>
+              <td class="tw-py-4">${order.totalCost}</td>
             </tr>
             </tbody>
           </table>

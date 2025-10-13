@@ -30,10 +30,13 @@
 }
 .table-container .table thead th {
   @apply tw-pb-4;
+  @apply tw-text-nowrap;
+  @apply tw-text-left;
   background: transparent;
 }
 .table-container .table tbody td {
   @apply tw-text-nowrap;
+  @apply tw-text-left;
   background: transparent;
 }
 /* Loading / empty placeholders */
