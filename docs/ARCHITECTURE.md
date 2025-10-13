@@ -2,271 +2,207 @@
 
 ## Overview
 
-The batch-take-profit frontend is built using the Aurelia framework with TypeScript, implementing a clean separation of concerns through the View/ViewModel/Store/Service pattern. This architecture ensures maintainability, testability, and scalability while handling the complexities of cryptocurrency exchange integrations.
+The batch-take-profit frontend is built using the Aurelia framework with TypeScript, implementing a clean separation of concerns through a modern component-store-service pattern. This architecture ensures maintainability, testability, and scalability while handling the complexities of cryptocurrency exchange integrations.
 
 ## Core Architectural Patterns
+
+The application follows a clear data flow, separating responsibilities into distinct layers.
+
+```mermaid
+graph TD
+    subgraph "Browser"
+        View["View (.html)"]
+    end
+
+    subgraph "Aurelia Frontend"
+        ViewModel["ViewModel (.ts)"]
+        Store["Store (.ts)"]
+        Service["Service (.ts)"]
+    end
+    
+    subgraph "Backend"
+        BackendAPI["butterfly-services API"]
+    end
+
+    View -- "User Interaction" --> ViewModel
+    ViewModel -- "Calls Methods" --> Store
+    Store -- "Uses" --> Service
+    Service -- "Makes API Calls" --> BackendAPI
+    BackendAPI -- "Returns Data" --> Service
+    Service -- "Returns Data" --> Store
+    Store -- "Updates State" --> ViewModel
+    ViewModel -- "Provides Data" --> View
+```
 
 ### 1. View/ViewModel Pattern
 
 **Views (.html)**
-- Pure presentation layer using Aurelia's binding syntax
-- No business logic - only display logic and formatting
-- Bind to ViewModel properties using `${property}` and `property.bind`
-- Handle user interactions through ViewModel methods
+- The presentation layer, built with standard HTML and Aurelia's templating syntax.
+- Contains minimal logic, primarily focused on displaying data and delegating user events to the ViewModel.
+- Binds to ViewModel properties and methods.
 
 **ViewModels (.ts)**
-- UI controllers that orchestrate user interactions
-- Inject and coordinate Stores for data operations
-- Expose observable properties for View binding
-- Handle component lifecycle (attached, detached, etc.)
+- The UI controller that manages the state and behavior of a component.
+- Injects and coordinates with Stores to get data and trigger business logic.
+- Exposes observable properties that the View binds to.
 
+*Example from `exchange-component.ts`:*
 ```typescript
-@inject(AssetStore, OrdersStore)
+@inject(AssetExchangeApiServiceToken, OrdersStoreToken, AssetsStoreToken)
 export class ExchangeComponent {
-  public assets: IAsset[] = [];
-  
-  public async attached() {
-    await this.refreshData();
+  @bindable assets: IAssetEx[] = [];
+
+  constructor(
+    private readonly assetExchangeService: IAssetExchangeService,
+    private readonly ordersStore: IOrdersStore,
+    private readonly assetsStore: IAssetsStore
+  ) {}
+
+  async createOrders(): Promise<void> {
+    const selectedAssets = this.assets.filter(asset => asset.selected);
+    for (const asset of selectedAssets) {
+      // Complex logic is handled by the service, initiated from the component
+      await this.assetExchangeService.createSellOrder(asset, this.assetsStore.getQuoteCoin(asset), asset.limit);
+    }
+    // After action, update state via the store
+    this.ordersStore.fetchOpenedOrders();
   }
 }
 ```
 
 ### 2. Store Pattern
 
-Stores act as centralized state managers and business logic coordinators:
+Stores act as centralized state managers for different domains of the application. They hold the application's state and contain the logic to manage and update it.
 
-**AssetStore**
-- Manages cryptocurrency asset state
-- Coordinates balance updates and price fetching
-- Caches asset data to minimize API calls
+**Key Stores:**
+- **`AssetsStore`**: Manages the state of cryptocurrency assets, including their balances and current prices.
+- **`OrdersStore`**: Manages the state of open and closed orders.
 
-**OrdersStore** 
-- Tracks order lifecycle and status
-- Manages order history and active orders
-- Handles order validation and error states
-
-**CoinsStore**
-- Manages supported cryptocurrency metadata
-- Provides coin-specific formatting and validation
-
+*Example from `orders-store.ts`:*
 ```typescript
-@injectable()
-export class AssetStore {
-  private assets: IAsset[] = [];
-  
-  public async refreshBalances(): Promise<void> {
-    // Coordinate with services to update state
+@inject(AssetExchangeApiServiceToken)
+export class OrdersStore implements IOrdersStore {
+  @observable openedOrders: IOpenedOrderListItemView[] | null = null;
+  @observable fetchingOpenedOrders = false;
+
+  constructor(private readonly assetExchangeService: IAssetExchangeService) {}
+
+  async fetchOpenedOrders(): Promise<void> {
+    this.fetchingOpenedOrders = true;
+    try {
+      const orders = await this.assetExchangeService.getOpenOrders();
+      // Sort and update the observable state property
+      this.openedOrders = orders.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    } catch (error) {
+      this.logger.error('Failed to fetch open orders:', error);
+      this.openedOrders = [];
+    } finally {
+      this.fetchingOpenedOrders = false;
+    }
   }
 }
 ```
 
 ### 3. Service Layer
 
-Services handle external integrations and data access:
+Services are responsible for encapsulating external interactions, primarily communication with the `butterfly-services` backend. They are stateless and provide a clear API for data fetching and submission.
 
-**AssetExchangeApiService**
-- Primary interface to butterfly-services backend
-- Handles authentication and request formatting
-- Provides typed methods for all API operations
+**Key Services:**
+- **`AssetExchangeApiService`**: The primary interface to the backend, providing typed methods for all API operations (e.g., fetching prices, creating orders).
+- **`RequestQueueService`**: Serializes all outgoing API requests to ensure they are processed in order, which is critical for nonce management.
+- **`EnvService`**: Loads and provides access to the application's configuration (`config.json` and `config.local.json`).
 
 ## Key Technical Decisions
 
 ### Error Handling Strategy
 
-**Retry Logic**: Recursive retry for nonce errors with intelligent backoff
-**User Feedback**: Alert-based notifications for operation results
-**Graceful Degradation**: Application continues functioning even with partial API failures
+**Nonce Management**: Nonce-related API errors are primarily solved by a server-side configuration on the Kraken API key ("Custom Nonce Window"). The frontend's `RequestQueueService` complements this by serializing requests, ensuring predictable execution order.
+**User Feedback**: User-facing alerts notify users of the success or failure of operations.
+**Graceful Degradation**: The application is designed to remain functional even if some API calls fail, for example, by showing cached data or allowing manual refreshes.
 
 ### State Management
 
-**Reactive Updates**: Stores expose observable properties that automatically update Views
-**Caching Strategy**: Intelligent caching to balance performance with data freshness
-**Optimistic Updates**: UI updates immediately with server confirmation
+**Reactive Updates**: Stores use Aurelia's `@observable` properties. When these properties are updated (e.g., with new data from the API), the UI (Views) bound to them automatically re-renders.
+**Caching Strategy**: Services may implement caching (e.g., for prices) to improve performance and reduce redundant API calls.
+**Optimistic Updates**: For some operations, the UI could be updated immediately, assuming success, and then reverted if the API call fails. (Currently not implemented).
 
 ## Component Architecture
 
-### ExchangeComponent
-The main trading interface implementing the complete order creation workflow:
+### `ExchangeComponent`
+The main trading interface where users can configure and execute batch sell orders.
 
-```typescript
-class ExchangeComponent {
-  // Data binding properties
-  public assets: IAsset[] = [];
-  public selectedOrders: IAsset[] = [];
-  public limitOrder: boolean = false;
-  
-  // User interaction handlers
-  public async createSellOrders(): Promise<void>
-  public async refresh(): Promise<void>
-  public validatePercentage(asset: IAsset): void
-}
-```
+### `OrdersDisplay`
+A component that shows lists of open and closed orders, with the ability to cancel open orders.
 
-### TradingGrid
-Asset management and portfolio overview component with real-time updates.
-
-### OrdersDisplay
-Order history and status tracking with filtering and search capabilities.
+### `table-gryd`
+A reusable wrapper component that provides a consistent look and feel for data tables, including loading and empty states.
 
 ## Integration Patterns
 
 ### Fluent UI Integration
 
-**FluentUIAdapter Pattern**
-The project uses a custom FluentUIAdapter (located in `src/stores/fluent-ui-adapter.ts`) to handle two-way binding between Aurelia and Fluent UI Web Components:
+**`FluentUIAdapter` Pattern**
+The project uses a custom `FluentUIAdapter` (in `src/stores/fluent-ui-adapter.ts`) to enable seamless two-way data binding between Aurelia and Fluent UI Web Components, which is not supported out-of-the-box.
 
-```typescript
-// Registration in main.ts
-FluentUIAdapter.customize({ withPrefix: 'fluent' })
-```
-
-**Key Benefits:**
-- Automatic two-way binding for all Fluent UI form components
-- Centralized configuration for component event handling
-- Clean separation from manual IAttrMapper setup
-- Extensible for new component types
-
-**Shadow DOM Constraints:**
-- Fluent UI components use Shadow DOM, creating style isolation
-- Only CSS custom properties can style component internals
-- TailwindCSS classes work for layout containers only
-- Use `style="--design-unit: 2px"` for component customization
+**Shadow DOM Styling**
+Fluent UI components use Shadow DOM, which isolates their internal styles. To customize them:
+- **Use CSS Custom Properties:** The primary way to style component internals is by overriding their CSS variables (e.g., `style="--accent-fill-rest: #4a7a49;"`).
+- **Use `::part()` selector:** For more direct styling, target a component's internal part, as done in `fluent-dialog-overrides.css`.
+- **TailwindCSS:** Utility classes are effective for layout and styling of the containers that *hold* Fluent components, but not for the components' internals.
 
 ### Backend Communication
 
-All backend communication flows through the request queue:
-
-```typescript
-// Asset balance updates
-await this.queueService.enqueue(() => 
-  this.apiService.getBalance(asset.exchange, asset.name)
-);
-
-// Order placement
-await this.queueService.enqueue(() =>
-  this.apiService.createOrder(orderRequest)
-);
-
-// Price fetching
-await this.queueService.enqueue(() =>
-  this.apiService.getCurrentPrice(asset.exchange, asset.name)
-);
-```
-
-### Configuration Management
-
-Environment-specific configuration through JSON files:
-- `config.json` - Default settings
-- `config.local.json` - Local overrides (gitignored)
+All backend communication is funneled through the `RequestQueueService` to ensure serialized execution. See `INTEGRATION.md` for a detailed explanation of why this is critical.
 
 ### Dependency Injection
 
-Aurelia's built-in DI container manages all dependencies:
+Aurelia's built-in DI container manages all dependencies, making components and services easy to test and maintain.
 
+*Example from `exchange-component.ts`:*
 ```typescript
-@inject(AssetStore, OrdersStore, LogService)
-export class ComponentName {
+@inject(
+  AssetExchangeApiServiceToken,
+  OrdersStoreToken,
+  RequestQueueServiceToken,
+  AssetsStoreToken,
+  IDialogService
+)
+export class ExchangeComponent {
   constructor(
-    private assetStore: AssetStore,
-    private ordersStore: OrdersStore,
-    private logger: LogService
+    private readonly assetExchangeService: IAssetExchangeService,
+    private readonly ordersStore: IOrdersStore,
+    private readonly queueService: IRequestQueueService,
+    private readonly assetsStore: IAssetsStore,
+    private readonly dialogService: IDialogService
   ) {}
 }
 ```
 
-## Performance Considerations
-
-### Request Optimization
-- Batch operations where possible
-- Intelligent caching to reduce API calls
-- Request deduplication for identical operations
-
-### UI Responsiveness
-- Asynchronous operations with loading indicators
-- Optimistic UI updates for immediate feedback
-- Background refresh without blocking user interactions
-
-### Memory Management
-- Proper cleanup in component detached lifecycle
-- Efficient data structures for large asset lists
-- Garbage collection friendly patterns
-
-## Testing Strategy
-
-### Unit Tests
-- Store logic testing with mocked services
-- Component behavior testing with Aurelia testing utilities
-- Service integration testing with mock backends
-
-### Integration Tests
-- End-to-end workflow testing
-- Backend API integration verification
-- Request queue behavior validation
-
-## Security Considerations
-
-### API Security
-- All sensitive operations handled by backend
-- No API keys or secrets in frontend code
-- Request validation and sanitization
-
-### Data Protection
-- Sensitive data never logged or cached locally
-- Secure communication with backend over HTTPS
-- User session management through backend
-
 ## TypeScript Coding Conventions
 
 ### Interface Naming
-All TypeScript interfaces must be prefixed with "I" to follow industry best practices and improve code clarity:
+All TypeScript interfaces must be prefixed with "I" to follow industry best practices and improve code clarity.
 
 ```typescript
-// ✅ Correct - Interface prefixed with "I"
-export interface ITableColumn {
-  key: string;
-  name: string;
-  type?: 'text' | 'number' | 'currency';
+// ✅ Correct
+export interface IOpenedOrderListItem {
+  orderId: string;
+  // ...
 }
 
-export interface IAsset {
-  id: string;
-  name: string;
-  exchange: string;
-}
-
-// ❌ Incorrect - Missing "I" prefix
-export interface TableColumn {
-  key: string;
-  name: string;
+// ❌ Incorrect
+export interface OpenedOrderListItem {
+  orderId: string;
+  // ...
 }
 ```
-
-### Benefits of "I" Prefix Convention
-- **Clear Distinction**: Immediately identifies interfaces vs classes/types
-- **IntelliSense Clarity**: IDEs group interfaces together in autocomplete
-- **Industry Standard**: Widely adopted in TypeScript community
-- **Consistency**: Aligns with Microsoft TypeScript guidelines
-- **Refactoring Safety**: Reduces naming conflicts when converting between interfaces/classes
-
-### Implementation Guidelines
-- Apply "I" prefix to all exported interfaces
-- Apply "I" prefix to all internal interfaces used across modules
-- Local interfaces within single functions may omit prefix for brevity
-- Update existing interfaces during refactoring to maintain consistency
 
 ## Future Architecture Considerations
 
 ### Scalability
-- Component lazy loading for large applications
-- State management optimization for complex workflows
-- Background task management for long-running operations
+- **Component Lazy Loading**: For larger applications, load components only when they are needed.
+- **State Management**: For more complex state interactions, consider a more robust state management library or pattern.
 
 ### Extensibility
-- Plugin architecture for additional exchanges
-- Modular component design for feature expansion
-- Configurable workflow customization
-
-### Monitoring
-- Performance metrics collection
-- Error tracking and reporting
-- User interaction analytics
+- **Plugin Architecture**: Design services to be extensible for supporting additional exchanges in the future.
+- **Modular Components**: Keep components focused on a single responsibility to make them easier to reuse and replace.

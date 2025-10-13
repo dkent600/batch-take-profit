@@ -28,21 +28,43 @@ The backend handles all exchange authentication:
 3. Backend handles exchange-specific authentication requirements
 4. Frontend receives authenticated responses
 
-## Request Queue Integration
+## Nonce Management and Request Serialization
 
-### Request Serialization Pattern
+### The Nonce Problem
 
-**All API calls must use the queue service:**
+Cryptocurrency exchanges like Kraken use a "nonce" (number used once) for every API request to prevent replay attacks. Each subsequent request must have a higher nonce value than the previous one. When multiple requests are sent concurrently from the application, network latency can cause them to arrive at the exchange out of order, resulting in "EAPI:Invalid nonce" errors for any request that arrives with a lower-than-expected nonce.
+
+### The Solution: API Key Configuration
+
+While software-based solutions like request serialization and retries can help, the definitive solution for this project was found in the Kraken API key configuration itself.
+
+**By enabling the "Custom Nonce Window" and setting it to a value like 10000 (milliseconds), you instruct Kraken to accept nonces that are out of sequence, as long as they are within the specified time window and have not been used before.**
+
+This server-side configuration is the primary mechanism that resolves the nonce errors encountered in this application.
+
+### The Role of the Request Queue
+
+The `RequestQueueService` is provided as a convenience for operations that benefit from being executed in a specific, sequential order. It is **not mandatory** for all API calls. For many operations, direct, parallel API calls are more desirable for performance.
+
+**When to use the queue (for serialization):**
+Use the queue when a sequence of operations must not overlap. For example, you might enqueue an order cancellation and then a new order creation to ensure they happen in a guaranteed sequence.
 
 ```typescript
-// ❌ Wrong - Direct API calls can cause nonce conflicts
-const balance = await this.apiService.getBalance(exchange, asset);
-
-// ✅ Correct - Queued requests maintain proper ordering
-const balance = await this.queueService.enqueue(() =>
-  this.apiService.getBalance(exchange, asset)
-);
+// Use the queue when sequence is critical
+await this.queueService.enqueue(() => this.apiService.cancelOrder(orderId));
+await this.queueService.enqueue(() => this.apiService.createSellOrder(newOrder));
 ```
+
+**When to use direct asynchronous calls (for performance):**
+For operations that can run independently and in parallel, making direct API calls is more performant. A common use case is fetching initial data, like the prices or balances for all assets on screen load.
+
+```typescript
+// Use parallel calls for better performance
+const pricePromises = assets.map(asset => this.apiService.getCurrentPrice(asset.exchange, asset.name));
+const prices = await Promise.all(pricePromises);
+```
+
+In summary, the `RequestQueueService` is a tool for enforcing serialization when it's critical. Choose the appropriate method—queued or direct—based on the requirements of the operation.
 
 ## API Service Layer
 
@@ -86,33 +108,7 @@ export class AssetExchangeApiService {
 
 ## Error Handling Integration
 
-### Nonce Error Recovery
 
-The frontend implements intelligent retry logic for nonce-related errors:
-
-```typescript
-private async executeWithRetry<T>(
-  operation: () => Promise<T>,
-  maxRetries: number = 3
-): Promise<T> {
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return await operation();
-    } catch (error) {
-      if (this.isNonceError(error) && attempt < maxRetries) {
-        await this.delay(1000 * attempt); // Exponential backoff
-        continue;
-      }
-      throw error;
-    }
-  }
-}
-
-private isNonceError(error: any): boolean {
-  return error?.message?.includes('EAPI:Invalid nonce') ||
-         error?.response?.data?.message?.includes('nonce');
-}
-```
 
 ### Backend Error Response Format
 
