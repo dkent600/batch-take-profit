@@ -47,6 +47,7 @@ export class OrdersDisplay {
   @bindable assets: IAsset[];
   private readonly logger: ILogger = resolve(ILogger).scopeTo('OrdersDisplay');
   fetchingOpenedOrders = true;
+  fetchingClosedOrders = true;
 
   async binding(): Promise<void> {
     this.fetchOpenedOrders();
@@ -73,6 +74,7 @@ export class OrdersDisplay {
       });
   }
   private fetchClosedOrders(): void {
+    this.fetchingClosedOrders = true;
     this.ordersStore.fetchClosedOrders(this.baseAssets, this.quoteAssets)
       .then((orders: IClosedOrderListItem[]) => {
         this.closedOrders = orders.map(order => ({
@@ -87,11 +89,13 @@ export class OrdersDisplay {
           limitPrice: order.type === 'limit' ? order.limitPrice : '',
           totalCost: order.status === 'executed' ? order.cost : ''
         }));
-
+      })
+      .finally(() => {
+        this.fetchingClosedOrders = false;
       });
   }
 
-  private _openedOrders: IOpenedOrderListItemView[] = [];
+  private _openedOrders: IOpenedOrderListItemView[] = null;
 
   private get openedOrders(): IOpenedOrderListItemView[] {
     return this._openedOrders;
@@ -101,7 +105,7 @@ export class OrdersDisplay {
     this._openedOrders = data;
   }
 
-  private _closedOrders: IClosedOrderListItemView[] = [];
+  private _closedOrders: IClosedOrderListItemView[] = null;
 
   private get closedOrders(): IClosedOrderListItemView[] {
     return this._closedOrders;
@@ -124,6 +128,13 @@ export class OrdersDisplay {
 
   get quoteAssets(): string[] {
     return this.assets.map(asset => this.assetsStore.getQuoteCoin(asset));
+  }
+
+  /**
+   * only show as empty if it has been loaded
+   */
+  ordersAreEmpty(orders: IOpenedOrderListItemView[] | IClosedOrderListItemView[]): boolean {
+    return orders?.length === 0;
   }
 
   cancelOrder(txId: string): void {

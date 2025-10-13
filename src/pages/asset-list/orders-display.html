@@ -46,8 +46,8 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
           </div>
           <table-gryd 
             class="tw-w-fit tw-mx-auto"
-            show-empty-state.bind="openedOrders?.length === 0" 
-            loading.bind="fetchingOpenedOrders" 
+            show-empty-state.bind="ordersAreEmpty(openedOrders)" 
+            loading.bind="!openedOrders && fetchingOpenedOrders" 
             empty-message="No open orders found">
             <table>
             <thead>
@@ -92,10 +92,20 @@ class="tw-[--accent-base-color:#4a7a49] tw-[--base-layer-luminance:0.1]">
           Closed Orders
         </div>
         <div class="tw-p-4">
+          <div class="tw-grid tw-place-items-center tw-pb-4 tw-pt-2">
+            <fluent-progress-ring 
+              click.trigger="fetchClosedOrders()" 
+              paused.bind="!fetchingClosedOrders"
+              value.bind="fetchingClosedOrders ? undefined : 80"
+              style="--design-unit: 1; width: 18px; height: 18px;"
+              title="Refresh"
+              ariaLabel="Refresh">
+            </fluent-progress-ring>
+          </div>
           <table-gryd 
             class="tw-w-fit tw-mx-auto"
-            show-empty-state.bind="closedOrders.length === 0" 
-            loading.bind="fetchingClosedOrders" 
+            show-empty-state.bind="ordersAreEmpty(closedOrders)" 
+            loading.bind="!closedOrders && fetchingClosedOrders" 
             empty-message="No closed orders found">
             <table>
               <thead>
