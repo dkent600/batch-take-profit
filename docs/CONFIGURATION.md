@@ -2,372 +2,469 @@
 
 ## Overview
 
-The batch-take-profit frontend uses a JSON-based configuration system that supports environment-specific overrides. This guide covers all configuration options and setup procedures.
+The batch-take-profit application uses a two-file configuration system:
+- **config.json** - Public configuration for assets and backend URL (tracked in version control)
+- **config.local.json** - Private configuration for API keys and secrets (not tracked in git)
 
 ## Configuration Files
 
-### config.json (Default Configuration)
-The main configuration file tracked in version control:
+### config.json (Public Configuration)
 
+Contains the backend service URL and asset definitions. This file is tracked in version control.
+
+**Structure:**
 ```json
 {
-  "apiBaseUrl": "http://localhost:3000",
-  "apiVersion": "v1",
-  "requestTimeout": 30000,
-  "retryAttempts": 3,
-  "retryDelayMs": 1000,
-  "enableRequestLogging": false,
-  "priceUpdateInterval": 30000,
-  "balanceRefreshInterval": 60000,
-  "maxConcurrentRequests": 1,
-  "uiSettings": {
-    "defaultPercentage": 10,
-    "theme": "forest",
-    "enableAnimations": true,
-    "autoRefreshPrices": true
+  "batchConfig": {
+    "serviceUrl": "http://localhost:3000",
+    "exchanges": [
+      {
+        "name": "MexC"
+      },
+      {
+        "name": "Kraken"
+      },
+      {
+        "name": "CoinEx"
+      }
+    ],
+    "assets": [
+      {
+        "name": "SOL",
+        "percentage": 15,
+        "exchange": "Kraken"
+      },
+      {
+        "name": "DOGE",
+        "percentage": 15,
+        "exchange": "Kraken"
+      }
+    ]
   }
 }
 ```
 
-### config.local.json (Local Overrides)
-Environment-specific configuration (not tracked in git):
+**Configuration Options:**
 
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| `batchConfig.serviceUrl` | string | Yes | Backend API base URL (butterfly-services endpoint) |
+| `batchConfig.exchanges` | array | Yes | List of exchange definitions |
+| `batchConfig.exchanges[].name` | string | Yes | Exchange name (e.g., "Kraken", "MexC", "CoinEx") |
+| `batchConfig.assets` | array | Yes | List of assets to manage |
+| `batchConfig.assets[].name` | string | Yes | Asset/coin symbol (e.g., "SOL", "DOGE") |
+| `batchConfig.assets[].exchange` | string | Yes | Exchange where the asset is traded |
+| `batchConfig.assets[].percentage` | number | Yes | Default percentage for take-profit orders |
+
+### config.local.json (Private Configuration)
+
+Contains sensitive information like API keys, secrets, and Telegram credentials. **This file must NOT be committed to version control.**
+
+**Structure:**
 ```json
 {
-  "apiBaseUrl": "https://api.butterfly-services.example.com",
-  "enableRequestLogging": true,
-  "uiSettings": {
-    "defaultPercentage": 25
+  "mexc": {
+    "apiKey": "your-mexc-api-key",
+    "apiSecret": "your-mexc-api-secret"
+  },
+  "kraken": {
+    "apiKey": "your-kraken-api-key",
+    "apiSecret": "your-kraken-api-secret"
+  },
+  "coinex": {
+    "apiKey": "your-coinex-api-key",
+    "apiSecret": "your-coinex-api-secret"
+  },
+  "telegram": {
+    "botToken": "your-telegram-bot-token",
+    "chatId": "your-telegram-chat-id"
   }
 }
 ```
 
-## Configuration Options Reference
+**Configuration Options:**
 
-### API Configuration
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `apiBaseUrl` | string | `"http://localhost:3000"` | Backend API base URL |
-| `apiVersion` | string | `"v1"` | API version for endpoint construction |
-| `requestTimeout` | number | `30000` | Request timeout in milliseconds |
-| `retryAttempts` | number | `3` | Maximum retry attempts for failed requests |
-| `retryDelayMs` | number | `1000` | Base delay between retries (exponential backoff) |
-
-### Request Queue Configuration
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `maxConcurrentRequests` | number | `1` | Max concurrent API requests (keep at 1 for nonce safety) |
-| `enableRequestLogging` | boolean | `false` | Enable detailed request/response logging |
-
-### Data Refresh Configuration
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `priceUpdateInterval` | number | `30000` | Automatic price update interval (ms) |
-| `balanceRefreshInterval` | number | `60000` | Balance refresh interval (ms) |
-| `cacheExpirationMs` | number | `30000` | Price cache expiration time |
-
-### UI Settings
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `uiSettings.defaultPercentage` | number | `10` | Default percentage for take-profit orders |
-| `uiSettings.theme` | string | `"forest"` | DaisyUI theme name |
-| `uiSettings.enableAnimations` | boolean | `true` | Enable UI animations |
-| `uiSettings.autoRefreshPrices` | boolean | `true` | Automatically refresh prices |
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| `{exchange}.apiKey` | string | Yes | Exchange API key (lowercase exchange name) |
+| `{exchange}.apiSecret` | string | Yes | Exchange API secret |
+| `telegram.botToken` | string | Optional | Telegram bot token for notifications |
+| `telegram.chatId` | string | Optional | Telegram chat ID for notifications |
 
 ## Environment Setup
 
-### Development Environment
+### Initial Setup
 
-1. **Copy default configuration**:
+1. **Create local configuration file:**
    ```bash
-   cp config.json config.local.json
+   # Create config.local.json from template
+   New-Item config.local.json -ItemType File
    ```
 
-2. **Update backend URL**:
+2. **Add your credentials to config.local.json:**
    ```json
    {
-     "apiBaseUrl": "http://localhost:3000",
-     "enableRequestLogging": true
+     "kraken": {
+       "apiKey": "your-actual-api-key",
+       "apiSecret": "your-actual-api-secret"
+     },
+     "telegram": {
+       "botToken": "your-bot-token",
+       "chatId": "your-chat-id"
+     }
    }
    ```
 
-3. **Verify backend connectivity**:
-   ```bash
-   curl http://localhost:3000/api/v1/health
-   ```
+3. **Configure assets in config.json:**
+   - Add your trading assets to the `assets` array
+   - Set the appropriate `percentage` for each asset
+   - Match the `exchange` field to one of your configured exchanges
 
-### Staging Environment
+4. **Update backend URL:**
+   - For local development, use `http://localhost:3000`
+   - For production, update `serviceUrl` to your deployed backend
 
-For staging deployment:
+### Development Environment
 
+**config.json:**
 ```json
 {
-  "apiBaseUrl": "https://staging-api.butterfly-services.com",
-  "requestTimeout": 60000,
-  "retryAttempts": 5,
-  "enableRequestLogging": false,
-  "uiSettings": {
-    "theme": "business"
+  "batchConfig": {
+    "serviceUrl": "http://localhost:3000",
+    "exchanges": [
+      {"name": "Kraken"}
+    ],
+    "assets": [
+      {
+        "name": "SOL",
+        "percentage": 15,
+        "exchange": "Kraken"
+      }
+    ]
+  }
+}
+```
+
+**config.local.json:**
+```json
+{
+  "kraken": {
+    "apiKey": "dev-api-key",
+    "apiSecret": "dev-api-secret"
+  },
+  "telegram": {
+    "botToken": "dev-bot-token",
+    "chatId": "dev-chat-id"
   }
 }
 ```
 
 ### Production Environment
 
-Production configuration template:
-
+**config.json:**
 ```json
 {
-  "apiBaseUrl": "https://api.butterfly-services.com",
-  "requestTimeout": 45000,
-  "retryAttempts": 3,
-  "retryDelayMs": 2000,
-  "enableRequestLogging": false,
-  "priceUpdateInterval": 60000,
-  "balanceRefreshInterval": 120000,
-  "uiSettings": {
-    "defaultPercentage": 5,
-    "theme": "corporate",
-    "enableAnimations": false,
-    "autoRefreshPrices": true
+  "batchConfig": {
+    "serviceUrl": "https://api.butterfly-services.com",
+    "exchanges": [
+      {"name": "Kraken"},
+      {"name": "MexC"},
+      {"name": "CoinEx"}
+    ],
+    "assets": [
+      {
+        "name": "SOL",
+        "percentage": 10,
+        "exchange": "Kraken"
+      },
+      {
+        "name": "DOGE",
+        "percentage": 15,
+        "exchange": "Kraken"
+      }
+    ]
   }
 }
 ```
 
-## Advanced Configuration
-
-### Custom Retry Logic
-
-Configure exponential backoff for API retries:
-
+**config.local.json:**
 ```json
 {
-  "retryAttempts": 5,
-  "retryDelayMs": 1000,
-  "retryMultiplier": 2,
-  "maxRetryDelayMs": 30000
-}
-```
-
-### Performance Tuning
-
-For high-performance requirements:
-
-```json
-{
-  "priceUpdateInterval": 15000,
-  "balanceRefreshInterval": 30000,
-  "cacheExpirationMs": 15000,
-  "requestTimeout": 20000,
-  "uiSettings": {
-    "enableAnimations": false
+  "kraken": {
+    "apiKey": "prod-kraken-api-key",
+    "apiSecret": "prod-kraken-api-secret"
+  },
+  "mexc": {
+    "apiKey": "prod-mexc-api-key",
+    "apiSecret": "prod-mexc-api-secret"
+  },
+  "coinex": {
+    "apiKey": "prod-coinex-api-key",
+    "apiSecret": "prod-coinex-api-secret"
+  },
+  "telegram": {
+    "botToken": "prod-bot-token",
+    "chatId": "prod-chat-id"
   }
 }
 ```
 
-### Debug Configuration
+## How Configuration is Used
 
-For troubleshooting and development:
+### AssetsConfigService
 
-```json
-{
-  "enableRequestLogging": true,
-  "requestTimeout": 120000,
-  "retryAttempts": 1,
-  "logLevel": "debug",
-  "uiSettings": {
-    "showDebugInfo": true
-  }
-}
-```
+The `AssetsConfigService` loads `config.json` to:
+- Retrieve the backend API URL (`serviceUrl`)
+- Load asset configurations (name, exchange, percentage)
+- Access exchange definitions
 
-## Configuration Loading
+### EnvService
 
-### Load Order
+The `EnvService` loads `config.local.json` to:
+- Retrieve exchange API credentials
+- Access Telegram bot credentials
+- Support dot-notation access (e.g., `envService.get('kraken.apiKey')`)
 
-Configuration is loaded in this priority order:
-1. `config.local.json` (highest priority)
-2. `config.json` (default values)
+### Configuration Flow
 
-### TypeScript Interface
-
-The configuration is typed for safety:
-
-```typescript
-interface AppConfig {
-  apiBaseUrl: string;
-  apiVersion: string;
-  requestTimeout: number;
-  retryAttempts: number;
-  retryDelayMs: number;
-  enableRequestLogging: boolean;
-  priceUpdateInterval: number;
-  balanceRefreshInterval: number;
-  maxConcurrentRequests: number;
-  uiSettings: {
-    defaultPercentage: number;
-    theme: string;
-    enableAnimations: boolean;
-    autoRefreshPrices: boolean;
-  };
-}
-```
-
-### Configuration Service
-
-Access configuration through the ConfigService:
-
-```typescript
-@injectable()
-export class ConfigService {
-  private config: AppConfig;
-  
-  constructor() {
-    this.loadConfig();
-  }
-  
-  private loadConfig(): void {
-    // Load and merge config files
-    const defaultConfig = require('../config.json');
-    let localConfig = {};
-    
-    try {
-      localConfig = require('../config.local.json');
-    } catch {
-      // config.local.json is optional
-    }
-    
-    this.config = { ...defaultConfig, ...localConfig };
-  }
-  
-  public get<T extends keyof AppConfig>(key: T): AppConfig[T] {
-    return this.config[key];
-  }
-}
-```
+1. Application starts and initializes `EnvService`
+2. `EnvService` fetches and loads `config.local.json`
+3. `AssetsConfigService` is injected with `EnvService`
+4. `AssetsConfigService` fetches and loads `config.json`
+5. Services access credentials via `envService.get('exchange.apiKey')`
+6. Services access public config via `assetsConfigService.serviceUrl` and `getAssets()`
 
 ## Security Considerations
 
-### Sensitive Information
+### Protecting Sensitive Information
 
-**Never include in configuration files**:
-- API keys or secrets
-- Database passwords
-- Private keys
-- Personal information
+**CRITICAL: Never commit `config.local.json` to version control!**
+
+The `.gitignore` file should always include:
+```
+config.local.json
+```
+
+**What goes in each file:**
+
+✅ **config.json** (safe to commit):
+- Backend service URL
+- Asset configurations
+- Exchange names
+- Public settings
+
+❌ **config.local.json** (NEVER commit):
+- API keys
+- API secrets
+- Telegram bot tokens
+- Any credentials or sensitive data
+
+### Credential Redaction
+
+The `AssetsConfigService` includes error redaction to prevent credentials from appearing in logs:
+
+```typescript
+error.message = error.message
+  .replace(this.apiKey || '', '[REDACTED_API_KEY]')
+  .replace(this.apiSecret || '', '[REDACTED_API_SECRET]')
+  .replace(this.telegramBotToken || '', '[REDACTED_BOT_TOKEN]');
+```
 
 ### File Permissions
 
-Ensure appropriate file permissions:
+For production deployments on Linux/Mac:
 ```bash
-# Development
-chmod 644 config.json
+# Make config.local.json readable only by owner
 chmod 600 config.local.json
 
-# Production
-chmod 400 config.local.json
+# Public config can be world-readable
+chmod 644 config.json
 ```
 
-### Environment Variables Override
-
-For container deployments, support environment variable overrides:
-
-```typescript
-private loadConfig(): void {
-  const config = { ...defaultConfig, ...localConfig };
-  
-  // Override with environment variables
-  if (process.env.API_BASE_URL) {
-    config.apiBaseUrl = process.env.API_BASE_URL;
-  }
-  
-  if (process.env.REQUEST_TIMEOUT) {
-    config.requestTimeout = parseInt(process.env.REQUEST_TIMEOUT);
-  }
-  
-  this.config = config;
-}
+On Windows (PowerShell):
+```powershell
+# Remove inheritance and grant only current user access
+icacls config.local.json /inheritance:r /grant:r "$env:USERNAME:(F)"
 ```
 
-## Troubleshooting Configuration
+## Troubleshooting
 
 ### Common Issues
 
-#### Configuration Not Loading
-- Verify JSON syntax with `npx jsonlint config.local.json`
-- Check file permissions and accessibility
-- Ensure file is in the correct directory
+#### "Local config not found" Warning
+
+**Symptom:** Warning message in console: "Local config not found, falling back to public config"
+
+**Cause:** `config.local.json` file doesn't exist or isn't accessible.
+
+**Solution:**
+1. Create `config.local.json` in the project root
+2. Add your exchange API credentials
+3. Ensure file is in the same directory as `config.json`
+
+#### Assets Not Loading
+
+**Symptom:** Empty asset list or "Error fetching config" message
+
+**Cause:** `config.json` is malformed or missing required fields.
+
+**Solution:**
+1. Validate JSON syntax: `npx jsonlint config.json`
+2. Ensure `batchConfig` object exists
+3. Verify `assets` array is present and properly formatted
+4. Check that each asset has `name`, `exchange`, and `percentage`
 
 #### API Connection Failures
-- Verify `apiBaseUrl` is correct and accessible
-- Check network connectivity to backend
-- Validate SSL certificates for HTTPS URLs
 
-#### Performance Issues
-- Reduce `priceUpdateInterval` and `balanceRefreshInterval`
-- Increase `requestTimeout` for slow networks
-- Disable `enableAnimations` for better performance
+**Symptom:** "Failed to fetch" or network errors when accessing backend
 
-### Validation
+**Cause:** Incorrect `serviceUrl` or backend not running.
 
-Validate configuration at startup:
+**Solution:**
+1. Verify `batchConfig.serviceUrl` in `config.json`
+2. Ensure butterfly-services backend is running
+3. Test URL manually: `curl http://localhost:3000/api/v1/production-mode`
+4. Check for CORS issues if running on different ports
 
-```typescript
-public validateConfig(): void {
-  const required = ['apiBaseUrl', 'apiVersion'];
-  
-  for (const key of required) {
-    if (!this.config[key]) {
-      throw new Error(`Required configuration missing: ${key}`);
-    }
-  }
-  
-  if (this.config.retryAttempts < 0) {
-    throw new Error('retryAttempts must be >= 0');
-  }
-  
-  if (!this.isValidUrl(this.config.apiBaseUrl)) {
-    throw new Error('apiBaseUrl must be a valid URL');
-  }
-}
+#### Missing Exchange Credentials
+
+**Symptom:** API calls fail with authentication errors
+
+**Cause:** Exchange credentials not configured in `config.local.json`
+
+**Solution:**
+1. Open `config.local.json`
+2. Add section for each exchange (use lowercase name):
+   ```json
+   {
+     "kraken": {
+       "apiKey": "your-key",
+       "apiSecret": "your-secret"
+     }
+   }
+   ```
+3. Ensure exchange name matches exactly (case-insensitive in code)
+
+### Configuration Validation
+
+Before running the application, verify your configuration:
+
+**Check config.json structure:**
+```powershell
+Get-Content config.json | ConvertFrom-Json | Select-Object -ExpandProperty batchConfig
 ```
 
-### Configuration Testing
+**Verify config.local.json exists (without revealing contents):**
+```powershell
+Test-Path config.local.json
+```
 
-Test configuration in different environments:
-
-```typescript
-describe('Configuration', () => {
-  it('should load default configuration', () => {
-    const config = new ConfigService();
-    expect(config.get('apiBaseUrl')).toBeDefined();
-  });
-  
-  it('should override with local configuration', () => {
-    // Mock config.local.json
-    const config = new ConfigService();
-    expect(config.get('enableRequestLogging')).toBe(true);
-  });
-});
+**Test backend connectivity:**
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/v1/production-mode"
 ```
 
 ## Best Practices
 
-### Development
-- Always use `config.local.json` for local overrides
-- Enable request logging during development
-- Use shorter intervals for faster feedback
+### Development Workflow
 
-### Production
-- Minimize logging overhead
-- Use appropriate timeouts for network conditions
-- Monitor configuration impact on performance
+1. **Never hardcode credentials** - Always use `config.local.json`
+2. **Keep config.json minimal** - Only include public, non-sensitive data
+3. **Document asset changes** - Comment why assets are added/removed
+4. **Test locally first** - Verify configuration before deploying
 
-### Maintenance
-- Document configuration changes
-- Version control `config.json` changes
-- Regular security review of accessible configurations
+### Adding New Assets
+
+1. Add asset to `config.json`:
+   ```json
+   {
+     "name": "BTC",
+     "percentage": 10,
+     "exchange": "Kraken"
+   }
+   ```
+
+2. Ensure exchange credentials exist in `config.local.json`
+
+3. Verify exchange is listed in `batchConfig.exchanges` array
+
+4. Restart application to load new configuration
+
+### Adding New Exchanges
+
+1. Add exchange to `config.json`:
+   ```json
+   {
+     "exchanges": [
+       {"name": "Binance"}
+     ]
+   }
+   ```
+
+2. Add credentials to `config.local.json`:
+   ```json
+   {
+     "binance": {
+       "apiKey": "your-key",
+       "apiSecret": "your-secret"
+     }
+   }
+   ```
+
+3. Verify butterfly-services backend supports the exchange
+
+### Configuration Backup
+
+**Backup your local configuration** (while keeping it secure):
+
+```powershell
+# Create encrypted backup (Windows)
+Copy-Item config.local.json config.local.backup.json
+Compress-Archive -Path config.local.backup.json -DestinationPath config-backup-$(Get-Date -Format 'yyyy-MM-dd').zip -CompressionLevel Optimal
+Remove-Item config.local.backup.json
+```
+
+**Never store backups in:**
+- Cloud services (Dropbox, Google Drive, etc.)
+- Email
+- Unencrypted USB drives
+- Version control systems
+
+## TypeScript Interface Reference
+
+The configuration interfaces used in the codebase:
+
+```typescript
+// From assets-config-service.ts
+interface IAsset {
+  name: string;
+  exchange: string;
+  percentage: number;
+  currentPrice: number;
+  amount?: number;
+  balance?: number;
+  limitPrice?: number;
+}
+
+interface IExchange {
+  name: string;
+}
+
+interface IAssetConfig {
+  name: string;
+  exchange: string;
+  percentage?: number;
+}
+
+interface IBatchConfig {
+  serviceUrl?: string;
+  exchanges?: IExchange[];
+  assets?: IAssetConfig[];
+}
+```
+
+## Related Documentation
+
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Application architecture and services
+- [INTEGRATION.md](INTEGRATION.md) - Backend API integration details
+- [butterfly-services README](../../butterfly-services/README.md) - Backend service documentation
