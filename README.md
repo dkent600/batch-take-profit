@@ -14,6 +14,7 @@ This application integrates with the **butterfly-services** backend API to provi
 
 - **Framework**: Aurelia with TypeScript
 - **Styling**: TailwindCSS + FluentUi Web Components components
+- **Code Architecture**: MVVM: [ View ] → binds to → [ ViewModel ] → uses → [ Store ] → calls → [ Service ]
 - **Build Tool**: Vite
 - **Testing**: Vitest
 - **HTTP Client**: Axios with request queue service
