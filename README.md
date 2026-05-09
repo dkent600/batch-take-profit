@@ -13,7 +13,7 @@ This application integrates with the **butterfly-services** backend API to provi
 ## Technical Stack
 
 - **Framework**: Aurelia with TypeScript
-- **Styling**: TailwindCSS + FluentUi WebComponents components
+- **Styling**: TailwindCSS + FluentUi Web Components components
 - **Build Tool**: Vite
 - **Testing**: Vitest
 - **HTTP Client**: Axios with request queue service
