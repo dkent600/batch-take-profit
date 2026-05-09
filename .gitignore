@@ -8,9 +8,6 @@ dist/
 # Tailwind JIT cache
 .tailwind/
 
-# DaisyUI config output (if any custom themes are built)
-.daisyui/
-
 # TypeScript build output (if tsc is run separately)
 *.tsbuildinfo
 
